@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Compiler.css";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 const Compiler = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     try {
@@ -21,6 +24,12 @@ const Compiler = () => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    dispatch(logout());
   };
 
   return (
@@ -56,6 +65,9 @@ const Compiler = () => {
       <br />
       <button className="btn" onClick={() => handleSubmit()}>
         Submit
+      </button>
+      <button className="btn" onClick={() => handleLogout()}>
+        Sign Out
       </button>
     </div>
   );
