@@ -1,5 +1,6 @@
 import Compiler from "./pages/Compiler/index";
 import "./App.css";
+import "./utilities.css";
 import SignIn from "./pages/Login";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SignUp from "./pages/Signup";
@@ -9,6 +10,8 @@ import { useEffect } from "react";
 import Loader from "./pages/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProblemList from "./pages/Problems";
+import Problem from "./pages/StatementPage";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -52,7 +55,11 @@ function App() {
         <Routes>
           {isAuthenticated ? (
             <>
+              <Route path="/statement/:id" element={<Problem />} />
+
               <Route path="/compiler" element={<Compiler />} />
+              <Route path="/problems*" element={<ProblemList />} />
+
               <Route path="*" element={<Navigate replace to="/compiler" />} />
             </>
           ) : (

@@ -18,7 +18,10 @@ const Compiler = () => {
         input,
       };
 
-      const { data } = await axios.post("http://localhost:5000/run", payload);
+      const { data } = await axios.post(
+        "http://localhost:5000/code/api/run",
+        payload
+      );
       console.log(data);
       setOutput(data.output);
     } catch (e) {

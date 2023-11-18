@@ -43,7 +43,7 @@ const SignIn = () => {
     setLoading(true);
     const data = new FormData(formRef.current);
     try {
-      const user = await axios.post("http://localhost:5000/login", {
+      const user = await axios.post("http://localhost:5000/api/auth/login", {
         email: data.get("email"),
         password: data.get("password"),
       });

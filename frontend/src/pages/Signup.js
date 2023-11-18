@@ -46,7 +46,7 @@ const SignUp = () => {
     setLoading(true);
     const data = new FormData(formRef.current);
     try {
-      const user = await axios.post("http://localhost:5000/register", {
+      const user = await axios.post("http://localhost:5000/api/auth/register", {
         email: data.get("email"),
         password: data.get("password"),
         firstname: data.get("firstname"),
