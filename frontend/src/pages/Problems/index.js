@@ -358,7 +358,9 @@ export default function EnhancedTable() {
                         padding="none"
                         onClick={(event) => navigate("/compiler")}
                       >
-                        {row.statement}
+                        {row.statement.length > 100
+                          ? row.statement.slice(0, 100) + "..."
+                          : row.statement}
                       </TableCell>
                       <TableCell align="right">{row.solution}</TableCell>
                       <TableCell align="right">{row.topic}</TableCell>

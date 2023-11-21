@@ -13,16 +13,17 @@ import { grey, green } from "@mui/material/colors";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
-const Compiler = ({ setOutput }) => {
-  const [code, setCode] = useState("");
-  const [expand, setExpand] = useState(false);
+const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
+  const [lang, setLang] = useState("cpp");
   const [input, setInput] = useState("");
+  const [compiler, setCompiler] = useState(false);
+  const [testCase, setTestCase] = useState("1.1.1.1");
   const dispatch = useDispatch();
 
   function onChange(newValue) {
     setCode(newValue);
-    console.log("change", newValue);
   }
 
   // Render editor
@@ -62,38 +63,68 @@ const Compiler = ({ setOutput }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const payload = {
-        lang: "cpp",
+        lang,
         code,
-        input,
+        input: testCase,
       };
 
       const { data } = await axios.post(
         "http://localhost:5000/api/code/run",
         payload
       );
-      console.log(data);
       setOutput(data.output);
+      setDesc(false);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <div className="compiler-page">
-        <select className="select-bx ">
+        <select
+          onChange={(e) => setLang(e.target.value)}
+          className="select-bx "
+        >
           <option value="cpp">C++</option>
           <option value="py">Python</option>
         </select>
-        <div className="compiler-body">
+        <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
           <Editor />
         </div>
+        {compiler && (
+          <div className="compiler-bottom">
+            <main className="header">
+              <div className="compiler-bottom-header-left">
+                <p>TestCase</p>
+                <p>Code Result</p>
+              </div>
+              <div
+                onClick={() => setCompiler((prev) => !prev)}
+                className="compiler-bottom-header-right"
+              >
+                <ArrowDropUpIcon />
+              </div>
+            </main>
+            <textarea
+              value={testCase}
+              onChange={(e) => setTestCase(e.target.value)}
+              className="testcase"
+            />
+          </div>
+        )}
       </div>
-      <div className="compiler-bottom">
-        <div>
-          <h4>Console ^</h4>
+      <div className="compiler-footer">
+        <div onClick={() => setCompiler((prev) => !prev)}>
+          <h4 className="console">
+            Console
+            <ArrowDropUpIcon />
+          </h4>
         </div>
 
         <Buttons />
