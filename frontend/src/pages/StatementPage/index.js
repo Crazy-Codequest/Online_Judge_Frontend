@@ -70,6 +70,7 @@ const Problem = () => {
             code={code}
             setCode={setCode}
             setDesc={setDesc}
+            id={problem._id}
           />
         </div>
         <div className="compiler-submit"></div>

@@ -15,7 +15,7 @@ import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
-const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
+const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
   const [lang, setLang] = useState("cpp");
   const [input, setInput] = useState("");
   const [compiler, setCompiler] = useState(false);
@@ -23,6 +23,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
   const dispatch = useDispatch();
 
   function onChange(newValue) {
+    console.log(newValue);
     setCode(newValue);
   }
 
@@ -32,7 +33,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
       <AceEditor
         mode="java"
         theme="github"
-        onChange={onChange}
+        onChange={(e) => onChange(e)}
         value={code}
         name="UNIQUE_ID_OF_DIV"
         editorProps={{ $blockScrolling: true }}
@@ -52,7 +53,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
   const Buttons = () => {
     return (
       <Stack spacing={2} direction="row">
-        <ColorButton onClick={handleSubmit} variant="contained" size="small">
+        <ColorButton onClick={handleRun} variant="contained" size="small">
           Run
         </ColorButton>
         <ColorButton onClick={handleSubmit} variant="contained" size="small">
@@ -62,7 +63,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
     );
   };
 
-  const handleSubmit = async () => {
+  const handleRun = async () => {
     setLoading(true);
     try {
       const payload = {
@@ -76,6 +77,28 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc }) => {
         payload
       );
       setOutput(data.output);
+      setDesc(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        lang,
+        code,
+        id,
+      };
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/code/submit",
+        payload
+      );
+      setOutput(data.message);
       setDesc(false);
     } catch (e) {
       console.log(e);
