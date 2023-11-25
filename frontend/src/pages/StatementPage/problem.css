@@ -1,6 +1,6 @@
 .problem-page {
   width: 100vw;
-  position: fixed;
+  position: absolute;
   height: 100vh;
   padding: 2rem;
   background-image: radial-gradient(

@@ -356,7 +356,7 @@ export default function EnhancedTable() {
                         id={labelId}
                         scope="row"
                         padding="none"
-                        onClick={(event) => navigate("/compiler")}
+                        // onClick={(event) => navigate("/compiler")}
                       >
                         {row.statement.length > 100
                           ? row.statement.slice(0, 100) + "..."

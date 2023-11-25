@@ -2,7 +2,13 @@ import Compiler from "./pages/Compiler/index";
 import "./App.css";
 import "./utilities.css";
 import SignIn from "./pages/Login";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import SignUp from "./pages/Signup";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, logout } from "./features/auth/authSlice";
@@ -12,11 +18,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProblemList from "./pages/Problems";
 import Problem from "./pages/StatementPage";
+import Navbar from "./pages/Navbar";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
-  console.log(isAuthenticated);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const verifyUser = () => {
     let user = {};
@@ -26,6 +33,10 @@ function App() {
     } else {
       dispatch(logout());
     }
+  };
+
+  const handleBack = () => {
+    navigate(-1); // This is equivalent to history.goBack()
   };
 
   useEffect(() => {
@@ -51,29 +62,32 @@ function App() {
         pauseOnHover
       />
 
-      <BrowserRouter>
-        <Routes>
-          {isAuthenticated ? (
-            <>
-              <Route path="/statement/:id" element={<Problem />} />
+      {isAuthenticated ? (
+        <>
+          <Navbar />
+          <Routes>
+            <Route path="/statement/:id" element={<Problem />} />
+            <Route index element={<Navigate replace to="/problems" />} />
 
-              <Route path="/compiler" element={<Compiler />} />
-              <Route path="/problems*" element={<ProblemList />} />
+            <Route path="/problems" index element={<ProblemList />} />
+            <Route path="/compiler" element={<Compiler />} />
+            <Route path="/contest" element={<Compiler />} />
 
-              <Route path="*" element={<Navigate replace to="/compiler" />} />
-            </>
-          ) : (
-            <>
-              <Route index element={<Navigate replace to="/signin" />} />
-              <Route path="/signin" element={<SignIn />} />
+            <Route path="*" element={<Navigate replace to="/problems" />} />
+          </Routes>
+        </>
+      ) : (
+        <>
+          <Routes>
+            <Route index element={<Navigate replace to="/signin" />} />
+            <Route path="/signin" element={<SignIn />} />
 
-              <Route path="/signup" element={<SignUp />} />
+            <Route path="/signup" element={<SignUp />} />
 
-              <Route path="*" element={<Navigate replace to="/" />} />
-            </>
-          )}
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<Navigate replace to="/" />} />
+          </Routes>
+        </>
+      )}
     </div>
   );
 }
