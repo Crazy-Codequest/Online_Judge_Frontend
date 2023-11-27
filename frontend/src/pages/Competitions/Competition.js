@@ -13,15 +13,15 @@ const Competition = () => {
   const [problems, setProblems] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const getCompetitions = async () => {
+  const getProblems = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/competition",
+      const { data } = await axios.post(
+        "http://localhost:5000/api/competition/id",
         {
           id: params.id,
         }
       );
-      setProblems(data.problems);
+      setProblems(data.fetchedCompetition.problems);
     } catch (e) {
       console.log(e);
     } finally {
@@ -30,7 +30,7 @@ const Competition = () => {
   };
 
   useEffect(() => {
-    getCompetitions();
+    getProblems();
   }, []);
 
   if (loading) {
@@ -39,7 +39,28 @@ const Competition = () => {
 
   return (
     <div className="competition-page">
-      <div className="table"></div>
+      {console.log(problems)}
+      <div className="table">
+        {problems.map((problem) => (
+          <div key={problem._id} className="compeitition-card">
+            <div className="card-content">
+              <img
+                className="card-img"
+                src="https://leetcode.com/_next/static/images/weekly-default-553ede7bcc8e1b4a44c28a9e4a32068c.png"
+              />
+              <div className="flex-end">
+                <h3
+                  className="pointer"
+                  onClick={() => navigate(`/statement/${problem._id}`)}
+                >
+                  {problem.statement}
+                </h3>
+                <p className="grey">{problem.difficulty}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

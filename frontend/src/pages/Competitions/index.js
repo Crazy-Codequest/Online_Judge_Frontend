@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Competition.css";
+import "./Competitions.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../Loader/Loader";
 import axios from "axios";
@@ -7,7 +7,7 @@ import getFormattedDateTime from "../../utils/time";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-const Competition = () => {
+const Competitions = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [competitions, setCompetitions] = useState({});
@@ -77,7 +77,10 @@ const Competition = () => {
               />
               <div className="card-info">
                 <div>
-                  <h3 onClick={() => getSearchedCompetition(competition._id)}>
+                  <h3
+                    className="pointer"
+                    onClick={() => getSearchedCompetition(competition._id)}
+                  >
                     {competition.title}
                   </h3>
                   <p className="grey">
@@ -103,4 +106,4 @@ const Competition = () => {
   );
 };
 
-export default Competition;
+export default Competitions;

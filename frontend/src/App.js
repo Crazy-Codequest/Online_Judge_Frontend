@@ -19,7 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 import ProblemList from "./pages/Problems";
 import Problem from "./pages/StatementPage";
 import Navbar from "./pages/Navbar";
-import Competition from "./pages/Competitions";
+import Competitions from "./pages/Competitions";
+import Competition from "./pages/Competitions/Competition";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -74,7 +75,7 @@ function App() {
             <Route path="/compiler" element={<Compiler />} />
             <Route path="/competition/:id" element={<Competition />} />
 
-            <Route path="/competitions" element={<Competition />} />
+            <Route path="/competitions" element={<Competitions />} />
 
             <Route path="*" element={<Navigate replace to="/problems" />} />
           </Routes>

@@ -7,19 +7,12 @@
   width: 50vw;
   background-color: white;
   margin: 0rem auto;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 20px;
 }
 
 .grey {
   color: grey;
-}
-
-.flex-end {
-  width: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .compeitition-card {
@@ -59,4 +52,36 @@
   color: grey;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
+}
+
+.primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+
+.primary:hover {
+  background-color: #204d74;
+}
+
+.btn-col {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+}
+
+.btn:hover {
+}
+
+.register {
+  background-color: #14334e;
 }
