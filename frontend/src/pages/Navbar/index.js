@@ -7,9 +7,12 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,11 +34,19 @@ export default function Navbar() {
             Problems
           </Button>
 
-          <Button onClick={() => navigate("/contest")} color="inherit">
+          <Button onClick={() => navigate("/competitions")} color="inherit">
             Contest
           </Button>
 
-          <Button color="inherit">Logout</Button>
+          <Button
+            onClick={() => {
+              localStorage.removeItem("user");
+              dispatch(logout());
+            }}
+            color="inherit"
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

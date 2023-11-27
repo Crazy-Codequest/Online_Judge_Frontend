@@ -1,7 +1,7 @@
 import Compiler from "./pages/Compiler/index";
 import "./App.css";
 import "./utilities.css";
-import SignIn from "./pages/Login";
+import SignIn from "./pages/Login/Login";
 import {
   BrowserRouter,
   Routes,
@@ -9,7 +9,7 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-import SignUp from "./pages/Signup";
+import SignUp from "./pages/Login/Signup";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, logout } from "./features/auth/authSlice";
 import { useEffect } from "react";
@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProblemList from "./pages/Problems";
 import Problem from "./pages/StatementPage";
 import Navbar from "./pages/Navbar";
+import Competition from "./pages/Competitions";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -28,7 +29,7 @@ function App() {
   const verifyUser = () => {
     let user = {};
     if (localStorage.getItem("user")) {
-      user = JSON.parse(localStorage.getItem("user"));
+      user = JSON.parse(localStorage.getItem("user")).user;
       dispatch(loginSuccess({ user }));
     } else {
       dispatch(logout());
@@ -71,7 +72,9 @@ function App() {
 
             <Route path="/problems" index element={<ProblemList />} />
             <Route path="/compiler" element={<Compiler />} />
-            <Route path="/contest" element={<Compiler />} />
+            <Route path="/competition/:id" element={<Competition />} />
+
+            <Route path="/competitions" element={<Competition />} />
 
             <Route path="*" element={<Navigate replace to="/problems" />} />
           </Routes>
