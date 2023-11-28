@@ -25,6 +25,9 @@ import "./styles.css";
 import axios from "axios";
 import Loading from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { urlConstants } from "../../apis";
+import { getConfig } from "../../utils/getConfig";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -221,6 +224,8 @@ export default function EnhancedTable() {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const token = localStorage.getItem("token");
+
   const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
@@ -288,7 +293,7 @@ export default function EnhancedTable() {
 
   const getData = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/problems");
+      const { data } = await axios.get(urlConstants.getProblems, getConfig());
       setProblems(data.problems);
       setLoading(false);
     } catch (e) {

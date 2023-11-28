@@ -5,6 +5,9 @@ import "./problem.css";
 import Compiler from "./Compiler";
 import StatementPage from "./StatementPage";
 import Loading from "../Loader/Loader";
+import { urlConstants } from "../../apis";
+import { useSelector } from "react-redux";
+import { getConfig } from "../../utils/getConfig";
 // import
 
 const Problem = () => {
@@ -15,13 +18,16 @@ const Problem = () => {
   const [desc, setDesc] = useState(true);
   const [code, setCode] = useState("");
 
+  const token = localStorage.getItem("token");
+
   const getData = async () => {
     try {
       const { data } = await axios.post(
-        `http://localhost:5000/api/problems/id`,
+        urlConstants.getProblem,
         {
           id: params.id,
-        }
+        },
+        getConfig()
       );
       setProblem(data.customprob);
     } catch (e) {

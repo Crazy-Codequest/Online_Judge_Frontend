@@ -21,18 +21,36 @@ import Problem from "./pages/StatementPage";
 import Navbar from "./pages/Navbar";
 import Competitions from "./pages/Competitions";
 import Competition from "./pages/Competitions/Competition";
+import axios from "axios";
+import { urlConstants } from "./apis";
+import { getConfig } from "./utils/getConfig";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const verifyUser = () => {
+  const verifyUser = async () => {
     let user = {};
     if (localStorage.getItem("user")) {
       user = JSON.parse(localStorage.getItem("user")).user;
       dispatch(loginSuccess({ user }));
+    }
+    if (user) {
+      try {
+        await axios.post(
+          urlConstants.getProblem,
+          {
+            id: "656612ed7552afc6bcbda006",
+          },
+          getConfig()
+        );
+      } catch (e) {
+        localStorage.removeItem("user");
+        dispatch(logout());
+      }
     } else {
+      localStorage.removeItem("user");
       dispatch(logout());
     }
   };

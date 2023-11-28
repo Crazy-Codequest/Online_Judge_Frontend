@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/auth/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./Login.css";
+import { urlConstants } from "../../apis";
 
 function Copyright(props) {
   return (
@@ -44,7 +45,7 @@ const SignIn = () => {
     setLoading(true);
     const data = new FormData(formRef.current);
     try {
-      const user = await axios.post("http://localhost:5000/api/auth/login", {
+      const user = await axios.post(urlConstants.loginUser, {
         email: data.get("email"),
         password: data.get("password"),
       });
@@ -58,6 +59,7 @@ const SignIn = () => {
       dispatch(
         loginSuccess({
           user: user.data.user,
+          token: user.data.token,
         })
       );
     } catch (e) {

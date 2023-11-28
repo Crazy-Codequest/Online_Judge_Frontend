@@ -3,6 +3,8 @@ import axios from "axios";
 import "./Compiler.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import { urlConstants } from "../../apis";
+import { getConfig } from "../../utils/getConfig";
 
 const Compiler = () => {
   const [code, setCode] = useState("");
@@ -19,8 +21,9 @@ const Compiler = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/code/api/run",
-        payload
+        urlConstants.runCode,
+        payload,
+        getConfig()
       );
       console.log(data);
       setOutput(data.output);

@@ -18,6 +18,7 @@ import { loginSuccess } from "../../features/auth/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
 import "./Login.css";
+import { urlConstants } from "../../apis";
 
 function Copyright(props) {
   return (
@@ -47,7 +48,7 @@ const SignUp = () => {
     setLoading(true);
     const data = new FormData(formRef.current);
     try {
-      const user = await axios.post("http://localhost:5000/api/auth/register", {
+      const user = await axios.post(urlConstants.registerUser, {
         email: data.get("email"),
         password: data.get("password"),
         firstname: data.get("firstname"),

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Compiler.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { render } from "react-dom";
 import AceEditor from "react-ace";
 import Box from "@mui/material/Box";
@@ -14,6 +14,8 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { urlConstants } from "../../apis";
+import { getConfig } from "../../utils/getConfig";
 
 const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
   const [lang, setLang] = useState("cpp");
@@ -21,6 +23,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
   const [compiler, setCompiler] = useState(false);
   const [testCase, setTestCase] = useState("1.1.1.1");
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   function onChange(newValue) {
     console.log(newValue);
@@ -73,8 +76,9 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/code/run",
-        payload
+        urlConstants.runCode,
+        payload,
+        getConfig()
       );
       setOutput(data.output);
       setDesc(false);
@@ -91,12 +95,14 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
       const payload = {
         lang,
         code,
-        id,
+        p_id: id,
+        u_id: user._id,
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/code/submit",
-        payload
+        urlConstants.submitCode,
+        payload,
+        getConfig()
       );
       setOutput(data.message);
       setDesc(false);

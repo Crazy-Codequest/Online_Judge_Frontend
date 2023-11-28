@@ -6,6 +6,8 @@ import axios from "axios";
 import getFormattedDateTime from "../../utils/time";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { urlConstants } from "../../apis";
+import { getConfig } from "../../utils/getConfig";
 
 const Competitions = () => {
   const params = useParams();
@@ -16,10 +18,14 @@ const Competitions = () => {
 
   const addUserToCompetition = async (id) => {
     try {
-      await axios.post("http://localhost:5000/api/competition/registeruser", {
-        user_id: user._id,
-        id,
-      });
+      await axios.post(
+        urlConstants.registerForCompetiton,
+        {
+          user_id: user._id,
+          id,
+        },
+        getConfig()
+      );
       setCompetitions((prevCompetitions) =>
         prevCompetitions.map((competition) =>
           competition._id === id
@@ -44,10 +50,8 @@ const Competitions = () => {
   const getCompetitions = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/competition",
-        {
-          id: params.id,
-        }
+        urlConstants.getCompetitions,
+        getConfig()
       );
       setCompetitions(data.competitions);
     } catch (e) {
