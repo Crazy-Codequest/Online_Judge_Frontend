@@ -26,8 +26,15 @@ const Competition = () => {
       );
       setProblems(data.fetchedCompetition.problems);
     } catch (e) {
-      console.log(e);
+      if (
+        e.response.data.error === "This competition is not currently active"
+      ) {
+        toast.error("Competition is currently inactive.");
+      } else {
+        toast.error("Sorry couldn't fetch the competition");
+      }
     } finally {
+      navigate("/competitions");
       setLoading(false);
     }
   };
@@ -42,7 +49,6 @@ const Competition = () => {
 
   return (
     <div className="competition-page">
-      {console.log(problems)}
       <div className="table">
         {problems.map((problem) => (
           <div key={problem._id} className="compeitition-card">

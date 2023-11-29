@@ -53,6 +53,7 @@ const Compiler = () => {
         className="text-compiler"
       ></textarea>
       <br />
+      <p className="title">Test Case</p>
       <textarea
         rows={5}
         cols={20}
@@ -71,9 +72,6 @@ const Compiler = () => {
       <br />
       <button className="btn" onClick={() => handleSubmit()}>
         Submit
-      </button>
-      <button className="btn" onClick={() => handleLogout()}>
-        Sign Out
       </button>
     </div>
   );

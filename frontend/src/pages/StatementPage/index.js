@@ -6,9 +6,7 @@ import Compiler from "./Compiler";
 import StatementPage from "./StatementPage";
 import Loading from "../Loader/Loader";
 import { urlConstants } from "../../apis";
-import { useSelector } from "react-redux";
 import { getConfig } from "../../utils/getConfig";
-// import
 
 const Problem = () => {
   const params = useParams();
@@ -17,8 +15,6 @@ const Problem = () => {
   const [loading, setLoading] = useState(true);
   const [desc, setDesc] = useState(true);
   const [code, setCode] = useState("");
-
-  const token = localStorage.getItem("token");
 
   const getData = async () => {
     try {

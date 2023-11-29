@@ -61,6 +61,23 @@ const Competitions = () => {
     }
   };
 
+  const handleCompetitionRedirect = (competition) => {
+    const currentDate = new Date();
+    if (
+      currentDate >= new Date(competition.start_date) &&
+      currentDate <= new Date(competition.end_date)
+    ) {
+      if (!competition.user.includes(user._id)) {
+        toast.error("Please register for this competition first");
+        return;
+      }
+
+      getSearchedCompetition(competition._id);
+    } else {
+      toast.error("This competition is not currently active");
+    }
+  };
+
   useEffect(() => {
     getCompetitions();
   }, []);
@@ -83,12 +100,15 @@ const Competitions = () => {
                 <div>
                   <h3
                     className="pointer"
-                    onClick={() => getSearchedCompetition(competition._id)}
+                    onClick={() => handleCompetitionRedirect(competition)}
                   >
                     {competition.title}
                   </h3>
                   <p className="grey">
-                    {getFormattedDateTime(competition.start_date)}
+                    Start - {getFormattedDateTime(competition.start_date)}
+                  </p>
+                  <p className="grey">
+                    End - {getFormattedDateTime(competition.end_date)}
                   </p>
                 </div>
                 <button

@@ -9,6 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import "./Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -25,11 +26,20 @@ export default function Navbar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            {/* <MenuIcon /> */}
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            className="nav-title"
+            variant="h6"
+            component="div"
+            onClick={() => navigate("/")}
+            sx={{ flexGrow: 1 }}
+          >
             Online Judge
           </Typography>
+          <Button onClick={() => navigate("/compiler")} color="inherit">
+            Compiler
+          </Button>
           <Button onClick={() => navigate("/problems")} color="inherit">
             Problems
           </Button>

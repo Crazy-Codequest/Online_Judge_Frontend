@@ -1,6 +1,6 @@
 .competition-page {
-  height: 100vh;
-  padding-top: 5rem;
+  min-height: 100vh;
+  padding: 0 5rem;
 }
 
 .table {
@@ -9,6 +9,7 @@
   margin: 0rem auto;
   padding: 1rem;
   border-radius: 20px;
+  margin-bottom: 5rem;
 }
 
 .grey {
@@ -41,6 +42,7 @@
   width: 80%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .pointer {
@@ -77,6 +79,7 @@
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 4px;
+  height: 2rem;
 }
 
 .btn:hover {
