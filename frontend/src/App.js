@@ -35,6 +35,7 @@ function App() {
     if (localStorage.getItem("user")) {
       user = JSON.parse(localStorage.getItem("user")).user;
       dispatch(loginSuccess({ user }));
+      return;
     }
     if (user) {
       try {
@@ -45,6 +46,7 @@ function App() {
           },
           getConfig()
         );
+        localStorage.saveItem("user");
       } catch (e) {
         localStorage.removeItem("user");
         dispatch(logout());

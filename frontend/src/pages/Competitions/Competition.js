@@ -33,8 +33,8 @@ const Competition = () => {
       } else {
         toast.error("Sorry couldn't fetch the competition");
       }
-    } finally {
       navigate("/competitions");
+    } finally {
       setLoading(false);
     }
   };

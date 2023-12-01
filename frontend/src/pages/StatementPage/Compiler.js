@@ -115,7 +115,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
 
   return (
     <>
-      <div className="compiler-page">
+      <div className="compiler-page-editor">
         <select
           onChange={(e) => setLang(e.target.value)}
           className="select-bx "

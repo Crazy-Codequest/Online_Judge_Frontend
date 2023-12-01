@@ -32,47 +32,42 @@ const Compiler = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    dispatch(logout());
-  };
-
   return (
     <div className="compiler">
-      <p className="title">Online Compiler</p>
-      <select className="select-bx ">
+      {/* <select className="select-bx ">
         <option value="cpp">C++</option>
         <option value="py">Python</option>
-      </select>
-      <br />
-      <textarea
-        rows={15}
-        cols={70}
-        onChange={(e) => setCode(e.target.value)}
-        className="text-compiler"
-      ></textarea>
-      <br />
-      <p className="title">Test Case</p>
-      <textarea
-        rows={5}
-        cols={20}
-        onChange={(e) => setInput(e.target.value)}
-        className="text-compiler"
-      ></textarea>
-      <br />
-      {output && (
-        <textarea
-          value={output}
-          rows={5}
-          cols={50}
-          className="text-compiler"
-        ></textarea>
-      )}
-      <br />
-      <button className="btn" onClick={() => handleSubmit()}>
-        Submit
-      </button>
+      </select> */}
+      <div className="online-compiler-page">
+        <div className="right-page-editor">
+          <div className="nav-right">
+            <p className="nav-title-compiler">Main.cpp</p>
+            <button onClick={handleSubmit} className="desktop-run-button run">
+              Run
+            </button>
+          </div>
+          <textarea
+            onChange={(e) => setCode(e.target.value)}
+            className="code-editor"
+          ></textarea>
+          <textarea
+            onChange={(e) => setInput(e.target.value)}
+            className="input-box"
+          ></textarea>
+        </div>
+        <div className="left-page-editor">
+          <div className="nav-left">
+            <div className="shell-name">Output</div>
+            <button
+              onClick={() => setOutput("")}
+              className="desktop-clear-button"
+            >
+              Clear
+            </button>
+          </div>
+          <textarea value={output} className="output-tabbox"></textarea>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,14 +1,141 @@
-.compiler {
+.compiler-page {
   position: fixed;
-  background-image: url("../../images/bg.jpg");
+  background-color: #f0efeb;
   background-size: 100% 100%;
   height: 100vh;
   width: 100vw;
-  background-repeat: no-repeat;
-  background-image: cover;
   text-align: center;
   margin-top: -1rem;
   overflow-y: auto;
+}
+
+.navbar-compiler {
+  height: 5rem;
+  width: 100%;
+  background-color: #d9d9d9;
+}
+
+.online-compiler-page {
+  display: flex;
+  padding: 1.5rem;
+  width: 100rem;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none;
+}
+
+.right-page-editor {
+  width: 50rem;
+  border: 1px solid #d3dce6;
+}
+
+.left-page-editor {
+  width: 50rem;
+  border: 1px solid #d3dce6;
+}
+
+.nav-right {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-bottom: 1px solid #d3dce6;
+}
+
+.nav-left {
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #d3dce6;
+}
+
+.nav-title-compiler {
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  font-weight: 500;
+  font-size: 16px;
+  border-right: 1px solid #d3dce6;
+  height: 100%;
+  width: 6rem;
+  color: rgba(37, 38, 94, 0.7);
+}
+
+.desktop-run-button {
+  display: flex;
+  min-width: 67px;
+  min-height: 32px;
+  margin: 0 20px 0 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.desktop-clear-button {
+  cursor: pointer;
+  padding: 6px 16px;
+  background: none;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(37, 38, 94, 0.7);
+  outline: none;
+  z-index: 109;
+  margin: 0 20px 0 16px;
+  border: 1px solid #d3dce6;
+  box-sizing: border-box;
+  border-radius: 2px;
+  font-family: "euclid_circular";
+}
+
+.run {
+  cursor: pointer;
+  padding: 6px 16px;
+  background: #0556f3;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  z-index: 109;
+  font-weight: bold;
+}
+
+.shell-name {
+  font-weight: 500;
+  line-height: 24px;
+  padding: 11px 18px;
+}
+
+.code-editor {
+  width: 50rem;
+  height: 30rem;
+  padding: 1rem;
+  border-bottom: 1px solid #d3dce6;
+}
+
+.input-box {
+  width: 50rem;
+  height: 8rem;
+  margin-top: -0.2rem;
+}
+
+.output-tabbox {
+  height: 38rem;
+  padding: 1rem;
+  width: 49rem;
 }
 
 .title {
@@ -34,9 +161,4 @@
 
 .btn:hover {
   transform: scale(1.2);
-}
-
-.text-compiler {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
