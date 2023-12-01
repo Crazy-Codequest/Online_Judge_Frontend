@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Compiler.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 import { urlConstants } from "../../apis";
@@ -32,41 +31,42 @@ const Compiler = () => {
     }
   };
 
-  return (
-    <div className="compiler">
-      {/* <select className="select-bx ">
+  {
+    /* <select className="select-bx ">
         <option value="cpp">C++</option>
         <option value="py">Python</option>
-      </select> */}
-      <div className="online-compiler-page">
-        <div className="right-page-editor">
-          <div className="nav-right">
-            <p className="nav-title-compiler">Main.cpp</p>
-            <button onClick={handleSubmit} className="desktop-run-button run">
-              Run
-            </button>
-          </div>
-          <textarea
-            onChange={(e) => setCode(e.target.value)}
-            className="code-editor"
-          ></textarea>
-          <textarea
-            onChange={(e) => setInput(e.target.value)}
-            className="input-box"
-          ></textarea>
+      </select> */
+  }
+
+  return (
+    <div className="online-compiler-page">
+      <div className="right-page-editor">
+        <div className="nav-right">
+          <p className="nav-title-compiler">Main.cpp</p>
+          <button onClick={handleSubmit} className="desktop-run-button run">
+            Run
+          </button>
         </div>
-        <div className="left-page-editor">
-          <div className="nav-left">
-            <div className="shell-name">Output</div>
-            <button
-              onClick={() => setOutput("")}
-              className="desktop-clear-button"
-            >
-              Clear
-            </button>
-          </div>
-          <textarea value={output} className="output-tabbox"></textarea>
+        <textarea
+          onChange={(e) => setCode(e.target.value)}
+          className="code-editor"
+        ></textarea>
+        <textarea
+          onChange={(e) => setInput(e.target.value)}
+          className="input-box"
+        ></textarea>
+      </div>
+      <div className="left-page-editor">
+        <div className="nav-left">
+          <div className="shell-name">Output</div>
+          <button
+            onClick={() => setOutput("")}
+            className="desktop-clear-button"
+          >
+            Clear
+          </button>
         </div>
+        <textarea value={output} className="output-tabbox"></textarea>
       </div>
     </div>
   );

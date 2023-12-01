@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Competition.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../Loader/Loader";
 import axios from "axios";

@@ -1,6 +1,5 @@
 import Compiler from "./pages/Compiler/index";
 import "./App.css";
-import "./utilities.css";
 import SignIn from "./pages/Login/Login";
 import {
   BrowserRouter,

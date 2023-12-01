@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Compiler.css";
 import { useDispatch, useSelector } from "react-redux";
 import { render } from "react-dom";
 import AceEditor from "react-ace";
@@ -114,7 +113,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
   };
 
   return (
-    <>
+    <div className="compiler-design">
       <div className="compiler-page-editor">
         <select
           onChange={(e) => setLang(e.target.value)}
@@ -158,7 +157,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
 
         <Buttons />
       </div>
-    </>
+    </div>
   );
 };
 

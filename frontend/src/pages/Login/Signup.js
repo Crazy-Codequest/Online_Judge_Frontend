@@ -17,7 +17,6 @@ import axios from "axios";
 import { loginSuccess } from "../../features/auth/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
-import "./Login.css";
 import { urlConstants } from "../../apis";
 
 function Copyright(props) {

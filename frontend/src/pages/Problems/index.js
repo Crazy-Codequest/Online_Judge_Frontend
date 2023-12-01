@@ -21,7 +21,6 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import "./styles.css";
 import axios from "axios";
 import Loading from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";

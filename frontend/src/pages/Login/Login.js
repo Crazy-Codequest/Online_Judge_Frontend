@@ -14,7 +14,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/auth/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import "./Login.css";
 import { urlConstants } from "../../apis";
 
 function Copyright(props) {
