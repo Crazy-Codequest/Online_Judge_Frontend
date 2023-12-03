@@ -23,6 +23,7 @@ import Competition from "./pages/Competitions/Competition";
 import axios from "axios";
 import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -30,12 +31,7 @@ function App() {
   const navigate = useNavigate();
 
   const verifyUser = async () => {
-    let user = {};
-    if (localStorage.getItem("user")) {
-      user = JSON.parse(localStorage.getItem("user")).user;
-      dispatch(loginSuccess({ user }));
-      return;
-    }
+    let user = JSON.parse(localStorage.getItem("user"))?.user;
     if (user) {
       try {
         await axios.post(
@@ -45,7 +41,7 @@ function App() {
           },
           getConfig()
         );
-        localStorage.saveItem("user");
+        dispatch(loginSuccess({ user }));
       } catch (e) {
         localStorage.removeItem("user");
         dispatch(logout());
@@ -95,6 +91,7 @@ function App() {
             <Route path="/competition/:id" element={<Competition />} />
 
             <Route path="/competitions" element={<Competitions />} />
+            <Route path="/profile" element={<ProfilePage />} />
 
             <Route path="*" element={<Navigate replace to="/problems" />} />
           </Routes>

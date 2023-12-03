@@ -46,6 +46,9 @@ export default function Navbar() {
           <Button onClick={() => navigate("/competitions")} color="inherit">
             Contest
           </Button>
+          <Button onClick={() => navigate("/profile")} color="inherit">
+            Profile
+          </Button>
 
           <Button
             onClick={() => {
