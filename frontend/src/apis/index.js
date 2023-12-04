@@ -11,4 +11,7 @@ export const urlConstants = {
   loginUser: baseUrl + "api/auth/login",
   registerUser: baseUrl + "api/auth/register",
   getSocialProfile: baseUrl + "api/social-profile/id",
+  updateSocialProfile: baseUrl + "api/social-profile/update",
+  updateAvatarUrl: baseUrl + "api/images/update",
+  updateUserProfile: baseUrl + "api/users/update",
 };

@@ -21,25 +21,74 @@ import {
   Facebook as FacebookIcon,
   Language as GlobeIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { urlConstants } from "../../apis";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
 import Loading from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
-  const [avatarUrl, setAvatarUrl] = useState(
-    "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-  );
-  const [newAvatarUrl, setNewAvatarUrl] = useState("");
-  const { user } = useSelector((state) => state.auth);
+  const [newAvatarUrl, setNewAvatarUrl] = useState({});
   const fileInputRef = useRef(null);
   const [userProfile, setUserProfile] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [editProfile, setProfileMode] = useState(false);
+  const [editedSocial, setEditedSocial] = useState({});
+  const [editedProfile, setEditedProfile] = useState({});
+
   const [loading, setLoading] = useState(true);
+
+  const handleEditClick = () => {
+    setEditedProfile({
+      username: userProfile.u_id.username,
+      firstname: userProfile.u_id.firstname,
+      lastname: userProfile.u_id.lastname,
+      email: userProfile.u_id.email,
+      mobile: userProfile.u_id.mobile,
+      address: userProfile.u_id.address,
+    });
+    setEditMode((prev) => !prev);
+  };
+
+  const handleSocialEditClick = () => {
+    setEditedSocial({
+      website: userProfile.website,
+      github: userProfile.github,
+      twitter: userProfile.twitter,
+      instagram: userProfile.instagram,
+      facebook: userProfile.facebook,
+    });
+    setProfileMode((prev) => !prev);
+  };
+
+  const handleChange = (field, value) => {
+    setEditedProfile((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSocialChange = (field, value) => {
+    setEditedSocial((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleAvatarChange = () => {
     fileInputRef.current.click();
+  };
+
+  const dataURLtoFile = (dataURL, filename) => {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
   };
 
   const handleFileChange = (event) => {
@@ -48,7 +97,7 @@ const ProfilePage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setAvatarUrl(reader.result);
+        setNewAvatarUrl(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -65,11 +114,72 @@ const ProfilePage = () => {
         getConfig()
       );
       setUserProfile(data.socialProfile);
+      setNewAvatarUrl(data.profileImageBuffer.img);
     } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
     }
+  };
+
+  const saveSocialProfile = async () => {
+    try {
+      const { data } = await axios.post(
+        urlConstants.updateSocialProfile,
+        {
+          u_id: "6551cf43aa1c26f08576935e",
+          id: "656c11cb2d8a8e0d07b3a03d",
+          ...editedSocial,
+        },
+        getConfig()
+      );
+      socialProfile();
+      toast.success("Profile saved succesfully!");
+      setEditMode(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveUserProfile = async () => {
+    try {
+      const { data } = await axios.post(
+        urlConstants.updateUserProfile,
+        {
+          id: "6551cf43aa1c26f08576935e",
+          user: editedProfile,
+        },
+        getConfig()
+      );
+      socialProfile();
+      toast.success("Profile saved succesfully!");
+      setEditMode(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAvatarSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("u_id", "6551cf43aa1c26f08576935e");
+      formData.append("id", "656cb3fbed917e526a9b4e86");
+      formData.append("file", dataURLtoFile(newAvatarUrl, "avatar.jpg"));
+
+      await axios.post(urlConstants.updateAvatarUrl, formData, getConfig());
+      toast.success("Profile Image saved successfully!");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveClick = () => {
+    setEditMode(false);
+    saveUserProfile();
   };
 
   const navigate = (url) => {
@@ -89,14 +199,13 @@ const ProfilePage = () => {
       <Container py={5}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            {/* User Card */}
             <Card className="mb-4" style={{ textAlign: "center" }}>
               <CardContent className="text-center">
                 <CardMedia
                   component="img"
                   alt="avatar"
                   height="150"
-                  image={avatarUrl}
+                  src={newAvatarUrl}
                   className="rounded-circle mx-auto"
                   style={{ width: "150px", margin: "0 auto" }}
                 />
@@ -127,42 +236,137 @@ const ProfilePage = () => {
                   <Button className="mr-2" variant="contained" color="primary">
                     Follow
                   </Button>
-                  <Button variant="outlined" className="ms-1">
-                    Message
+                  <Button
+                    variant="outlined"
+                    className="ms-1"
+                    onClick={handleAvatarSave}
+                  >
+                    Save
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Profile Information Card */}
-            <Card className="mb-4" style={{ width: "100%" }}>
+            <Card className="mb-4" style={{ width: "100%", margin: "1rem" }}>
               <CardContent>
-                <ProfileInfoRow
-                  label="User Name"
-                  value={userProfile.u_id.username}
-                />
-                <Divider />
-                <ProfileInfoRow
-                  label="First Name"
-                  value={userProfile.u_id.firstname}
-                />
-                <Divider />
-                <ProfileInfoRow
-                  label="Last Name"
-                  value={userProfile.u_id.lastname}
-                />
-                <Divider />
-                <ProfileInfoRow label="Email" value={userProfile.u_id.email} />
-                <Divider />
-                <ProfileInfoRow
-                  label="Mobile"
-                  value={userProfile.u_id.mobile}
-                />
-                <Divider />
-                <ProfileInfoRow
-                  label="Address"
-                  value={userProfile.u_id.address}
-                />
+                {editMode ? (
+                  <>
+                    <Button
+                      className="mr-2 mb-2"
+                      variant="contained"
+                      color="primary"
+                      onClick={saveUserProfile}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="mr-2 mb-2"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleEditClick}
+                    >
+                      Edit
+                    </Button>
+                    <TextField
+                      fullWidth
+                      label="User Name"
+                      variant="outlined"
+                      value={editedProfile.username}
+                      onChange={(e) => handleChange("username", e.target.value)}
+                      className="mb-2"
+                    />
+                    <TextField
+                      fullWidth
+                      label="First Name"
+                      variant="outlined"
+                      value={editedProfile.firstname}
+                      onChange={(e) =>
+                        handleChange("firstname", e.target.value)
+                      }
+                      className="mb-2"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Last Name"
+                      variant="outlined"
+                      value={editedProfile.lastname}
+                      onChange={(e) => handleChange("lastname", e.target.value)}
+                      className="mb-2"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      variant="outlined"
+                      value={editedProfile.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                      className="mb-2"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Mobile"
+                      variant="outlined"
+                      value={editedProfile.mobile}
+                      onChange={(e) => handleChange("mobile", e.target.value)}
+                      className="mb-2"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Address"
+                      variant="outlined"
+                      value={editedProfile.address}
+                      onChange={(e) => handleChange("address", e.target.value)}
+                      className="mb-2"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      className="mr-2 mb-2"
+                      variant="contained"
+                      color="primary"
+                      onClick={saveUserProfile}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="mr-2 mb-2"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleEditClick}
+                    >
+                      Edit
+                    </Button>
+                    <ProfileInfoRow
+                      label="User Name"
+                      value={userProfile.u_id.username}
+                    />
+                    <Divider />
+                    <ProfileInfoRow
+                      label="First Name"
+                      value={userProfile.u_id.firstname}
+                    />
+                    <Divider />
+                    <ProfileInfoRow
+                      label="Last Name"
+                      value={userProfile.u_id.lastname}
+                    />
+                    <Divider />
+                    <ProfileInfoRow
+                      label="Email"
+                      value={userProfile.u_id.email}
+                    />
+                    <Divider />
+                    <ProfileInfoRow
+                      label="Mobile"
+                      value={userProfile.u_id.mobile}
+                    />
+                    <Divider />
+                    <ProfileInfoRow
+                      label="Address"
+                      value={userProfile.u_id.address}
+                    />
+                  </>
+                )}
               </CardContent>
             </Card>
           </Grid>
@@ -172,31 +376,120 @@ const ProfilePage = () => {
             <Card className="mb-4">
               <CardContent>
                 <List className="rounded-3">
-                  <SocialListItem
-                    icon={<GlobeIcon />}
-                    text={userProfile.website}
-                    onClick={() => navigate(userProfile.website)}
-                  />
-                  <SocialListItem
-                    onClick={() => navigate(userProfile.github)}
-                    icon={<GitHubIcon />}
-                    text="github"
-                  />
-                  <SocialListItem
-                    onClick={() => navigate(userProfile.twitter)}
-                    icon={<TwitterIcon />}
-                    text="twitter"
-                  />
-                  <SocialListItem
-                    onClick={() => navigate(userProfile.instagram)}
-                    icon={<InstagramIcon />}
-                    text="instagram"
-                  />
-                  <SocialListItem
-                    onClick={() => navigate(userProfile.facebook)}
-                    icon={<FacebookIcon />}
-                    text="facebook"
-                  />
+                  {editProfile ? (
+                    <>
+                      <Button
+                        className="mr-2 mb-2"
+                        variant="contained"
+                        color="primary"
+                        onClick={saveSocialProfile}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        className="mr-2 mb-2"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSocialEditClick}
+                      >
+                        Edit
+                      </Button>
+                      <TextField
+                        fullWidth
+                        label="Website"
+                        variant="outlined"
+                        value={editedSocial.website}
+                        onChange={(e) =>
+                          handleSocialChange("website", e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                      <TextField
+                        fullWidth
+                        label="Github"
+                        variant="outlined"
+                        value={editedSocial.github}
+                        onChange={(e) =>
+                          handleSocialChange("github", e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                      <TextField
+                        fullWidth
+                        label="Twitter"
+                        variant="outlined"
+                        value={editedSocial.twitter}
+                        onChange={(e) =>
+                          handleSocialChange("twitter", e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                      <TextField
+                        fullWidth
+                        label="Instagram"
+                        variant="outlined"
+                        value={editedSocial.instagram}
+                        onChange={(e) =>
+                          handleSocialChange("instagram", e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                      <TextField
+                        fullWidth
+                        label="Facebook"
+                        variant="outlined"
+                        value={editedSocial.facebook}
+                        onChange={(e) =>
+                          handleSocialChange("facebook", e.target.value)
+                        }
+                        className="mb-2"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        className="mr-2 mb-2"
+                        variant="contained"
+                        color="primary"
+                        onClick={saveSocialProfile}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        className="mr-2 mb-2"
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSocialEditClick}
+                      >
+                        Edit
+                      </Button>
+                      <SocialListItem
+                        icon={<GlobeIcon />}
+                        text={userProfile.website}
+                        onClick={() => navigate(userProfile.website)}
+                      />
+                      <SocialListItem
+                        onClick={() => navigate(userProfile.github)}
+                        icon={<GitHubIcon />}
+                        text="github"
+                      />
+                      <SocialListItem
+                        onClick={() => navigate(userProfile.twitter)}
+                        icon={<TwitterIcon />}
+                        text="twitter"
+                      />
+                      <SocialListItem
+                        onClick={() => navigate(userProfile.instagram)}
+                        icon={<InstagramIcon />}
+                        text="instagram"
+                      />
+                      <SocialListItem
+                        onClick={() => navigate(userProfile.facebook)}
+                        icon={<FacebookIcon />}
+                        text="facebook"
+                      />
+                    </>
+                  )}
                 </List>
               </CardContent>
             </Card>
