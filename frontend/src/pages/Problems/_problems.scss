@@ -2,4 +2,12 @@
   padding: 5rem;
   width: 100vw;
   height: 90vh;
+
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+  .gap {
+    margin-right: 2rem;
+  }
 }

@@ -16,7 +16,7 @@ import Loader from "./pages/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProblemList from "./pages/Problems";
-import Problem from "./pages/StatementPage";
+import StatementPage from "./pages/StatementPage";
 import Navbar from "./pages/Navbar";
 import Competitions from "./pages/Competitions";
 import Competition from "./pages/Competitions/Competition";
@@ -24,6 +24,7 @@ import axios from "axios";
 import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
 import ProfilePage from "./pages/Profile";
+import Problem from "./pages/Admin/Problem";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -83,10 +84,12 @@ function App() {
         <>
           <Navbar />
           <Routes>
-            <Route path="/statement/:id" element={<Problem />} />
+            <Route path="/statement/:id" element={<StatementPage />} />
             <Route index element={<Navigate replace to="/problems" />} />
 
             <Route path="/problems" index element={<ProblemList />} />
+            <Route path="/problem/:id" element={<Problem />} />
+
             <Route path="/compiler" element={<Compiler />} />
             <Route path="/competition/:id" element={<Competition />} />
 

@@ -7,7 +7,7 @@ import Loading from "../Loader/Loader";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
 
-const Problem = () => {
+const Statement = () => {
   const params = useParams();
   const [problem, setProblem] = useState({});
   const [output, setOutput] = useState("");
@@ -80,4 +80,4 @@ const Problem = () => {
   );
 };
 
-export default Problem;
+export default Statement;

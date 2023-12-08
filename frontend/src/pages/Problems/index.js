@@ -24,9 +24,10 @@ import { visuallyHidden } from "@mui/utils";
 import axios from "axios";
 import Loading from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import EditIcon from "@mui/icons-material/Edit";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import { useSelector } from "react-redux";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -130,7 +131,8 @@ function EnhancedTableHead(props) {
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              {headCell.label === "Title" && <p className="gap"></p>}
+              <div>{headCell.label}</div>
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
@@ -225,6 +227,8 @@ export default function EnhancedTable() {
 
   const token = localStorage.getItem("token");
 
+  const { user } = useSelector((state) => state.auth);
+
   const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
@@ -261,6 +265,10 @@ export default function EnhancedTable() {
     console.log(newSelected);
 
     setSelected(newSelected);
+  };
+
+  const handleProblem = (event, id) => {
+    navigate();
   };
 
   const handleChangePage = (event, newPage) => {
@@ -335,7 +343,6 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={() => navigate(`/statement/${row._id}`)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -346,14 +353,16 @@ export default function EnhancedTable() {
                       <TableCell style={{ paddingLeft: "16px" }} />
 
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                          onClick={(event) => handleClick(event, row._id)}
-                        />
+                        <div className="flex">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                            onClick={(event) => handleClick(event, row._id)}
+                          />
+                        </div>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -362,11 +371,27 @@ export default function EnhancedTable() {
                         padding="none"
                         // onClick={(event) => navigate("/compiler")}
                       >
+                        <Tooltip title="Edit">
+                          <IconButton>
+                            {user.role === "admin" ? (
+                              <EditIcon
+                                onClick={() => navigate(`/problem/${row._id}`)}
+                              />
+                            ) : (
+                              <p className="gap"></p>
+                            )}
+                          </IconButton>
+                        </Tooltip>
                         {row.statement.length > 100
                           ? row.statement.slice(0, 100) + "..."
                           : row.statement}
                       </TableCell>
-                      <TableCell align="right">{row.solution}</TableCell>
+                      <TableCell
+                        onClick={(event) => navigate(`/statement/${row._id}`)}
+                        align="right"
+                      >
+                        {row.solution}
+                      </TableCell>
                       <TableCell align="right">{row.topic}</TableCell>
                       <TableCell align="right">{row.difficulty}</TableCell>
                       <TableCell align="right">{row.input}</TableCell>

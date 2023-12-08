@@ -6,13 +6,32 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const { user } = useSelector((state) => state.auth);
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (path) => {
+    navigate(path);
+    handleMenuClose();
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -36,29 +55,52 @@ export default function Navbar() {
           >
             Online Judge
           </Typography>
-          <Button onClick={() => navigate("/compiler")} color="inherit">
-            Compiler
-          </Button>
           <Button onClick={() => navigate("/problems")} color="inherit">
             Problems
           </Button>
-
           <Button onClick={() => navigate("/competitions")} color="inherit">
             Contest
           </Button>
-          <Button onClick={() => navigate("/profile")} color="inherit">
-            Profile
-          </Button>
-
-          <Button
-            onClick={() => {
-              localStorage.removeItem("user");
-              dispatch(logout());
-            }}
+          <IconButton
+            size="large"
             color="inherit"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenuClick}
           >
-            Logout
-          </Button>
+            <AccountCircleIcon />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={() => handleMenuItemClick("/compiler")}>
+              Admin
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick("/profile")}>
+              Profile
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                localStorage.removeItem("user");
+                dispatch(logout());
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
     </Box>
