@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Loading from "../Loader/Loader";
-import { urlConstants } from "../../apis";
-import { getConfig } from "../../utils/getConfig";
-import Statement from "../StatementPage";
+import Loading from "../../Loader/Loader";
+import { urlConstants } from "../../../apis";
+import { getConfig } from "../../../utils/getConfig";
 
 const Problem = () => {
   const params = useParams();

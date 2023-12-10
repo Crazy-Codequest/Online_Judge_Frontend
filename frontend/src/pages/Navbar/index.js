@@ -35,7 +35,7 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ height: "4rem" }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -86,8 +86,11 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={() => handleMenuItemClick("/compiler")}>
+            <MenuItem onClick={() => handleMenuItemClick("/admin")}>
               Admin
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick("/compiler")}>
+              Dashboard
             </MenuItem>
             <MenuItem onClick={() => handleMenuItemClick("/profile")}>
               Profile
