@@ -21,6 +21,7 @@ const Sidebar = ({
   setOpenCreateDialog,
   sidebarCollapsed,
   setSidebarCollapsed,
+  setCurrentState,
 }) => {
   const collapseSidebar = () => {
     setSidebarCollapsed(true);
@@ -43,7 +44,13 @@ const Sidebar = ({
         <MenuItem icon={<GridViewRoundedIcon />}> Dashboard </MenuItem>
         <MenuItem icon={<ReceiptRoundedIcon />}> Problems </MenuItem>
         <SubMenu label="Users" icon={<PersonIcon />}>
-          <MenuItem icon={<AccountCircleRoundedIcon />}> User Table </MenuItem>
+          <MenuItem
+            onClick={() => setCurrentState("Users")}
+            icon={<AccountCircleRoundedIcon />}
+          >
+            {" "}
+            User Table{" "}
+          </MenuItem>
           <MenuItem
             onClick={() => setOpenCreateDialog(true)}
             icon={<ShieldRoundedIcon />}

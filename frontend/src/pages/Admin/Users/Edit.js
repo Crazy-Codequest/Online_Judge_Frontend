@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { getConfig } from "../../../utils/getConfig";
+import { urlConstants } from "../../../apis";
+import axios from "axios";
 
 const Edit = ({
   selectedUser,
@@ -28,13 +30,14 @@ const Edit = ({
 
   const handleUpdateUser = async () => {
     try {
-      // const updatedUser = await updateUser(
-      //   {
-      //     id: selectedUser._id,
-      //     user: { ...selectedUser, ...updatedUserData },
-      //   },
-      //   getConfig()
-      // );
+      await axios.post(
+        urlConstants.updateUserProfile,
+        {
+          id: selectedUser._id,
+          user: { ...selectedUser, ...updatedUserData },
+        },
+        getConfig()
+      );
       const updatedUser = { ...selectedUser, ...updatedUserData };
       setUsers(
         users.map((user) => (user._id === updatedUser._id ? updatedUser : user))

@@ -90,7 +90,7 @@ function App() {
 
             <Route path="/problems" index element={<ProblemList />} />
             <Route path="/problem/:id" element={<Problem />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/*" element={<Admin />} />
 
             <Route path="/compiler" element={<Compiler />} />
             <Route path="/competition/:id" element={<Competition />} />

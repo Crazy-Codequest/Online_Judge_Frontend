@@ -9,6 +9,9 @@ import {
   DialogActions,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { urlConstants } from "../../../apis";
+import { getConfig } from "../../../utils/getConfig";
 
 const Delete = ({
   selectedUser,
@@ -19,11 +22,18 @@ const Delete = ({
   setUsers,
 }) => {
   const handleDeleteUser = async () => {
-    // await deleteUser(selectedUser._id);
-    setUsers(users.filter((user) => user._id !== selectedUser._id));
-    setSelectedUser(null);
-    setOpenDeleteDialog(false);
-    toast.success("User deleted successfully!");
+    try {
+      await axios.delete(
+        `${urlConstants.singleUser}/${selectedUser._id}`,
+        getConfig()
+      );
+      setUsers(users.filter((user) => user._id !== selectedUser._id));
+      setSelectedUser(null);
+      setOpenDeleteDialog(false);
+      toast.success("User deleted successfully!");
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   return (

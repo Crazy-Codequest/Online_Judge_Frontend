@@ -8,10 +8,46 @@ import {
   TextField,
   DialogActions,
 } from "@mui/material";
+import axios from "axios";
+import { urlConstants } from "../../../apis";
+import { toast } from "react-toastify";
+import { getConfig } from "../../../utils/getConfig";
 
-const CreateUser = ({ openCreateDialog, setOpenCreateDialog }) => {
+const CreateUser = ({
+  openCreateDialog,
+  setOpenCreateDialog,
+  setUsersData,
+}) => {
+  const [newUser, setNewUser] = useState({
+    email: "",
+    firstname: "",
+    lastname: "",
+    role: "",
+  });
   const handleCreateUser = async () => {
-    setOpenCreateDialog(false);
+    try {
+      let { data } = await axios.post(
+        urlConstants.createUser,
+        {
+          ...newUser,
+        },
+        getConfig()
+      );
+      const user = data.user;
+      setUsersData((prev) => [...prev, user]);
+      setOpenCreateDialog(false);
+      toast.success("User updated successfully!");
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -24,16 +60,37 @@ const CreateUser = ({ openCreateDialog, setOpenCreateDialog }) => {
           variant="outlined"
           fullWidth
           margin="dense"
-          // Your form fields for new user
+          name="firstname"
+          value={newUser.firstname}
+          onChange={handleInputChange}
         />
         <TextField
           label="Lastname"
           variant="outlined"
           fullWidth
           margin="dense"
-          // Your form fields for new user
+          name="lastname"
+          value={newUser.lastname}
+          onChange={handleInputChange}
         />
-        {/* Other user details fields */}
+        <TextField
+          value={newUser.email}
+          label="Email"
+          variant="outlined"
+          fullWidth
+          name="email"
+          onChange={handleInputChange}
+          margin="dense"
+        />
+        <TextField
+          value={newUser.role}
+          label="Role"
+          variant="outlined"
+          fullWidth
+          margin="dense"
+          name="role"
+          onChange={handleInputChange}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCreateUser}>Create</Button>

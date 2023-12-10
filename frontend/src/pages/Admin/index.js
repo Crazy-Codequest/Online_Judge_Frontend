@@ -7,11 +7,13 @@ import Delete from "./Users/Delete";
 
 const Admin = () => {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [usersData, setUsersData] = useState([]);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [users, setUsers] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentState, setCurrentState] = useState("Users");
 
   return (
     <div className="admin-page">
@@ -19,21 +21,27 @@ const Admin = () => {
         setOpenCreateDialog={setOpenCreateDialog}
         sidebarCollapsed={sidebarCollapsed}
         setSidebarCollapsed={setSidebarCollapsed}
+        setCurrentState={setCurrentState}
       />
-      <UserTable
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
-        setOpenEditDialog={setOpenEditDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        users={users}
-        setUsers={setUsers}
-        openCreateDialog={openCreateDialog}
-      />
+      {currentState === "Users" && (
+        <UserTable
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          setOpenEditDialog={setOpenEditDialog}
+          setOpenDeleteDialog={setOpenDeleteDialog}
+          users={users}
+          setUsers={setUsers}
+          openCreateDialog={openCreateDialog}
+          usersData={usersData}
+          setUsersData={setUsersData}
+        />
+      )}
       <CreateUser
         openCreateDialog={openCreateDialog}
         setOpenCreateDialog={setOpenCreateDialog}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
+        setUsersData={setUsersData}
       />
       {openEditDialog && (
         <Edit

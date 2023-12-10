@@ -60,8 +60,9 @@ const UserTable = ({
   users,
   setUsers,
   openCreateDialog,
+  usersData,
+  setUsersData,
 }) => {
-  const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const count = Math.ceil(usersData.length / USERS_PER_PAGE);
