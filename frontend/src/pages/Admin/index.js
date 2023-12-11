@@ -1,19 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import UserLogic from "./Users/UserRoutes";
 import Sidebar from "./Sidebar";
-import UserTable from "./Users";
-import CreateUser from "./Users/Create";
-import Edit from "./Users/Edit";
-import Delete from "./Users/Delete";
+import ProblemRoutes from "./Problems/ProblemRoutes";
 
 const Admin = () => {
-  const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [usersData, setUsersData] = useState([]);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [users, setUsers] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currentState, setCurrentState] = useState("Users");
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [currentState, setCurrentState] = useState("Problems");
 
   return (
     <div className="admin-page">
@@ -24,43 +17,14 @@ const Admin = () => {
         setCurrentState={setCurrentState}
       />
       {currentState === "Users" && (
-        <UserTable
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
-          setOpenEditDialog={setOpenEditDialog}
-          setOpenDeleteDialog={setOpenDeleteDialog}
-          users={users}
-          setUsers={setUsers}
+        <UserLogic
           openCreateDialog={openCreateDialog}
-          usersData={usersData}
-          setUsersData={setUsersData}
+          setOpenCreateDialog={setOpenCreateDialog}
         />
       )}
-      <CreateUser
-        openCreateDialog={openCreateDialog}
-        setOpenCreateDialog={setOpenCreateDialog}
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
-        setUsersData={setUsersData}
-      />
-      {openEditDialog && (
-        <Edit
-          openEditDialog={openEditDialog}
-          selectedUser={selectedUser}
-          setOpenEditDialog={setOpenEditDialog}
-          users={users}
-          setUsers={setUsers}
-        />
-      )}
-      <Delete
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
-        users={users}
-        setUsers={setUsers}
-      />
+      {currentState === "Problems" && <ProblemRoutes />}
     </div>
   );
 };
+
 export default Admin;

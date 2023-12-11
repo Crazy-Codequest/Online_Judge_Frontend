@@ -15,8 +15,7 @@ import { Pagination } from "@mui/material";
 import axios from "axios";
 import { getConfig } from "../../../utils/getConfig";
 import Loading from "../../Loader/Loader";
-
-const USERS_PER_PAGE = 6;
+import { USERS_PER_PAGE } from "../../../utils/constants";
 
 // Replace this with your API calls or other data source
 

@@ -42,7 +42,6 @@ const Sidebar = ({
           <h2>Admin</h2>
         </MenuItem>
         <MenuItem icon={<GridViewRoundedIcon />}> Dashboard </MenuItem>
-        <MenuItem icon={<ReceiptRoundedIcon />}> Problems </MenuItem>
         <SubMenu label="Users" icon={<PersonIcon />}>
           <MenuItem
             onClick={() => setCurrentState("Users")}
@@ -59,10 +58,12 @@ const Sidebar = ({
             Create Users{" "}
           </MenuItem>
         </SubMenu>
-        <SubMenu label="Settings" icon={<SettingsApplicationsRoundedIcon />}>
-          <MenuItem icon={<AccountCircleRoundedIcon />}> Account </MenuItem>
-          <MenuItem icon={<ShieldRoundedIcon />}> Privacy </MenuItem>
-          <MenuItem icon={<NotificationsRoundedIcon />}>Notifications</MenuItem>
+        <SubMenu label="Problems" icon={<SettingsApplicationsRoundedIcon />}>
+          <MenuItem icon={<AccountCircleRoundedIcon />}>
+            {" "}
+            Problem Table{" "}
+          </MenuItem>
+          <MenuItem icon={<ShieldRoundedIcon />}> Create Problem </MenuItem>
         </SubMenu>
         <MenuItem icon={<LogoutRoundedIcon />}> Logout </MenuItem>
       </Menu>

@@ -24,7 +24,6 @@ import axios from "axios";
 import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
 import ProfilePage from "./pages/Profile";
-import Problem from "./pages/Admin/Problem";
 import Admin from "./pages/Admin";
 
 function App() {
@@ -89,7 +88,7 @@ function App() {
             <Route index element={<Navigate replace to="/problems" />} />
 
             <Route path="/problems" index element={<ProblemList />} />
-            <Route path="/problem/:id" element={<Problem />} />
+            {/* <Route path="/problem/:id" element={<Problem />} /> */}
             <Route path="/admin/*" element={<Admin />} />
 
             <Route path="/compiler" element={<Compiler />} />
