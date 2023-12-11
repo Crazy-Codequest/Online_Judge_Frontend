@@ -3,7 +3,10 @@ import Table from "./Table";
 import Create from "./Create";
 import Edit from "./Edit";
 
-const ProblemRoutes = () => {
+const ProblemRoutes = ({
+  openCreateProblemDialog,
+  setOpenProblemCreateDialog,
+}) => {
   const [problems, setProblems] = useState([]);
   const [selectedProblem, setSelectedProblem] = useState({});
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -22,11 +25,6 @@ const ProblemRoutes = () => {
         setProblemsData={setProblemsData}
         setOpenEditDialog={setOpenEditDialog}
       />
-      <Create
-        openCreateDialog={openCreateDialog}
-        setOpenCreateDialog={setOpenCreateDialog}
-        setProblemsData={setProblemsData}
-      />
       {openEditDialog && (
         <Edit
           openEditDialog={openEditDialog}
@@ -36,6 +34,13 @@ const ProblemRoutes = () => {
           setProblems={setProblems}
         />
       )}
+      <Create
+        openCreateDialog={openCreateProblemDialog}
+        setOpenCreateDialog={setOpenProblemCreateDialog}
+        selectedProblem={selectedProblem}
+        setSelectedProblem={setSelectedProblem}
+        setProblemsData={setProblemsData}
+      />
     </>
   );
 };

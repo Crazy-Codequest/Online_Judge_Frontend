@@ -6,6 +6,7 @@ import ProblemRoutes from "./Problems/ProblemRoutes";
 const Admin = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [openCreateProblemDialog, setOpenProblemCreateDialog] = useState(false);
   const [currentState, setCurrentState] = useState("Problems");
 
   return (
@@ -15,14 +16,16 @@ const Admin = () => {
         sidebarCollapsed={sidebarCollapsed}
         setSidebarCollapsed={setSidebarCollapsed}
         setCurrentState={setCurrentState}
+        setOpenProblemCreateDialog={setOpenProblemCreateDialog}
       />
-      {currentState === "Users" && (
-        <UserLogic
-          openCreateDialog={openCreateDialog}
-          setOpenCreateDialog={setOpenCreateDialog}
-        />
-      )}
-      {currentState === "Problems" && <ProblemRoutes />}
+      <UserLogic
+        openCreateDialog={openCreateDialog}
+        setOpenCreateDialog={setOpenCreateDialog}
+      />
+      <ProblemRoutes
+        openCreateProblemDialog={openCreateProblemDialog}
+        setOpenProblemCreateDialog={setOpenProblemCreateDialog}
+      />
     </div>
   );
 };

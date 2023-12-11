@@ -32,7 +32,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
       const problem = data.problem;
       setProblemsData((prev) => [...prev, problem]);
       setOpenCreateDialog(false);
-      toast.success("Problem updated successfully!");
+      toast.success("Problem created successfully!");
     } catch (e) {
       console.log(e.message);
     }
@@ -52,39 +52,39 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
       <DialogContent>
         <DialogContentText>Enter problem details</DialogContentText>
         <TextField
-          label="Firstname"
+          label="Statement"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="firstname"
+          name="statement"
           value={newProblem.statement}
           onChange={handleInputChange}
         />
         <TextField
-          label="Lastname"
+          label="Difficulty"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="lastname"
+          name="difficulty"
           value={newProblem.difficulty}
           onChange={handleInputChange}
         />
         <TextField
           value={newProblem.topic}
-          label="Email"
+          label="Topic"
           variant="outlined"
           fullWidth
-          name="email"
+          name="topic"
           onChange={handleInputChange}
           margin="dense"
         />
         <TextField
           value={newProblem.competition_problem}
-          label="Role"
+          label="Competition Problem"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="role"
+          name="competition_problem"
           onChange={handleInputChange}
         />
       </DialogContent>
