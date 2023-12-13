@@ -19,6 +19,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
     difficulty: "",
     topic: "",
     competition_problem: "",
+    solution: "",
   });
   const handleCreateProblem = async () => {
     try {
@@ -29,10 +30,12 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
         },
         getConfig()
       );
-      const problem = data.problem;
+      const problem = data.newprob;
+      console.log(problem);
       setProblemsData((prev) => [...prev, problem]);
       setOpenCreateDialog(false);
       toast.success("Problem created successfully!");
+      setNewProblem({});
     } catch (e) {
       console.log(e.message);
     }
@@ -85,6 +88,15 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           fullWidth
           margin="dense"
           name="competition_problem"
+          onChange={handleInputChange}
+        />
+        <TextField
+          value={newProblem.solution}
+          label="Solution"
+          variant="outlined"
+          fullWidth
+          margin="dense"
+          name="solution"
           onChange={handleInputChange}
         />
       </DialogContent>

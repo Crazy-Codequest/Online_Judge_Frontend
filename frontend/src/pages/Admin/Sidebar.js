@@ -11,6 +11,8 @@ import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 const Sidebar = ({
   setOpenCreateDialog,
@@ -22,6 +24,7 @@ const Sidebar = ({
   const collapseSidebar = () => {
     setSidebarCollapsed(true);
   };
+  const dispatch = useDispatch();
 
   return (
     <ReactSidebar
@@ -47,7 +50,10 @@ const Sidebar = ({
             User Table{" "}
           </MenuItem>
           <MenuItem
-            onClick={() => setOpenCreateDialog(true)}
+            onClick={() => {
+              setCurrentState("Users");
+              setOpenCreateDialog(true);
+            }}
             icon={<ShieldRoundedIcon />}
           >
             {" "}
@@ -55,19 +61,34 @@ const Sidebar = ({
           </MenuItem>
         </SubMenu>
         <SubMenu label="Problems" icon={<SettingsApplicationsRoundedIcon />}>
-          <MenuItem icon={<AccountCircleRoundedIcon />}>
+          <MenuItem
+            onClick={() => setCurrentState("Problems")}
+            icon={<AccountCircleRoundedIcon />}
+          >
             {" "}
             Problem Table{" "}
           </MenuItem>
           <MenuItem
-            onClick={() => setOpenProblemCreateDialog(true)}
+            onClick={() => {
+              setCurrentState("Problems");
+              setOpenProblemCreateDialog(true);
+            }}
             icon={<ShieldRoundedIcon />}
           >
             {" "}
             Create Problem{" "}
           </MenuItem>
         </SubMenu>
-        <MenuItem icon={<LogoutRoundedIcon />}> Logout </MenuItem>
+        <MenuItem
+          onClick={() => {
+            localStorage.removeItem("user");
+            dispatch(logout());
+          }}
+          icon={<LogoutRoundedIcon />}
+        >
+          {" "}
+          Logout{" "}
+        </MenuItem>
       </Menu>
     </ReactSidebar>
   );

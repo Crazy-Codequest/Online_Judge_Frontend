@@ -18,14 +18,18 @@ const Admin = () => {
         setCurrentState={setCurrentState}
         setOpenProblemCreateDialog={setOpenProblemCreateDialog}
       />
-      <UserLogic
-        openCreateDialog={openCreateDialog}
-        setOpenCreateDialog={setOpenCreateDialog}
-      />
-      <ProblemRoutes
-        openCreateProblemDialog={openCreateProblemDialog}
-        setOpenProblemCreateDialog={setOpenProblemCreateDialog}
-      />
+      {currentState === "Users" && (
+        <UserLogic
+          openCreateDialog={openCreateDialog}
+          setOpenCreateDialog={setOpenCreateDialog}
+        />
+      )}
+      {currentState === "Problems" && (
+        <ProblemRoutes
+          openCreateProblemDialog={openCreateProblemDialog}
+          setOpenProblemCreateDialog={setOpenProblemCreateDialog}
+        />
+      )}
     </div>
   );
 };

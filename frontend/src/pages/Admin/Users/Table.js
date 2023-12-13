@@ -132,21 +132,21 @@ const UserTable = ({
                 <TableCell className="center">{user.email}</TableCell>
                 <TableCell className="center">{user.role}</TableCell>
                 <TableCell className="center">
-                  <Button>
-                    <Edit
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setOpenEditDialog(true);
-                      }}
-                    />
+                  <Button
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenEditDialog(true);
+                    }}
+                  >
+                    <Edit />
                   </Button>
-                  <Button>
-                    <Delete
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setOpenDeleteDialog(true);
-                      }}
-                    />
+                  <Button
+                    onClick={() => {
+                      setSelectedUser(user);
+                      setOpenDeleteDialog(true);
+                    }}
+                  >
+                    <Delete />
                   </Button>
                 </TableCell>
               </TableRow>

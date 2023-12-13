@@ -14,43 +14,46 @@ import { urlConstants } from "../../../apis";
 import { getConfig } from "../../../utils/getConfig";
 
 const Delete = ({
-  selectedUser,
-  setSelectedUser,
+  selectedProblem,
+  setSelectedProblem,
   openDeleteDialog,
   setOpenDeleteDialog,
-  users,
-  setUsers,
+  problems,
+  setProblems,
 }) => {
-  const handleDeleteUser = async () => {
+  const handleDeleteProblem = async () => {
     try {
       await axios.delete(
-        `${urlConstants.singleUser}/${selectedUser._id}`,
+        `${urlConstants.problem}/${selectedProblem._id}`,
         getConfig()
       );
-      setUsers(users.filter((user) => user._id !== selectedUser._id));
-      setSelectedUser(null);
+      setProblems(
+        problems.filter((problem) => problem._id !== selectedProblem._id)
+      );
+      setSelectedProblem(null);
       setOpenDeleteDialog(false);
-      toast.success("User deleted successfully!");
+      toast.success("Problem deleted successfully!");
     } catch (e) {
       console.log(e.message);
+      toast.error("Error in deleting the problem.");
     }
   };
 
   return (
     <div>
-      {selectedUser && (
+      {selectedProblem && (
         <Dialog
           open={openDeleteDialog}
           onClose={() => setOpenDeleteDialog(false)}
         >
-          <DialogTitle>Delete User</DialogTitle>
+          <DialogTitle>Delete Problem</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Are you sure you want to delete this user?
+              Are you sure you want to delete this problem?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button color="error" onClick={handleDeleteUser}>
+            <Button color="error" onClick={handleDeleteProblem}>
               Delete
             </Button>
             <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>

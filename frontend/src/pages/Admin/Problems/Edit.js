@@ -64,9 +64,9 @@ const Edit = ({
     selectedProblem && (
       <div>
         <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-          <DialogTitle>Edit User</DialogTitle>
+          <DialogTitle>Edit Problem</DialogTitle>
           <DialogContent>
-            <DialogContentText>Edit user details</DialogContentText>
+            <DialogContentText>Edit problem details</DialogContentText>
             <TextField
               label="Statement"
               variant="outlined"

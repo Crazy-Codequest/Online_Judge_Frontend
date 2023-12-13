@@ -93,22 +93,22 @@ const ProblemsTable = ({
                   {problem.competition_problem ? "true" : "false"}
                 </TableCell>
                 <TableCell className="center">
-                  <Button>
-                    <Edit
-                      onClick={() => {
-                        console.log(problem);
-                        setSelectedProblem(problem);
-                        setOpenEditDialog(true);
-                      }}
-                    />
+                  <Button
+                    onClick={() => {
+                      console.log(problem);
+                      setSelectedProblem(problem);
+                      setOpenEditDialog(true);
+                    }}
+                  >
+                    <Edit />
                   </Button>
-                  <Button>
-                    <Delete
-                      onClick={() => {
-                        setSelectedProblem(problem);
-                        setOpenDeleteDialog(true);
-                      }}
-                    />
+                  <Button
+                    onClick={() => {
+                      setSelectedProblem(problem);
+                      setOpenDeleteDialog(true);
+                    }}
+                  >
+                    <Delete />
                   </Button>
                 </TableCell>
               </TableRow>
