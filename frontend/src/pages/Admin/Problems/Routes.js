@@ -15,7 +15,7 @@ const ProblemRoutes = ({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [problemsData, setProblemsData] = useState([]);
   return (
-    <>
+    <div className="problems-container">
       <Table
         problems={problems}
         setProblems={setProblems}
@@ -52,7 +52,7 @@ const ProblemRoutes = ({
         problems={problems}
         setProblems={setProblems}
       />
-    </>
+    </div>
   );
 };
 

@@ -1,0 +1,45 @@
+.problems-container {
+  width: 100%;
+  .problems-page {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+  }
+  .problems-page.collapse {
+    width: 90%;
+  }
+  .center {
+    text-align: center;
+  }
+}
+
+.dialog-content {
+  padding: 2rem;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.close-icon {
+  position: absolute;
+  cursor: pointer;
+  top: 2rem;
+  right: 2rem;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-buttons {
+  margin-bottom: 1rem;
+  margin-right: 2rem;
+  display: flex;
+  justify-content: end;
+}
+
+.examples {
+  height: 12rem;
+  padding: 2rem;
+  overflow-y: auto;
+}

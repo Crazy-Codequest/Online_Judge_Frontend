@@ -67,7 +67,7 @@ const ProblemsTable = ({
   }, [pageNumber, problemsData]);
 
   return (
-    <div className={`users-page ${openCreateDialog ? "collapse" : ""}`}>
+    <div className={`problems-page ${openCreateDialog ? "collapse" : ""}`}>
       <TableContainer
         className="table"
         sx={{ width: "100%", margin: "2rem auto" }}
