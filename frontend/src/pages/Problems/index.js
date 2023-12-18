@@ -65,10 +65,10 @@ const headCells = [
     label: "Title",
   },
   {
-    id: "solution",
+    id: "description",
     numeric: true,
     disablePadding: false,
-    label: "Solution",
+    label: "Description",
   },
   {
     id: "topic",
@@ -81,12 +81,6 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Difficulty",
-  },
-  {
-    id: "input",
-    numeric: true,
-    disablePadding: false,
-    label: "Input",
   },
 ];
 
@@ -122,7 +116,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align="center"
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -132,7 +126,7 @@ function EnhancedTableHead(props) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label === "Title" && <p className="gap"></p>}
-              <div>{headCell.label}</div>
+              <div style={{ paddingLeft: "1rem" }}>{headCell.label}</div>
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
@@ -369,32 +363,25 @@ export default function EnhancedTable() {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        alig
                         // onClick={(event) => navigate("/compiler")}
                       >
-                        <Tooltip title="Edit">
-                          <IconButton>
-                            {user.role === "admin" ? (
-                              <EditIcon
-                                onClick={() => navigate(`/problem/${row._id}`)}
-                              />
-                            ) : (
-                              <p className="gap"></p>
-                            )}
-                          </IconButton>
-                        </Tooltip>
+                        <p className="gap"></p>
+
                         {row.statement.length > 100
                           ? row.statement.slice(0, 100) + "..."
                           : row.statement}
                       </TableCell>
                       <TableCell
                         onClick={(event) => navigate(`/statement/${row._id}`)}
-                        align="right"
+                        align="center"
                       >
-                        {row.solution}
+                        {row.description[0]?.length > 50
+                          ? row.description[0].slice(0, 50) + "..."
+                          : row.description[0]}
                       </TableCell>
-                      <TableCell align="right">{row.topic}</TableCell>
-                      <TableCell align="right">{row.difficulty}</TableCell>
-                      <TableCell align="right">{row.input}</TableCell>
+                      <TableCell align="center">{row.topic}</TableCell>
+                      <TableCell align="center">{row.difficulty}</TableCell>
                       <TableCell style={{ paddingRight: "16px" }} />
                     </TableRow>
                   );

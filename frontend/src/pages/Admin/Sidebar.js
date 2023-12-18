@@ -79,6 +79,25 @@ const Sidebar = ({
             Create Problem{" "}
           </MenuItem>
         </SubMenu>
+        <SubMenu label="Competitions" icon={<PersonIcon />}>
+          <MenuItem
+            onClick={() => setCurrentState("Competitions")}
+            icon={<AccountCircleRoundedIcon />}
+          >
+            {" "}
+            Competition Table{" "}
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setCurrentState("Competitions");
+              setOpenCreateDialog(true);
+            }}
+            icon={<ShieldRoundedIcon />}
+          >
+            {" "}
+            Create Competition{" "}
+          </MenuItem>
+        </SubMenu>
         <MenuItem
           onClick={() => {
             localStorage.removeItem("user");

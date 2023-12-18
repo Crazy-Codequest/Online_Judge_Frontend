@@ -3,8 +3,10 @@ const baseUrl = "http://localhost:5000/";
 export const urlConstants = {
   getProblem: baseUrl + "api/problems/id",
   getProblems: baseUrl + "api/problems",
-  getCompetition: baseUrl + "api/competition/id",
-  getCompetitions: baseUrl + "api/competition",
+  getCompetition: baseUrl + "api/competitions/id",
+  getCompetitions: baseUrl + "api/competitions",
+  createCompetition: baseUrl + "api/competitions/create",
+  updateCompetition: baseUrl + "api/competitions/update",
   registerForCompetiton: baseUrl + "api/competition/registeruser",
   runCode: baseUrl + "api/code/run",
   submitCode: baseUrl + "api/code/submit",

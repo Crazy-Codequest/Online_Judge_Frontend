@@ -13,26 +13,33 @@ import { urlConstants } from "../../../apis";
 import { toast } from "react-toastify";
 import { getConfig } from "../../../utils/getConfig";
 
-const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
-  const [newUser, setNewUser] = useState({
-    email: "",
-    firstname: "",
-    lastname: "",
-    role: "",
+const Create = ({
+  openCreateDialog,
+  setOpenCreateDialog,
+  setCompetitionsData,
+}) => {
+  const [newCompetition, setNewCompetition] = useState({
+    title: "",
+    start_date: "",
+    end_date: "",
   });
-  const handleCreateUser = async () => {
+  const handleCreateCompetition = async () => {
     try {
       let { data } = await axios.post(
-        urlConstants.createUser,
+        urlConstants.createCompetition,
         {
-          ...newUser,
+          ...newCompetition,
+          start_date: new Date(newCompetition.start_date),
+          end_date: new Date(newCompetition.end_date),
+          problems: [],
         },
         getConfig()
       );
-      const user = data.user;
-      setUsersData((prev) => [...prev, user]);
+      const competition = data.competiton;
+      setCompetitionsData((prev) => [...prev, competition]);
       setOpenCreateDialog(false);
-      toast.success("User created successfully!");
+      toast.success("Competition created successfully!");
+      setNewCompetition({});
     } catch (e) {
       console.log(e.message);
     }
@@ -40,7 +47,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewUser((prevData) => ({
+    setNewCompetition((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -48,48 +55,39 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
 
   return (
     <Dialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)}>
-      <DialogTitle>Create User</DialogTitle>
+      <DialogTitle>Create Competition</DialogTitle>
       <DialogContent>
-        <DialogContentText>Enter user details</DialogContentText>
+        <DialogContentText>Enter compeitition details</DialogContentText>
         <TextField
-          label="Firstname"
+          label="Title"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="firstname"
-          value={newUser.firstname}
+          name="title"
+          value={newCompetition.title}
           onChange={handleInputChange}
         />
         <TextField
-          label="Lastname"
+          label="Start Date"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="lastname"
-          value={newUser.lastname}
+          name="start_date"
+          value={newCompetition.start_date}
           onChange={handleInputChange}
         />
         <TextField
-          value={newUser.email}
-          label="Email"
+          value={newCompetition.end_date}
+          label="End"
           variant="outlined"
           fullWidth
-          name="email"
+          name="end_date"
           onChange={handleInputChange}
           margin="dense"
-        />
-        <TextField
-          value={newUser.role}
-          label="Role"
-          variant="outlined"
-          fullWidth
-          margin="dense"
-          name="role"
-          onChange={handleInputChange}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCreateUser}>Create</Button>
+        <Button onClick={handleCreateCompetition}>Create</Button>
         <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
       </DialogActions>
     </Dialog>

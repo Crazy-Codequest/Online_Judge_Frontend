@@ -15,29 +15,31 @@ import { Pagination } from "@mui/material";
 import axios from "axios";
 import { getConfig } from "../../../utils/getConfig";
 import Loading from "../../Loader/Loader";
-import { USERS_PER_PAGE } from "../../../utils/constants";
+import { COMPETITIONS_PER_PAGE } from "../../../utils/constants";
+import { urlConstants } from "../../../apis";
+import getFormattedDateTime from "../../../utils/time";
 
-const UserTable = ({
-  setSelectedUser,
+const CompetitionTable = ({
+  setSelectedCompetition,
   setOpenEditDialog,
   setOpenDeleteDialog,
-  users,
-  setUsers,
+  competitions,
+  setCompetitions,
   openCreateDialog,
-  usersData,
-  setUsersData,
+  competitionsData,
+  setCompetitionsData,
 }) => {
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
-  const count = Math.ceil(usersData.length / USERS_PER_PAGE);
+  const count = Math.ceil(competitionsData.length / COMPETITIONS_PER_PAGE);
 
-  const getUsers = async () => {
+  const getCompetitions = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/users",
+        urlConstants.getCompetitions,
         getConfig()
       );
-      setUsersData(data.users);
+      setCompetitionsData(data.competitions);
     } catch (e) {
       console.log(e);
     } finally {
@@ -50,47 +52,49 @@ const UserTable = ({
   };
 
   useEffect(() => {
-    getUsers();
+    getCompetitions();
   }, []);
 
   useEffect(() => {
-    if (usersData.length) {
-      const filteredUsers = usersData.slice(
-        (pageNumber - 1) * USERS_PER_PAGE,
-        pageNumber * USERS_PER_PAGE
+    if (competitionsData.length) {
+      const filteredCompetitions = competitionsData.slice(
+        (pageNumber - 1) * COMPETITIONS_PER_PAGE,
+        pageNumber * COMPETITIONS_PER_PAGE
       );
-      setUsers(filteredUsers);
+      setCompetitions(filteredCompetitions);
     }
-  }, [pageNumber, usersData]);
+  }, [pageNumber, competitionsData]);
 
   return (
     <div className={`users-page ${openCreateDialog ? "collapse" : ""}`}>
       <TableContainer
         className="table"
-        sx={{ width: "100%", margin: "2rem auto" }}
+        sx={{ width: "80%", margin: "2rem auto" }}
         component={Paper}
       >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="center">Firstname</TableCell>
-              <TableCell className="center">Lastname</TableCell>
-              <TableCell className="center">Email</TableCell>
-              <TableCell className="center">Role</TableCell>
+              <TableCell className="center">Title</TableCell>
+              <TableCell className="center">Start Date</TableCell>
+              <TableCell className="center">End Date</TableCell>
               <TableCell className="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
-              <TableRow key={user._id}>
-                <TableCell className="center">{user.firstname}</TableCell>
-                <TableCell className="center">{user.lastname}</TableCell>
-                <TableCell className="center">{user.email}</TableCell>
-                <TableCell className="center">{user.role}</TableCell>
+            {competitions.map((competition) => (
+              <TableRow key={competition._id}>
+                <TableCell className="center">{competition.title}</TableCell>
+                <TableCell className="center">
+                  {getFormattedDateTime(competition.start_date)}
+                </TableCell>
+                <TableCell className="center">
+                  {getFormattedDateTime(competition.end_date)}
+                </TableCell>
                 <TableCell className="center">
                   <Button
                     onClick={() => {
-                      setSelectedUser(user);
+                      setSelectedCompetition(competition);
                       setOpenEditDialog(true);
                     }}
                   >
@@ -98,7 +102,7 @@ const UserTable = ({
                   </Button>
                   <Button
                     onClick={() => {
-                      setSelectedUser(user);
+                      setSelectedCompetition(competition);
                       setOpenDeleteDialog(true);
                     }}
                   >
@@ -121,4 +125,4 @@ const UserTable = ({
   );
 };
 
-export default UserTable;
+export default CompetitionTable;
