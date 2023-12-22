@@ -16,6 +16,7 @@ import { getConfig } from "../../../utils/getConfig";
 import MenuItem from "@mui/material/MenuItem";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
+import CustomDatepicker from "./Datepicker";
 
 const Create = ({
   openCreateDialog,
@@ -25,7 +26,7 @@ const Create = ({
   const [newCompetition, setNewCompetition] = useState({
     title: "",
     start_date: null,
-    end_date: "",
+    end_date: null,
     problems: "",
     user: "",
   });
@@ -41,7 +42,6 @@ const Create = ({
           ...newCompetition,
           start_date: new Date(newCompetition.start_date),
           end_date: new Date(newCompetition.end_date),
-          problems: [],
         },
         getConfig()
       );
@@ -53,6 +53,13 @@ const Create = ({
     } catch (e) {
       console.log(e.message);
     }
+  };
+
+  const handleDateChange = (name, value) => {
+    setNewCompetition((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleInputChange = (e) => {
@@ -70,6 +77,7 @@ const Create = ({
         `${urlConstants.adminProblemId}/${user._id}`
       );
       setProblems(data.problems);
+      console.log(data.problems);
     } catch (e) {
       console.log(e.message);
     }
@@ -99,6 +107,7 @@ const Create = ({
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
     >
+      {console.log(newCompetition)}
       <DialogTitle>Create Competition</DialogTitle>
       <DialogContent className="dialog-content">
         <DialogContentText>Enter compeitition details</DialogContentText>
@@ -115,25 +124,10 @@ const Create = ({
           onChange={handleInputChange}
           className="mt-1"
         />
-        <TextField
-          label="Start Date"
-          variant="outlined"
-          fullWidth
-          margin="dense"
-          name="start_date"
-          value={newCompetition.start_date}
-          onChange={handleInputChange}
-          className="mt-1"
-        />
-        <TextField
-          value={newCompetition.end_date}
-          label="End"
-          variant="outlined"
-          fullWidth
-          name="end_date"
-          onChange={handleInputChange}
-          margin="dense"
-          className="mt-1"
+        <CustomDatepicker
+          start_date={newCompetition.start_date}
+          end_date={newCompetition.end_date}
+          handleChange={handleDateChange}
         />
         <TextField
           value={newCompetition.user}
@@ -148,7 +142,8 @@ const Create = ({
         >
           {users.map((user) => (
             <MenuItem
-              value={user}
+              key={user._id}
+              value={user._id}
             >{`${user.firstname} ${user.lastname}`}</MenuItem>
           ))}
         </TextField>
@@ -164,7 +159,9 @@ const Create = ({
           select
         >
           {problems.map((problem) => (
-            <MenuItem value={problem}>{problem.statement}</MenuItem>
+            <MenuItem key={user._id} value={problem._id}>
+              {problem.statement}
+            </MenuItem>
           ))}
         </TextField>
       </DialogContent>
