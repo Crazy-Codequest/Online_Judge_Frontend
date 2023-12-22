@@ -20,6 +20,7 @@ export const urlConstants = {
   singleUser: baseUrl + "api/users",
   createUser: baseUrl + "api/users/create",
   problem: baseUrl + "api/problems",
+  user: baseUrl + "api/users",
   createProblem: baseUrl + "api/problems/create",
   updateProblem: baseUrl + "api/problems/update",
 };

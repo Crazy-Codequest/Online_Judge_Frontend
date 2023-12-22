@@ -13,12 +13,18 @@ import { urlConstants } from "../../../apis";
 import { toast } from "react-toastify";
 import { getConfig } from "../../../utils/getConfig";
 
+import CloseIcon from "@mui/icons-material/Close";
+import MenuItem from "@mui/material/MenuItem";
+
 const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
   const [newUser, setNewUser] = useState({
-    email: "",
     firstname: "",
     lastname: "",
     role: "",
+    username: "",
+    email: "",
+    mobile: null,
+    password: "",
   });
   const handleCreateUser = async () => {
     try {
@@ -47,37 +53,68 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
   };
 
   return (
-    <Dialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)}>
-      <DialogTitle>Create User</DialogTitle>
-      <DialogContent>
+    <Dialog
+      fullWidth
+      maxWidth={false}
+      fullScreen
+      open={openCreateDialog}
+      onClose={() => setOpenCreateDialog(false)}
+    >
+      <DialogTitle className="mt-2 ml-2">Create User</DialogTitle>
+      <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
+        <CloseIcon />
+      </div>
+      <DialogContent className="dialog-content">
         <DialogContentText>Enter user details</DialogContentText>
-        <TextField
-          label="Firstname"
-          variant="outlined"
-          fullWidth
-          margin="dense"
-          name="firstname"
-          value={newUser.firstname}
-          onChange={handleInputChange}
-        />
-        <TextField
-          label="Lastname"
-          variant="outlined"
-          fullWidth
-          margin="dense"
-          name="lastname"
-          value={newUser.lastname}
-          onChange={handleInputChange}
-        />
-        <TextField
-          value={newUser.email}
-          label="Email"
-          variant="outlined"
-          fullWidth
-          name="email"
-          onChange={handleInputChange}
-          margin="dense"
-        />
+        <div className="flex-end">
+          <TextField
+            label="Firstname"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+            name="firstname"
+            value={newUser.firstname}
+            onChange={handleInputChange}
+            className="mt-1"
+            style={{ width: "45%" }}
+          />
+          <TextField
+            label="Lastname"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+            name="lastname"
+            value={newUser.lastname}
+            onChange={handleInputChange}
+            className="mt-1"
+            style={{ width: "45%" }}
+          />
+        </div>
+        <div className="flex-end">
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
+            margin="dense"
+            name="username"
+            value={newUser.username}
+            onChange={handleInputChange}
+            className="mt-1"
+            style={{ width: "45%" }}
+          />
+          <TextField
+            value={newUser.mobile}
+            label="Mobile"
+            variant="outlined"
+            fullWidth
+            name="mobile"
+            onChange={handleInputChange}
+            margin="dense"
+            className="mt-1"
+            style={{ width: "45%" }}
+          />
+        </div>
+
         <TextField
           value={newUser.role}
           label="Role"
@@ -86,9 +123,36 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
           margin="dense"
           name="role"
           onChange={handleInputChange}
+          className="mt-1"
+          select
+        >
+          <MenuItem value="user">User</MenuItem>
+          <MenuItem value="admin">Admin</MenuItem>
+        </TextField>
+
+        <TextField
+          value={newUser.email}
+          label="Email"
+          variant="outlined"
+          fullWidth
+          name="email"
+          onChange={handleInputChange}
+          margin="dense"
+          className="mt-1"
+        />
+
+        <TextField
+          value={newUser.password}
+          label="Password"
+          variant="outlined"
+          fullWidth
+          margin="dense"
+          name="password"
+          onChange={handleInputChange}
+          className="mt-1"
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions className="action-buttons">
         <Button onClick={handleCreateUser}>Create</Button>
         <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
       </DialogActions>

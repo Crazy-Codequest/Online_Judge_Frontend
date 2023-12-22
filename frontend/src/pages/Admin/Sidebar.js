@@ -57,7 +57,7 @@ const Sidebar = ({
             icon={<ShieldRoundedIcon />}
           >
             {" "}
-            Create Users{" "}
+            Create User{" "}
           </MenuItem>
         </SubMenu>
         <SubMenu label="Problems" icon={<SettingsApplicationsRoundedIcon />}>

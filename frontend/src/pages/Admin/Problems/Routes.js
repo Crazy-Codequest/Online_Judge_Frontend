@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Table from "./Table";
 import Create from "./Create";
 import Edit from "./Edit";
-import Delete from "../Users/Delete";
+import Delete from "./Delete";
 
 const ProblemRoutes = ({
   openCreateProblemDialog,
