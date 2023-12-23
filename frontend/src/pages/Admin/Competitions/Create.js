@@ -9,7 +9,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import axios from "axios";
-import { urlConstants } from "../../../apis";
+import { adminRoutes, urlConstants } from "../../../apis";
 import { toast } from "react-toastify";
 import { getConfig } from "../../../utils/getConfig";
 
@@ -74,7 +74,7 @@ const Create = ({
   const getProblemIds = async () => {
     try {
       const { data } = await axios.get(
-        `${urlConstants.adminProblemId}/${user._id}`
+        `${adminRoutes.getProblemIds}/${user._id}`
       );
       setProblems(data.problems);
       console.log(data.problems);
@@ -86,7 +86,7 @@ const Create = ({
   const getUserIds = async () => {
     try {
       const { data } = await axios.get(
-        `${urlConstants.adminUserId}/${user._id}`
+        `${adminRoutes.adminUserId}/${user._id}`
       );
       setUsers(data.users);
     } catch (e) {
@@ -108,7 +108,7 @@ const Create = ({
       onClose={() => setOpenCreateDialog(false)}
     >
       {console.log(newCompetition)}
-      <DialogTitle>Create Competition</DialogTitle>
+      <DialogTitle className="mt-2 ml-2">Create Competition</DialogTitle>
       <DialogContent className="dialog-content">
         <DialogContentText>Enter compeitition details</DialogContentText>
         <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
