@@ -5,6 +5,7 @@ body {
 }
 
 .app {
+  min-height: 100vh;
   padding-top: 5rem;
   overflow-y: auto;
   background-image: radial-gradient(

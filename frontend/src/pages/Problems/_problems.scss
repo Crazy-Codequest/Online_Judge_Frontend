@@ -1,8 +1,11 @@
 .problem-list {
-  padding: 5rem;
+  padding: 3rem;
   width: 90vw;
-  height: 90vh;
   margin: 0 auto;
+
+  .pointer {
+    cursor: pointer;
+  }
 
   .flex {
     display: flex;
