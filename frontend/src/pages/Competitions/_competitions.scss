@@ -1,17 +1,13 @@
-.competition-page {
+.competitions-page {
   padding: 0 5rem;
-  height: 90vh;
+  min-height: 90vh;
 
   .table {
     width: 50vw;
-    height: 80vh;
-    overflow-y: auto;
     background-color: white;
-    margin: 0rem auto;
+    margin: 2rem auto;
     padding: 1rem;
     border-radius: 20px;
-    margin-bottom: 5rem;
-    margin-top: 2rem;
   }
 
   ::-webkit-scrollbar {

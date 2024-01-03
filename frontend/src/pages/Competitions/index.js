@@ -102,7 +102,7 @@ const Competitions = () => {
   }
 
   return (
-    <div className="competition-page">
+    <div className="competitions-page">
       <div className="table">
         {competitions.map((competition) => (
           <div key={competition._id} className="compeitition-card">
