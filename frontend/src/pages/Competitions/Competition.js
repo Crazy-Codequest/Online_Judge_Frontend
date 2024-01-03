@@ -3,16 +3,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../Loader/Loader";
 import axios from "axios";
 import getFormattedDateTime from "../../utils/time";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import CompetitionTimer from "./timer";
+import { setTimestamp } from "../../features/auth/dataSlice";
 
 const Competition = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [problems, setProblems] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const { user } = useSelector((state) => state.auth);
+  const { timestamp } = useSelector((state) => state.data);
+
+  const dispatch = useDispatch();
 
   const getProblems = async () => {
     try {
@@ -24,6 +31,10 @@ const Competition = () => {
         getConfig()
       );
       setProblems(data.fetchedCompetition.problems);
+      const timestamp = data.fetchedCompetition.users.filter(
+        (compuser) => compuser.userId === user._id
+      )[0].timestamp;
+      dispatch(setTimestamp(timestamp));
     } catch (e) {
       if (
         e.response.data.error === "This competition is not currently active"
@@ -48,6 +59,7 @@ const Competition = () => {
 
   return (
     <div className="competition-page">
+      <CompetitionTimer competitionTimestamp={timestamp} />
       <div className="table">
         {problems.map((problem) => (
           <div key={problem._id} className="compeitition-card">

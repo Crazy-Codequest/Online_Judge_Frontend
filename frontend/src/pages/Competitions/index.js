@@ -28,7 +28,13 @@ const Competitions = () => {
       setCompetitions((prevCompetitions) =>
         prevCompetitions.map((competition) =>
           competition._id === id
-            ? { ...competition, user: [...competition.user, user._id] }
+            ? {
+                ...competition,
+                users: [
+                  ...competition.users,
+                  { userId: user._id, timestamp: new Date() },
+                ],
+              }
             : competition
         )
       );
@@ -60,13 +66,23 @@ const Competitions = () => {
     }
   };
 
+  const foundUser = (competition) => {
+    return competition.users.find((user) => user?.userId === user._id);
+  };
+
+  const foundUsers = (competition) => {
+    return competition.users.find(
+      (comp_user) => comp_user?.userId === user._id
+    );
+  };
+
   const handleCompetitionRedirect = (competition) => {
     const currentDate = new Date();
     if (
       currentDate >= new Date(competition.start_date) &&
       currentDate <= new Date(competition.end_date)
     ) {
-      if (!competition.user.includes(user._id)) {
+      if (foundUser(competition)) {
         toast.error("Please register for this competition first");
         return;
       }
@@ -113,12 +129,10 @@ const Competitions = () => {
                 <button
                   onClick={() => addUserToCompetition(competition._id)}
                   className={`btn-col primary ${
-                    competition.user.includes(user._id) ? "register" : ""
+                    foundUser(competition) ? "register" : ""
                   }`}
                 >
-                  {competition.user.includes(user._id)
-                    ? "Registered"
-                    : "Register"}
+                  {foundUsers(competition) ? "Registered" : "Register"}
                 </button>
               </div>
             </div>
