@@ -25,6 +25,7 @@ import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
 import ProfilePage from "./pages/Profile";
 import Admin from "./pages/Admin";
+import CompetitionProblem from "./pages/Competitions/Problems/Statement";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -85,6 +86,10 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/statement/:id" element={<StatementPage />} />
+            <Route
+              path="/competition/statement/:id"
+              element={<CompetitionProblem />}
+            />
             <Route index element={<Navigate replace to="/problems" />} />
 
             <Route path="/problems" index element={<ProblemList />} />

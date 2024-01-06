@@ -71,7 +71,9 @@ const Competition = () => {
               <div className="flex-end">
                 <h3
                   className="pointer"
-                  onClick={() => navigate(`/statement/${problem._id}`)}
+                  onClick={() =>
+                    navigate(`/competition/statement/${problem._id}`)
+                  }
                 >
                   {problem.statement}
                 </h3>
