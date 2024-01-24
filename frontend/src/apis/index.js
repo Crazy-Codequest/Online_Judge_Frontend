@@ -25,6 +25,9 @@ export const urlConstants = {
   updateProblem: baseUrl + "api/problems/update",
   getCompetitionProblem: baseUrl + "api/competitions/problem/id",
   getTimestamp: baseUrl + "api/competitions/timestamp",
+  getUserSubmissions: baseUrl + "api/competitions/getusersubmisions",
+  getAllSubmissions: baseUrl + "api/competitions/getallsubmisions",
+  getLeaderboard: baseUrl + "api/competitions/getleaderboard",
 };
 
 export const adminRoutes = {

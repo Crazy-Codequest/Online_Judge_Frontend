@@ -25,6 +25,7 @@ import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
 import ProfilePage from "./pages/Profile";
 import Admin from "./pages/Admin";
+import CompetitionStatement from "./pages/Competitions/Problems/Statement";
 import CompetitionProblem from "./pages/Competitions/Problems/Statement";
 
 function App() {

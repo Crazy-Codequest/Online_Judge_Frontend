@@ -96,6 +96,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
         code,
         p_id: id,
         u_id: user._id,
+        input: testCase,
       };
 
       const { data } = await axios.post(
