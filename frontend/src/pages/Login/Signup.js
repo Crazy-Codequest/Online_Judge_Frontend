@@ -131,6 +131,15 @@ const SignUp = () => {
               margin="normal"
               required
               fullWidth
+              name="username"
+              label="Username"
+              id="username"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               id="firstname"
               label="First Name"
               name="firstname"

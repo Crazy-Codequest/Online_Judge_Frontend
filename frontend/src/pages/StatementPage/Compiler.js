@@ -16,7 +16,15 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
 
-const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
+const Compiler = ({
+  setOutput,
+  setLoading,
+  code,
+  setCode,
+  setDesc,
+  id,
+  c_id,
+}) => {
   const [lang, setLang] = useState("cpp");
   const [input, setInput] = useState("");
   const [compiler, setCompiler] = useState(false);
@@ -96,6 +104,7 @@ const Compiler = ({ setOutput, setLoading, code, setCode, setDesc, id }) => {
         code,
         p_id: id,
         u_id: user._id,
+        c_id: c_id,
         input: testCase,
       };
 

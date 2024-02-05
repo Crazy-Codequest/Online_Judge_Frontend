@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/auth/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 import { urlConstants } from "../../apis";
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -62,7 +63,10 @@ const SignIn = () => {
         })
       );
     } catch (e) {
+      toast.error("Incorrect email or password!");
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 

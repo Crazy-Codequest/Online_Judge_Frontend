@@ -26,10 +26,12 @@ import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
 import Loading from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
   const [newAvatarUrl, setNewAvatarUrl] = useState({});
   const fileInputRef = useRef(null);
+  const [profile, setProfile] = useState({});
   const [userProfile, setUserProfile] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [editProfile, setProfileMode] = useState(false);
@@ -37,6 +39,8 @@ const ProfilePage = () => {
   const [editedProfile, setEditedProfile] = useState({});
 
   const [loading, setLoading] = useState(true);
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleEditClick = () => {
     setEditedProfile({
@@ -108,11 +112,11 @@ const ProfilePage = () => {
       const { data } = await axios.post(
         urlConstants.getSocialProfile,
         {
-          u_id: "6551cf43aa1c26f08576935e",
-          id: "656c11cb2d8a8e0d07b3a03d",
+          u_id: user._id,
         },
         getConfig()
       );
+      setProfile(data);
       setUserProfile(data.socialProfile);
       setNewAvatarUrl(data.profileImageBuffer.img);
     } catch (e) {
@@ -127,8 +131,8 @@ const ProfilePage = () => {
       const { data } = await axios.post(
         urlConstants.updateSocialProfile,
         {
-          u_id: "6551cf43aa1c26f08576935e",
-          id: "656c11cb2d8a8e0d07b3a03d",
+          u_id: user._id,
+          id: userProfile._id,
           ...editedSocial,
         },
         getConfig()
@@ -148,7 +152,7 @@ const ProfilePage = () => {
       const { data } = await axios.post(
         urlConstants.updateUserProfile,
         {
-          id: "6551cf43aa1c26f08576935e",
+          id: user._id,
           user: editedProfile,
         },
         getConfig()
@@ -156,21 +160,21 @@ const ProfilePage = () => {
       socialProfile();
       toast.success("Profile saved succesfully!");
       setEditMode(false);
+      setLoading(false);
     } catch (e) {
       console.log(e);
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleAvatarSave = async () => {
     try {
       const formData = new FormData();
-      formData.append("u_id", "6551cf43aa1c26f08576935e");
-      formData.append("id", "656cb3fbed917e526a9b4e86");
+      formData.append("u_id", user._id);
       formData.append("file", dataURLtoFile(newAvatarUrl, "avatar.jpg"));
-
-      await axios.post(urlConstants.updateAvatarUrl, formData, getConfig());
+      const url = profile?.profileImageBuffer?.img
+        ? urlConstants.updateAvatarUrl
+        : urlConstants.uploadAvatarUrl;
+      await axios.post(url, formData, getConfig());
       toast.success("Profile Image saved successfully!");
     } catch (e) {
       console.error(e);

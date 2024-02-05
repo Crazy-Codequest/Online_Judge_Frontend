@@ -15,6 +15,7 @@ export const urlConstants = {
   getSocialProfile: baseUrl + "api/social-profile/id",
   updateSocialProfile: baseUrl + "api/social-profile/update",
   updateAvatarUrl: baseUrl + "api/images/update",
+  uploadAvatarUrl: baseUrl + "api/images/upload",
   updateUserProfile: baseUrl + "api/users/update",
   getUsers: baseUrl + "api/users",
   singleUser: baseUrl + "api/users",

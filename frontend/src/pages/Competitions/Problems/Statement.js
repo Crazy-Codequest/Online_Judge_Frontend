@@ -98,6 +98,7 @@ const CompetitionProblem = () => {
             setCode={setCode}
             setDesc={setDesc}
             id={problem._id}
+            c_id="6562325b5905a5ec08fabd37"
           />
         </div>
         <div className="compiler-submit"></div>
