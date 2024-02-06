@@ -24,9 +24,12 @@ const Problems = ({ problems, verifySubmissions }) => {
       </TableHead>
       <TableBody>
         {problems.map((problem) => (
-          <TableRow key={problem._id}>
+          <TableRow
+            className={`${verifySubmissions(problem._id) > 0 ? "green" : ""}`}
+            key={problem._id}
+          >
             <TableCell
-              className="pointer"
+              className={`pointer`}
               onClick={() => navigate(`/competition/statement/${problem._id}`)}
             >
               {problem.statement}

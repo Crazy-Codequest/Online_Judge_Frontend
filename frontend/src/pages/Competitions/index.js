@@ -6,6 +6,13 @@ import getFormattedDateTime from "../../utils/time";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { urlConstants } from "../../apis";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+} from "@mui/material";
 import { getConfig } from "../../utils/getConfig";
 
 const Competitions = () => {
@@ -103,41 +110,52 @@ const Competitions = () => {
 
   return (
     <div className="competitions-page">
-      <div className="table">
-        {competitions.map((competition) => (
-          <div key={competition._id} className="compeitition-card">
-            <div className="card-content">
-              <img
-                className="card-img"
-                src="https://leetcode.com/_next/static/images/weekly-default-553ede7bcc8e1b4a44c28a9e4a32068c.png"
-              />
-              <div className="card-info">
-                <div>
-                  <h3
+      <div className="center mt-2 mb-2">
+        <div className="card-width">
+          {competitions.map((competition) => (
+            <Card key={competition._id} className="mb-2">
+              <CardContent>
+                <img
+                  className="img-place"
+                  src="https://leetcode.com/_next/static/images/weekly-default-553ede7bcc8e1b4a44c28a9e4a32068c.png"
+                  alt="Competition Logo"
+                />
+                <div className="mt-1">
+                  <Typography
+                    variant="h5"
+                    component="div"
                     className="pointer"
                     onClick={() => handleCompetitionRedirect(competition)}
                   >
                     {competition.title}
-                  </h3>
-                  <p className="grey">
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className="mt-1"
+                  >
                     Start - {getFormattedDateTime(competition.start_date)}
-                  </p>
-                  <p className="grey">
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
                     End - {getFormattedDateTime(competition.end_date)}
-                  </p>
+                  </Typography>
                 </div>
-                <button
-                  onClick={() => addUserToCompetition(competition._id)}
-                  className={`btn-col primary ${
-                    foundUser(competition) ? "register" : ""
-                  }`}
-                >
-                  {foundUsers(competition) ? "Registered" : "Register"}
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+                <CardActions className="mt-1">
+                  <Button
+                    onClick={() => addUserToCompetition(competition._id)}
+                    variant="contained"
+                    style={{ width: "100%" }}
+                    className={`btn-col primary ${
+                      foundUser(competition) ? "register" : ""
+                    }`}
+                  >
+                    {foundUsers(competition) ? "Registered" : "Register"}
+                  </Button>
+                </CardActions>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ const Competition = () => {
       dispatch(setTimestamp(timestamp));
     } catch (e) {
       if (
-        e.response.data.error === "This competition is not currently active"
+        e.response?.data?.error === "This competition is not currently active"
       ) {
         toast.error("Competition is currently inactive.");
       } else {
