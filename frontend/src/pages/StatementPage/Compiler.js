@@ -13,6 +13,8 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import Editor from "@monaco-editor/react";
+
 
 const Compiler = ({
   setOutput,
@@ -23,7 +25,7 @@ const Compiler = ({
   id,
   c_id,
 }) => {
-  const [lang, setLang] = useState("cpp");
+  const [lang, setLang] = useState("python");
   const [compiler, setCompiler] = useState(false);
   const [testCase, setTestCase] = useState("1.1.1.1");
   const { user } = useSelector((state) => state.auth);
@@ -104,26 +106,31 @@ const Compiler = ({
     }
   };
 
+  function handleEditorChange(value, event) {
+    setCode(value);
+  }
+
+
   return (
     <div className="compiler-design">
       <div className="compiler-page-editor">
         <select
+          value={lang}
           onChange={(e) => setLang(e.target.value)}
           className="select-bx "
         >
           <option value="cpp">C++</option>
-          <option value="py">Python</option>
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
         </select>
         <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
-          <AceEditor
-            mode="java"
-            theme="github"
-            onChange={(e) => onChange(e)}
-            value={code}
-            name="UNIQUE_ID_OF_DIV"
-            editorProps={{ $blockScrolling: true }}
-            style={{ width: "100%", height: "100%" }}
-          />        </div>
+        <Editor
+            code={code}
+            height="100%"
+            language={lang}
+            onChange={handleEditorChange}
+          />        
+        </div>
         {compiler && (
           <div className="compiler-bottom">
             <main className="header">
