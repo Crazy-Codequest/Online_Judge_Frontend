@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { render } from "react-dom";
 import AceEditor from "react-ace";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
-import { grey, green } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-github";
@@ -26,10 +24,8 @@ const Compiler = ({
   c_id,
 }) => {
   const [lang, setLang] = useState("cpp");
-  const [input, setInput] = useState("");
   const [compiler, setCompiler] = useState(false);
   const [testCase, setTestCase] = useState("1.1.1.1");
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   function onChange(newValue) {
@@ -37,20 +33,6 @@ const Compiler = ({
     setCode(newValue);
   }
 
-  // Render editor
-  const Editor = () => {
-    return (
-      <AceEditor
-        mode="java"
-        theme="github"
-        onChange={(e) => onChange(e)}
-        value={code}
-        name="UNIQUE_ID_OF_DIV"
-        editorProps={{ $blockScrolling: true }}
-        style={{ width: "100%", height: "100%" }}
-      />
-    );
-  };
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[500]),
@@ -133,8 +115,15 @@ const Compiler = ({
           <option value="py">Python</option>
         </select>
         <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
-          <Editor />
-        </div>
+          <AceEditor
+            mode="java"
+            theme="github"
+            onChange={(e) => onChange(e)}
+            value={code}
+            name="UNIQUE_ID_OF_DIV"
+            editorProps={{ $blockScrolling: true }}
+            style={{ width: "100%", height: "100%" }}
+          />        </div>
         {compiler && (
           <div className="compiler-bottom">
             <main className="header">
