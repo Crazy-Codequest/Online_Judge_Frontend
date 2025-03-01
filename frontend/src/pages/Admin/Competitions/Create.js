@@ -7,6 +7,7 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  Chip,
 } from "@mui/material";
 import axios from "axios";
 import { adminRoutes, urlConstants } from "../../../apis";
@@ -27,8 +28,8 @@ const Create = ({
     title: "",
     start_date: null,
     end_date: null,
-    problems: "",
-    user: "",
+    problems: [],
+    users: [],
   });
   const [problems, setProblems] = useState([]);
   const [users, setUsers] = useState([]);
@@ -64,10 +65,31 @@ const Create = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setNewCompetition((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleAddItem = (item, type, key) => {
+    console.log(item);
+    setNewCompetition((prevData) => ({
+      ...prevData,
+      [type]: [...prevData[type], { key: key, value: item }],
+    }));
+  };
+
+  const handleAddProblem = (item, type) => {
+    setNewCompetition((prevData) => ({
+      ...prevData,
+      [type]: [...prevData[type], item],
+    }));
+  };
+
+  const handleRemoveItem = (index, type) => {
+    setNewCompetition((prevData) => ({
+      ...prevData,
+      [type]: prevData[type].filter((_, i) => i !== index),
     }));
   };
 
@@ -77,7 +99,6 @@ const Create = ({
         `${adminRoutes.getProblemIds}/${user._id}`
       );
       setProblems(data.problems);
-      console.log(data.problems);
     } catch (e) {
       console.log(e.message);
     }
@@ -107,10 +128,9 @@ const Create = ({
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
     >
-      {console.log(newCompetition)}
       <DialogTitle className="mt-2 ml-2">Create Competition</DialogTitle>
       <DialogContent className="dialog-content">
-        <DialogContentText>Enter compeitition details</DialogContentText>
+        <DialogContentText>Enter competition details</DialogContentText>
         <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
           <CloseIcon />
         </div>
@@ -130,40 +150,57 @@ const Create = ({
           handleChange={handleDateChange}
         />
         <TextField
-          value={newCompetition.user}
-          label="User Id"
+          label="Applicants"
           variant="outlined"
           fullWidth
           margin="dense"
-          name="user"
-          onChange={handleInputChange}
-          className="mt-1"
+          name="users"
           select
+          className="mt-3"
+          onChange={(e) => handleAddItem(e.target.value, "users")}
         >
-          {users.map((user) => (
-            <MenuItem
-              key={user._id}
-              value={user._id}
-            >{`${user.firstname} ${user.lastname}`}</MenuItem>
+          {users.map((user, index) => (
+            <MenuItem key={index} value={user._id}>
+              {`${user.firstname} ${user.lastname}`}
+            </MenuItem>
           ))}
         </TextField>
+        <div className="mt-2">
+          {newCompetition.users.map((user, index) => (
+            <Chip
+              key={index}
+              label={`${user.firstname} ${user.lastname}`}
+              onDelete={() => handleRemoveItem(index, "users")}
+              className="mr-2"
+            />
+          ))}
+        </div>
         <TextField
-          value={newCompetition.problems}
-          label="Problem Id"
+          label="Problem Ids"
           variant="outlined"
           fullWidth
           margin="dense"
           name="problems"
-          onChange={handleInputChange}
-          className="mt-1"
           select
+          className="mt-1"
+          onChange={(e) => handleAddProblem(e.target.value, "problems")}
         >
-          {problems.map((problem) => (
-            <MenuItem key={user._id} value={problem._id}>
+          {problems.map((problem, index) => (
+            <MenuItem key={index} value={problem._id}>
               {problem.statement}
             </MenuItem>
           ))}
         </TextField>
+        <div className="mt-2">
+          {newCompetition.problems.map((problem, index) => (
+            <Chip
+              key={index}
+              label={problem.statement}
+              onDelete={() => handleRemoveItem(index, "problems")}
+              className="mr-2"
+            />
+          ))}
+        </div>
       </DialogContent>
       <DialogActions className="action-buttons">
         <Button onClick={handleCreateCompetition}>Create</Button>

@@ -11,7 +11,7 @@ export default function CustomDatepicker({
   return (
     <div className="mt-1">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="flex-between">
+        <div className="mt-2 flex-between">
           <DatePicker
             key={1}
             onChange={(e) => handleChange("start_date", e["$d"])}
