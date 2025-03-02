@@ -6,12 +6,10 @@ import {
   TextField,
   Box,
   Button,
-  Tooltip,
   Avatar,
-  useTheme,
-  Divider,
   Grid,
   styled,
+  useTheme,
 } from "@mui/material";
 import {
   CalendarMonth,
@@ -23,10 +21,11 @@ import {
   TrendingUp,
 } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { format } from "date-fns";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { Link } from "react-router-dom";
 
 const ProfessionalButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5, 4),
@@ -59,7 +58,6 @@ const HomePage = () => {
   const theme = useTheme();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Dummy data
   const problemOfTheDay = {
     id: 101,
     title: "Array Manipulation",
@@ -90,27 +88,6 @@ const HomePage = () => {
     "2024-03-20": { id: 103, title: "DP Challenge", difficulty: "Hard" },
   };
 
-  const renderCalendarDay = (date, selectedDates, pickersDayProps) => {
-    const dateStr = format(date, "yyyy-MM-dd");
-    const problem = problemCalendar[dateStr];
-    return (
-      <Tooltip title={problem?.title || ""} arrow>
-        <PickersDay
-          {...pickersDayProps}
-          sx={{
-            ...(problem && {
-              fontWeight: 600,
-              "&:not(.Mui-selected)": {
-                border: "2px solid",
-                borderColor: theme.palette.success.light,
-              },
-            }),
-          }}
-        />
-      </Tooltip>
-    );
-  };
-
   return (
     <Container maxWidth="xl" sx={{ py: 6 }}>
       <Box
@@ -119,15 +96,15 @@ const HomePage = () => {
           gridTemplateAreas: {
             xs: `
               "hero"
-              "potd"
-              "calendar"
+              "techInfo"
+              "potdCalendar"
               "stats"
               "leaderboard"
               "quick"
             `,
             md: `
-              "hero hero"
-              "potd calendar"
+              "hero techInfo"
+              "potdCalendar potdCalendar"
               "stats leaderboard"
               "quick quick"
             `,
@@ -137,7 +114,6 @@ const HomePage = () => {
           transition: "all 0.3s ease",
         }}
       >
-        {/* Hero Section */}
         <Paper
           sx={{
             gridArea: "hero",
@@ -173,93 +149,111 @@ const HomePage = () => {
               - Linus Torvalds, Creator of Linux and Git
             </Box>
           </Typography>
-          <ProfessionalButton
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ width: "fit-content" }}
-          >
-            Start Coding
-          </ProfessionalButton>
+          <Link to="/problems">
+            <ProfessionalButton
+              variant="contained"
+              color="secondary"
+              size="large"
+              sx={{ width: "fit-content", mt: 3 }}
+            >
+              Start Coding
+            </ProfessionalButton>
+          </Link>
         </Paper>
 
-        {/* Problem of the Day */}
-        <Paper sx={{ gridArea: "potd", p: 4, borderRadius: 4 }}>
+        <Paper
+          sx={{
+            gridArea: "techInfo",
+            p: 4,
+            borderRadius: 4,
+            bgcolor: "warning.main",
+            color: "common.white",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
           <SectionHeader
-            title="Daily Challenge"
-            icon={<Code />}
+            title="DSA Technical Insights"
+            icon={<School />}
             color="warning"
           />
-          <Box bgcolor="action.hover" p={3} borderRadius={3}>
-            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-              {problemOfTheDay.title}
-              <Box
-                component="span"
-                color="text.secondary"
-                ml={2}
-                fontSize="0.875rem"
-              >
-                #{problemOfTheDay.id}
-              </Box>
-            </Typography>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              {problemOfTheDay.description}
-            </Typography>
-            <Box display="flex" justifyContent="space-between" mt={3}>
-              <Box>
-                <Typography variant="caption" color="text.disabled">
-                  Difficulty:
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color={
-                    problemOfTheDay.difficulty === "Easy"
-                      ? "success.main"
-                      : problemOfTheDay.difficulty === "Medium"
-                      ? "warning.main"
-                      : "error.main"
-                  }
-                  fontWeight="600"
-                >
-                  {problemOfTheDay.difficulty}
-                </Typography>
-              </Box>
-              <ProfessionalButton variant="contained">
-                Solve Challenge
-              </ProfessionalButton>
-            </Box>
-          </Box>
+          <Typography variant="body1">
+            Arrays store data contiguously, allowing O(1) access while demanding
+            careful memory management during resizing. Strings, typically
+            implemented as character arrays, leverage this design for efficient
+            manipulation, enabling powerful techniques like sliding window
+            algorithms for pattern matching.
+          </Typography>
         </Paper>
 
-        {/* Calendar Section */}
-        <Paper sx={{ gridArea: "calendar", p: 4, borderRadius: 4 }}>
-          <SectionHeader
-            title="Practice Calendar"
-            icon={<CalendarMonth />}
-            color="success"
-          />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <StaticDatePicker
-              orientation="portrait"
-              openTo="day"
-              value={selectedDate}
-              onChange={(newValue) => setSelectedDate(newValue)}
-              renderDay={renderCalendarDay}
-              renderInput={() => <TextField />}
-              componentsProps={{
-                actionBar: { actions: [] },
-              }}
-              sx={{
-                "& .MuiPickersCalendarHeader-label": {
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                },
-              }}
+        <Box
+          sx={{
+            gridArea: "potdCalendar",
+            display: "grid",
+            gridTemplateColumns: "7fr 0.3fr",
+            gap: 2,
+          }}
+        >
+          <Paper sx={{ p: 4, borderRadius: 4 }}>
+            <SectionHeader
+              title="Daily Challenge"
+              icon={<Code />}
+              color="warning"
             />
-          </LocalizationProvider>
-        </Paper>
+            <Box bgcolor="action.hover" p={3} borderRadius={3}>
+              <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                {problemOfTheDay.title}
+                <Box
+                  component="span"
+                  color="text.secondary"
+                  ml={2}
+                  fontSize="0.875rem"
+                >
+                  #{problemOfTheDay.id}
+                </Box>
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                {problemOfTheDay.description}
+              </Typography>
+              <Box display="flex" justifyContent="space-between" mt={3}>
+                <Box>
+                  <Typography variant="caption" color="text.disabled">
+                    Difficulty:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color={
+                      problemOfTheDay.difficulty === "Easy"
+                        ? "success.main"
+                        : problemOfTheDay.difficulty === "Medium"
+                        ? "warning.main"
+                        : "error.main"
+                    }
+                    fontWeight="600"
+                  >
+                    {problemOfTheDay.difficulty}
+                  </Typography>
+                </Box>
+                <ProfessionalButton variant="contained">
+                  Solve Challenge
+                </ProfessionalButton>
+              </Box>
+            </Box>
+          </Paper>
 
-        {/* Stats Section */}
+          <Paper sx={{ p: 4, borderRadius: 4 }}>
+            <SectionHeader
+              title="Practice Calendar"
+              icon={<CalendarMonth />}
+              color="success"
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar />
+            </LocalizationProvider>
+          </Paper>
+        </Box>
+
         <Paper sx={{ gridArea: "stats", p: 4, borderRadius: 4 }}>
           <SectionHeader
             title="Platform Stats"
@@ -289,7 +283,6 @@ const HomePage = () => {
           </Grid>
         </Paper>
 
-        {/* Leaderboard Section */}
         <Paper sx={{ gridArea: "leaderboard", p: 4, borderRadius: 4 }}>
           <SectionHeader
             title="Top Performers"
@@ -314,7 +307,6 @@ const HomePage = () => {
           ))}
         </Paper>
 
-        {/* Quick Access Section */}
         <Paper sx={{ gridArea: "quick", p: 4, borderRadius: 4 }}>
           <SectionHeader
             title="Quick Access"
@@ -334,13 +326,15 @@ const HomePage = () => {
                 ),
               }}
             />
-            <ProfessionalButton
-              fullWidth
-              variant="outlined"
-              startIcon={<Announcement />}
-            >
-              Contest Archive
-            </ProfessionalButton>
+            <Link to="competitions">
+              <ProfessionalButton
+                fullWidth
+                variant="outlined"
+                startIcon={<Announcement />}
+              >
+                Contest Archive
+              </ProfessionalButton>
+            </Link>
             <ProfessionalButton
               fullWidth
               variant="outlined"

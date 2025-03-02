@@ -2,7 +2,6 @@ import Compiler from "./pages/Compiler/index";
 import "./App.css";
 import SignIn from "./pages/Login/Login";
 import {
-  BrowserRouter,
   Routes,
   Route,
   Navigate,
@@ -25,14 +24,12 @@ import { urlConstants } from "./apis";
 import { getConfig } from "./utils/getConfig";
 import ProfilePage from "./pages/Profile";
 import Admin from "./pages/Admin";
-import CompetitionStatement from "./pages/Competitions/Problems/Statement";
 import CompetitionProblem from "./pages/Competitions/Problems/Statement";
 import Home from "./pages/Home";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const verifyUser = async () => {
     let user = JSON.parse(localStorage.getItem("user"))?.user;
@@ -54,10 +51,6 @@ function App() {
       localStorage.removeItem("user");
       dispatch(logout());
     }
-  };
-
-  const handleBack = () => {
-    navigate(-1); // This is equivalent to history.goBack()
   };
 
   useEffect(() => {
@@ -93,9 +86,9 @@ function App() {
               path="/competition/statement/:id"
               element={<CompetitionProblem />}
             />
-            <Route index element={<Navigate replace to="/problems" />} />
+            {/* <Route index element={<Navigate replace to="/" />} /> */}
 
-            <Route path="/problems" index element={<ProblemList />} />
+            <Route path="/problems" element={<ProblemList />} />
             {/* <Route path="/problem/:id" element={<Problem />} /> */}
             <Route path="/admin/*" element={<Admin />} />
 
@@ -105,7 +98,7 @@ function App() {
             <Route path="/competitions" element={<Competitions />} />
             <Route path="/profile" element={<ProfilePage />} />
 
-            <Route path="*" element={<Navigate replace to="/problems" />} />
+            <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>
         </>
       ) : (

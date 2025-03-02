@@ -13,6 +13,9 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import GreyCircle from "../../components/GreyCircle";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import CodeIcon from "@mui/icons-material/Code";
+import { CardMedia } from "@mui/material";
+import logo from "../../images/logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -92,14 +95,22 @@ export default function Navbar() {
             Playground
           </Button>
         </Box>
-        <Box sx={{ width: "60%", textAlign: "center" }}>
+        <Box
+          sx={{
+            width: "60%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardMedia sx={{width: 35, height: 35, mr: 1}} component="img" src={logo} />
           <Typography
             className="nav-title"
             variant="h6"
             component="div"
             onClick={() => navigate("/")}
           >
-            Online Judge
+            CodeQuest
           </Typography>
         </Box>
         <Box
