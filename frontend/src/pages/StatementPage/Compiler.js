@@ -14,6 +14,8 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
 import Editor from "@monaco-editor/react";
+import LanguageSelect from "../../components/LanguageSelect";
+import { toast } from "react-toastify";
 
 
 const Compiler = ({
@@ -25,7 +27,7 @@ const Compiler = ({
   id,
   c_id,
 }) => {
-  const [lang, setLang] = useState("python");
+  const [lang, setLang] = useState("cpp");
   const [compiler, setCompiler] = useState(false);
   const [testCase, setTestCase] = useState("1.1.1.1");
   const { user } = useSelector((state) => state.auth);
@@ -58,6 +60,10 @@ const Compiler = ({
   };
 
   const handleRun = async () => {
+    if(!code.length){
+      toast.error("No code detected. Please add some code before submitting.")
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -74,6 +80,7 @@ const Compiler = ({
       setOutput(data.output);
       setDesc(false);
     } catch (e) {
+      setOutput("There was a error while running your code", e);
       console.log(e);
     } finally {
       setLoading(false);
@@ -81,6 +88,12 @@ const Compiler = ({
   };
 
   const handleSubmit = async () => {
+    if (!code.length) {
+      toast.error(
+        "No code detected. Please add some code before submitting."
+      );
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -114,22 +127,15 @@ const Compiler = ({
   return (
     <div className="compiler-design">
       <div className="compiler-page-editor">
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value)}
-          className="select-bx "
-        >
-          <option value="cpp">C++</option>
-          <option value="python">Python</option>
-          <option value="javascript">JavaScript</option>
-        </select>
+        <LanguageSelect lang={lang} setLang={setLang} />
         <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
-        <Editor
+          <Editor
             code={code}
             height="100%"
             language={lang}
             onChange={handleEditorChange}
-          />        
+            options={{ automaticLayout: true }}
+          />
         </div>
         {compiler && (
           <div className="compiler-bottom">

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import { Editor } from "@monaco-editor/react";
+import { Button, TextField } from "@mui/material";
+import LanguageSelect from "../../components/LanguageSelect";
 
 const Compiler = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
-  const dispatch = useDispatch();
+  const [lang, setLang] = useState("cpp");
 
   const handleSubmit = async () => {
     try {
       const payload = {
-        lang: "cpp",
+        lang,
         code,
         input,
       };
@@ -31,11 +32,8 @@ const Compiler = () => {
     }
   };
 
-  {
-    /* <select className="select-bx ">
-        <option value="cpp">C++</option>
-        <option value="py">Python</option>
-      </select> */
+  function handleEditorChange(value, event) {
+    setCode(value);
   }
 
   return (
@@ -43,18 +41,35 @@ const Compiler = () => {
       <div className="right-page-editor">
         <div className="nav-right">
           <p className="nav-title-compiler">Main.cpp</p>
-          <button onClick={handleSubmit} className="desktop-run-button run">
+          <LanguageSelect
+            sx={{ height: "100%" }}
+            lang={lang}
+            setLang={setLang}
+          />
+          <Button
+            sx={{ ml: "auto", mr: 2 }}
+            variant="contained"
+            onClick={handleSubmit}
+          >
             Run
-          </button>
+          </Button>
         </div>
-        <textarea
-          onChange={(e) => setCode(e.target.value)}
-          className="code-editor"
-        ></textarea>
-        <textarea
+        <Editor
+          code={code}
+          height="50vh"
+          language={lang}
+          onChange={handleEditorChange}
+        />
+        <TextField
+          placeholder="Add Input"
+          rows={7}
+          multiline={true}
+          sx={{
+            backgroundColor: "#fff",
+            width: "100%",
+          }}
           onChange={(e) => setInput(e.target.value)}
-          className="input-box"
-        ></textarea>
+        />
       </div>
       <div className="left-page-editor">
         <div className="nav-left">
@@ -66,7 +81,11 @@ const Compiler = () => {
             Clear
           </button>
         </div>
-        <textarea value={output} className="output-tabbox"></textarea>
+        <textarea
+          value={output}
+          readOnly
+          className="output-tabbox"
+        />
       </div>
     </div>
   );
