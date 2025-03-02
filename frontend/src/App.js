@@ -27,6 +27,7 @@ import ProfilePage from "./pages/Profile";
 import Admin from "./pages/Admin";
 import CompetitionStatement from "./pages/Competitions/Problems/Statement";
 import CompetitionProblem from "./pages/Competitions/Problems/Statement";
+import Home from "./pages/Home";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -86,6 +87,7 @@ function App() {
         <>
           <Navbar />
           <Routes>
+            <Route path="/" index element={<Home />} />
             <Route path="/statement/:id" element={<StatementPage />} />
             <Route
               path="/competition/statement/:id"

@@ -65,7 +65,7 @@ export default function Navbar() {
         >
           <Button
             sx={{ textTransform: "none" }}
-            onClick={() => navigate("/problems")}
+            onClick={() => navigate("/")}
             color="inherit"
           >
             Home
