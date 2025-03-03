@@ -1,3 +1,3 @@
 ﻿# Online_Judge_Frontend
 
-## Project link - https://online-judge001.netlify.app/
+## Project link - http://crazy-codequest.netlify.app/
