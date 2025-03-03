@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Chip, Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
@@ -16,6 +16,7 @@ const Problems = () => {
     page: 0,
     pageSize: PROBLEMS_PER_PAGE,
   });
+  const [topicCounts, setTopicCounts] = useState([]);
 
   const navigate = useNavigate();
 
@@ -32,7 +33,18 @@ const Problems = () => {
       }
     };
 
+    const getTopicCounts = async () => {
+      try{
+        const {data} = await axios.get(urlConstants.getTopicCounts, getConfig());
+        setTopicCounts(data.topicCounts);
+        console.log(data.topicCounts);
+      }catch(e){
+        console.log(e);
+      }
+    }
+
     getProblems();
+    getTopicCounts();
   }, []);
 
   if (loading) return <Loading />;
@@ -86,8 +98,40 @@ const columns = [
 
 
   return (
-    <Box sx={{ width: "100%", display: "flex", justifyContent: "center", py: 6 }}>
-      <Paper sx={{ width: "50%", boxShadow: "none" }}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        py: 6,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+          width: { xs: "95%", md: "70%", lg: "50%" },
+          mb: 3,
+        }}
+      >
+        {topicCounts.map((topic) => {
+          return (
+            <Typography>
+              {`${topic._id} `}
+              <Chip sx={{ p: 0 }} variant="filter" label={topic.count} />
+            </Typography>
+          );
+        })}
+      </Box>
+      <Box
+        sx={{
+          width: { xs: "95%", md: "70%", lg: "50%" },
+          boxShadow: "none",
+        }}
+      >
         <DataGrid
           rows={problems.slice(
             paginationModel.page * paginationModel.pageSize,
@@ -127,7 +171,7 @@ const columns = [
             },
           }}
         />
-      </Paper>
+      </Box>
     </Box>
   );
 };
