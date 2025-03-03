@@ -8,9 +8,4 @@ body {
   min-height: 100vh;
   padding-top: 5rem;
   overflow-y: auto;
-  background-image: radial-gradient(
-    closest-side at 50% 135%,
-    #ffffff 50%,
-    #eceff1 100%
-  );
 }

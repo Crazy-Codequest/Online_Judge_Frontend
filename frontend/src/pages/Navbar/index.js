@@ -13,35 +13,54 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import GreyCircle from "../../components/GreyCircle";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import CodeIcon from "@mui/icons-material/Code";
-import { CardMedia } from "@mui/material";
+import { CardMedia, IconButton } from "@mui/material";
 import logo from "../../images/logo.png";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useIsTab } from "../../hooks/use-is-tab";
+import { useIsMobile } from "../../hooks/use-is-mobile";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const isTab  = useIsTab();
+  const isMobile = useIsMobile();
 
-  const { user } = useSelector((state) => state.auth);
+  const [anchorElLeft, setAnchorElLeft] = React.useState(null);
+  const [anchorElRight, setAnchorElRight] = React.useState(null);
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleLeftMenuClick = (event) => {
+    setAnchorElLeft(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleRightMenuClick = (event) => {
+    setAnchorElRight(event.currentTarget);
   };
 
-  const handleMenuItemClick = (path) => {
+  const handleLeftMenuClose = () => {
+    setAnchorElLeft(null);
+  };
+
+  const handleRightMenuClose = () => {
+    setAnchorElRight(null);
+  };
+
+
+  const handleMenuLeftItemClick = (path) => {
     navigate(path);
-    handleMenuClose();
+    handleLeftMenuClose();
   };
+
+   const handleMenuRightItemClick = (path) => {
+     navigate(path);
+     handleRightMenuClose();
+   };
 
   return (
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "#f8f9fa",
+        backgroundColor: "#fff",
         color: "#0000008c",
         boxShadow: "none",
         borderBottom: "0.2px solid #ddd",
@@ -50,60 +69,69 @@ export default function Navbar() {
       }}
     >
       <Toolbar sx={{ minHeight: "0 !important", padding: 0, width: "100%" }}>
-        {/* <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton> */}
+        {isTab && (
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ ml: 2 }}
+            onClick={handleLeftMenuClick}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        {!isTab && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+            }}
+          >
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => navigate("/")}
+              color="inherit"
+            >
+              Home
+            </Button>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => navigate("/problems")}
+              color="inherit"
+            >
+              Problems
+            </Button>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => navigate("/competitions")}
+              color="inherit"
+            >
+              Contest
+            </Button>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => navigate("/compiler")}
+              color="inherit"
+            >
+              Playground
+            </Button>
+          </Box>
+        )}
         <Box
           sx={{
-            width: "25%",
             display: "flex",
-            gap: 2,
-          }}
-        >
-          <Button
-            sx={{ textTransform: "none" }}
-            onClick={() => navigate("/")}
-            color="inherit"
-          >
-            Home
-          </Button>
-          <Button
-            sx={{ textTransform: "none" }}
-            onClick={() => navigate("/problems")}
-            color="inherit"
-          >
-            Problems
-          </Button>
-          <Button
-            sx={{ textTransform: "none" }}
-            onClick={() => navigate("/competitions")}
-            color="inherit"
-          >
-            Contest
-          </Button>
-          <Button
-            sx={{ textTransform: "none" }}
-            onClick={() => navigate("/compiler")}
-            color="inherit"
-          >
-            Playground
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            width: "60%",
-            display: "flex",
-            justifyContent: "center",
+            justifyContent: { xs: "end", sm: "center" },
             alignItems: "center",
+            flexGrow: 1,
+            mr: { xs: 2, sm: 0 },
           }}
         >
-          <CardMedia sx={{width: 35, height: 35, mr: 1}} component="img" src={logo} />
+          <CardMedia
+            sx={{ width: 35, height: 35, mr: 1 }}
+            component="img"
+            src={logo}
+          />
           <Typography
             className="nav-title"
             variant="h6"
@@ -115,28 +143,30 @@ export default function Navbar() {
         </Box>
         <Box
           sx={{
-            width: "25%",
-            display: "flex",
+            display: { xs: "none", sm: "flex" },
             justifyContent: "end",
             alignItems: "center",
             gap: 2,
           }}
         >
           <SearchOutlinedIcon />
-          <GreyCircle sx={{ ml: 2 }}>
+          <GreyCircle sx={{ ml: { xs: 0, md: 2 } }}>
             <DarkModeOutlinedIcon sx={{ width: 18 }} />
           </GreyCircle>
 
           <NotificationsNoneOutlinedIcon />
 
-          <GreyCircle sx={{ ml: 5 }} onClick={handleMenuClick}>
+          <GreyCircle
+            sx={{ ml: { xs: 0, md: 5 } }}
+            onClick={handleRightMenuClick}
+          >
             <Typography>C</Typography>
           </GreyCircle>
         </Box>
 
         <Menu
           id="menu-appbar"
-          anchorEl={anchorEl}
+          anchorEl={anchorElLeft}
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
@@ -146,16 +176,63 @@ export default function Navbar() {
             vertical: "top",
             horizontal: "right",
           }}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
+          open={Boolean(anchorElLeft)}
+          onClose={handleLeftMenuClose}
         >
-          <MenuItem onClick={() => handleMenuItemClick("/admin")}>
+          <MenuItem onClick={() => handleMenuLeftItemClick("/")}>Home</MenuItem>
+          <MenuItem onClick={() => handleMenuLeftItemClick("/problems")}>
+            Problems
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuLeftItemClick("/competitions")}>
+            Contest
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuLeftItemClick("/compiler")}>
+            Playground
+          </MenuItem>
+          {isMobile && (
+            <>
+              <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
+                Admin
+              </MenuItem>
+              <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
+                Dashboard
+              </MenuItem>
+              <MenuItem onClick={() => handleMenuRightItemClick("/profile")}>
+                Profile
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  dispatch(logout());
+                }}
+              >
+                Logout
+              </MenuItem>
+            </>
+          )}
+        </Menu>
+        <Menu
+          id="left-menu-appbar"
+          anchorEl={anchorElRight}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          open={Boolean(anchorElRight)}
+          onClose={handleRightMenuClose}
+        >
+          <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
             Admin
           </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick("/compiler")}>
+          <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
             Dashboard
           </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick("/profile")}>
+          <MenuItem onClick={() => handleMenuRightItemClick("/profile")}>
             Profile
           </MenuItem>
           <MenuItem

@@ -1,117 +1,134 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
-import { Pagination } from "@mui/material";
+import { Box, Paper } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
 import { PROBLEMS_PER_PAGE } from "../../utils/constants";
 import { urlConstants } from "../../apis";
 import Loading from "../Loader/Loader";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Problems = () => {
   const [problems, setProblems] = useState([]);
-  const [problemsData, setProblemsData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [pageNumber, setPageNumber] = useState(1);
-  const count = Math.ceil(problemsData.length / PROBLEMS_PER_PAGE);
+  const [totalProblems, setTotalProblems] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: PROBLEMS_PER_PAGE,
+  });
 
   const navigate = useNavigate();
 
-  const getProblems = async () => {
-    try {
-      const { data } = await axios.get(urlConstants.getProblems, getConfig());
-
-      setProblemsData(data.problems);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPageNumber(newPage);
-  };
-
   useEffect(() => {
-    if (problemsData.length) {
-      const filteredProblems = problemsData.slice(
-        (pageNumber - 1) * PROBLEMS_PER_PAGE,
-        pageNumber * PROBLEMS_PER_PAGE
-      );
-      setProblems(filteredProblems);
-    }
-  }, [pageNumber, problemsData]);
+    const getProblems = async () => {
+      try {
+        const { data } = await axios.get(urlConstants.getProblems, getConfig());
+        setTotalProblems(data.problems.length);
+        setProblems(data.problems);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
     getProblems();
   }, []);
 
-  if (loading && problems.length === 0) {
-    return <Loading />;
-  }
+  if (loading) return <Loading />;
+
+const columns = [
+  {
+    field: "statement",
+    headerName: "Statement",
+    flex: 2,
+    sortable: true,
+    renderCell: (params) => (
+      <Link style={{
+        color: "inherit", textDecoration: "none"
+      }} to={`/statement/${params.row._id}`}>
+        <span style={{ cursor: "pointer" }}>{params.value}</span>
+      </Link>
+    ),
+  },
+  {
+    field: "description",
+    headerName: "Description",
+    flex: 3,
+    sortable: false,
+    valueGetter: (value, row, column, apiRef) => {
+      const descArray = value;
+      if (Array.isArray(descArray)) {
+        const formattedDesc = descArray.join(" "); 
+        return formattedDesc.length > 100
+          ? `${formattedDesc.substring(0, 100)}...`
+          : formattedDesc;
+      }
+      console.log(value);
+
+      return value;
+    },
+  },
+  {
+    field: "difficulty",
+    headerName: "Difficulty",
+    flex: 1,
+    sortable: true,
+  },
+  {
+    field: "competition_problem",
+    headerName: "Competition Problem",
+    flex: 1,
+    sortable: true,
+    valueGetter: (params) => (params.value ? "Yes" : "No"),
+  },
+];
+
 
   return (
-    <div className="problem-list">
-      {console.log(problems)}
-      <TableContainer
-        className="table"
-        sx={{ width: "100%", margin: "2rem auto" }}
-        component={Paper}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className="center">Statement</TableCell>
-              <TableCell className="center">Description</TableCell>
-              <TableCell className="center">Topic</TableCell>
-              <TableCell className="center">Difficulty</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {problems.map((problem) => (
-              <TableRow key={problem._id}>
-                <TableCell
-                  onClick={(event) => navigate(`/statement/${problem._id}`)}
-                  width="40%"
-                  className="center pointer"
-                >
-                  {problem.statement}
-                </TableCell>
-                <TableCell width="30%" className="center">
-                  {`${
-                    String(problem.description).length > 100
-                      ? String(problem.description).substring(0, 100) + "..."
-                      : String(problem.description)
-                  }`}
-                </TableCell>
-                <TableCell width="15%" className="center">
-                  {problem.difficulty}
-                </TableCell>
-                <TableCell width="15%" className="center">
-                  {problem.competition_problem ? "true" : "false"}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Pagination
-        count={count}
-        page={pageNumber}
-        onChange={handleChangePage}
-        sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
-      />
-    </div>
+    <Box sx={{ width: "100%", display: "flex", justifyContent: "center", py: 6 }}>
+      <Paper sx={{ width: "50%", boxShadow: "none" }}>
+        <DataGrid
+          rows={problems.slice(
+            paginationModel.page * paginationModel.pageSize,
+            (paginationModel.page + 1) * paginationModel.pageSize
+          )}
+          columns={columns}
+          pagination
+          paginationMode="server"
+          rowCount={totalProblems}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          getRowId={(row) => row._id}
+          disableColumnSeparator
+          disableSelectionOnClick
+          hideFooterSelectedRowCount
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
+          }
+          sx={{
+            border: "none",
+            "& .MuiDataGrid-cell": {
+              padding: "4px",
+              border: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: "#f5f5f5",
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: "white",
+            },
+            "& .MuiDataGrid-row:nth-of-type(odd)": {
+              backgroundColor: "#f9f9f9",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              border: "none",
+            },
+          }}
+        />
+      </Paper>
+    </Box>
   );
 };
 
