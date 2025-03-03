@@ -27,7 +27,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Chirag
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -104,7 +104,9 @@ const SignIn = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              defaultValue="test@gmail.com"
             />
+
             <TextField
               margin="normal"
               required
@@ -114,7 +116,9 @@ const SignIn = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              defaultValue="Test@123"
             />
+
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"

@@ -15,6 +15,7 @@ import axios from "axios";
 import { getConfig } from "../../../utils/getConfig";
 import Loading from "../../Loader/Loader";
 import { USERS_PER_PAGE } from "../../../utils/constants";
+import { urlConstants } from "../../../apis";
 
 const UserTable = ({
   setSelectedUser,
@@ -33,7 +34,7 @@ const UserTable = ({
   const getUsers = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/users",
+        urlConstants.getUsers,
         getConfig()
       );
       setUsersData(data.users);

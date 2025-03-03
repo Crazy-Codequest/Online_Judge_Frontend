@@ -90,6 +90,9 @@ const HomePage = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 6 }}>
+      <Typography variant="h4" fontWeight={700} gutterBottom>
+        Design in progress
+      </Typography>
       <Box
         sx={{
           display: "grid",

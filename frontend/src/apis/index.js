@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5000/";
+const baseUrl = "https://online-judge-001.onrender.com/";
 
 export const urlConstants = {
   getProblem: baseUrl + "api/problems/id",
@@ -30,6 +30,7 @@ export const urlConstants = {
   getAllSubmissions: baseUrl + "api/competitions/getallsubmisions",
   getLeaderboard: baseUrl + "api/competitions/getleaderboard",
   getTopicCounts: baseUrl + "api/problems/topic-counts",
+  getUsers: baseUrl + "api/users"
 };
 
 export const adminRoutes = {

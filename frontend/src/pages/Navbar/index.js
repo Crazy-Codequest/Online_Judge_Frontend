@@ -24,6 +24,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const isTab  = useIsTab();
   const isMobile = useIsMobile();
+  const {user} = useSelector((state) => state.auth);  
 
   const [anchorElLeft, setAnchorElLeft] = React.useState(null);
   const [anchorElRight, setAnchorElRight] = React.useState(null);
@@ -191,9 +192,11 @@ export default function Navbar() {
           </MenuItem>
           {isMobile && (
             <>
-              <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
-                Admin
-              </MenuItem>
+              {user.role === "admin" && (
+                <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
+                  Admin
+                </MenuItem>
+              )}
               <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
                 Dashboard
               </MenuItem>
@@ -226,9 +229,11 @@ export default function Navbar() {
           open={Boolean(anchorElRight)}
           onClose={handleRightMenuClose}
         >
-          <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
-            Admin
-          </MenuItem>
+          {user.role === "admin" && (
+            <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
+              Admin
+            </MenuItem>
+          )}
           <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
             Dashboard
           </MenuItem>

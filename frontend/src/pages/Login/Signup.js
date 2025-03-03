@@ -29,7 +29,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Chirag
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -52,6 +52,7 @@ const SignUp = () => {
         password: data.get("password"),
         firstname: data.get("firstname"),
         lastname: data.get("lastname"),
+        username: data.get("username"),
       });
       localStorage.setItem(
         "user",
