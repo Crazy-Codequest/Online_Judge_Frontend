@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Paper,
@@ -22,10 +22,14 @@ import {
 } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { format } from "date-fns";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Link } from "react-router-dom";
+import { urlConstants } from "../apis";
+import axios from "axios";
+import { getConfig } from "../utils/getConfig";
+import PracticeCalendar from "./Admin/PracticeCalendar";
+import FloatingText from "./FloatingButton";
 
 const ProfessionalButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5, 4),
@@ -57,13 +61,18 @@ const SectionHeader = ({ title, icon, color = "primary" }) => {
 const HomePage = () => {
   const theme = useTheme();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dailyProblem, setDailyProblem] = useState({});
+  const [problems, setProblems] = useState([]);
 
-  const problemOfTheDay = {
-    id: 101,
-    title: "Array Manipulation",
-    difficulty: "Medium",
-    description:
-      "Solve this array manipulation problem using optimal approaches...",
+  const getProblems = async () => {
+    try {
+      const { data } = await axios.get(urlConstants.getProblems, getConfig());
+      setProblems(data.problems);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      // setLoading(false);
+    }
   };
 
   const leaderboardData = [
@@ -73,26 +82,39 @@ const HomePage = () => {
   ];
 
   const statsSummary = {
-    totalProblems: 1250,
-    activeUsers: 3850,
-    dailySubmissions: 14500,
+    totalProblems: 100,
+    activeUsers: 50,
+    dailySubmissions: 100,
   };
 
-  const problemCalendar = {
-    [format(new Date(), "yyyy-MM-dd")]: {
-      id: 101,
-      title: "Daily Challenge",
-      difficulty: "Medium",
-    },
-    "2024-03-15": { id: 102, title: "Binary Search", difficulty: "Easy" },
-    "2024-03-20": { id: 103, title: "DP Challenge", difficulty: "Hard" },
+  const getData = async () => {
+    try {
+      const { data } = await axios.post(
+        urlConstants.getProblem,
+        {
+          id: "67c54bdeece1696d8d2e66e5",
+        },
+        getConfig()
+      );
+      setDailyProblem(data.customprob);
+    } catch (e) {
+      console.log(e);
+    } 
+    // finally {
+    //   setLoading(false);
+    // }
   };
+
+  useEffect(() => {
+    getData();
+    getProblems();
+  }, []);
 
   return (
     <Container maxWidth="xl" sx={{ py: 6 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Design in progress
-      </Typography>
+      <Box sx={{ width: "100%", mb: 10 }}>
+        <FloatingText />
+      </Box>
       <Box
         sx={{
           display: "grid",
@@ -130,7 +152,7 @@ const HomePage = () => {
           }}
         >
           <Typography variant="h4" fontWeight={700} gutterBottom>
-            Algorithm Excellence
+            CodeQuest - A Algorithm Excellence Platform
           </Typography>
           <Typography
             variant="body1"
@@ -157,7 +179,7 @@ const HomePage = () => {
               variant="contained"
               color="secondary"
               size="large"
-              sx={{ width: "fit-content", mt: 3 }}
+              sx={{ width: "fit-content" }}
             >
               Start Coding
             </ProfessionalButton>
@@ -206,18 +228,18 @@ const HomePage = () => {
             />
             <Box bgcolor="action.hover" p={3} borderRadius={3}>
               <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                {problemOfTheDay.title}
+                {dailyProblem.statement}
                 <Box
                   component="span"
                   color="text.secondary"
                   ml={2}
                   fontSize="0.875rem"
                 >
-                  #{problemOfTheDay.id}
+                  {dailyProblem.id}
                 </Box>
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
-                {problemOfTheDay.description}
+                {dailyProblem.description}
               </Typography>
               <Box display="flex" justifyContent="space-between" mt={3}>
                 <Box>
@@ -227,34 +249,27 @@ const HomePage = () => {
                   <Typography
                     variant="body2"
                     color={
-                      problemOfTheDay.difficulty === "Easy"
+                      dailyProblem.difficulty === "Easy"
                         ? "success.main"
-                        : problemOfTheDay.difficulty === "Medium"
+                        : dailyProblem.difficulty === "Medium"
                         ? "warning.main"
                         : "error.main"
                     }
                     fontWeight="600"
                   >
-                    {problemOfTheDay.difficulty}
+                    {dailyProblem.difficulty}
                   </Typography>
                 </Box>
-                <ProfessionalButton variant="contained">
-                  Solve Challenge
-                </ProfessionalButton>
+                <Link to={`/statement/${dailyProblem._id}`}>
+                  <ProfessionalButton variant="contained">
+                    Solve Challenge
+                  </ProfessionalButton>
+                </Link>
               </Box>
             </Box>
           </Paper>
 
-          <Paper sx={{ p: 4, borderRadius: 4 }}>
-            <SectionHeader
-              title="Practice Calendar"
-              icon={<CalendarMonth />}
-              color="success"
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar />
-            </LocalizationProvider>
-          </Paper>
+          <PracticeCalendar problems={problems} />
         </Box>
 
         <Paper sx={{ gridArea: "stats", p: 4, borderRadius: 4 }}>
