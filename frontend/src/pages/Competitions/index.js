@@ -12,8 +12,11 @@ import {
   CardContent,
   Typography,
   CardActions,
+  Box,
+  CardMedia,
 } from "@mui/material";
 import { getConfig } from "../../utils/getConfig";
+import { images } from "../../data/contest";
 
 const Competitions = () => {
   const params = useParams();
@@ -109,55 +112,62 @@ const Competitions = () => {
   }
 
   return (
-    <div className="competitions-page">
-      <div className="center mt-2 mb-2">
-        <div className="card-width">
-          {competitions.map((competition) => (
-            <Card key={competition._id} className="mb-2">
-              <CardContent>
-                <img
-                  className="img-place"
-                  src="https://leetcode.com/_next/static/images/weekly-default-553ede7bcc8e1b4a44c28a9e4a32068c.png"
-                  alt="Competition Logo"
-                />
-                <div className="mt-1">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    className="pointer"
-                    onClick={() => handleCompetitionRedirect(competition)}
-                  >
-                    {competition.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    className="mt-1"
-                  >
-                    Start - {getFormattedDateTime(competition.start_date)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    End - {getFormattedDateTime(competition.end_date)}
-                  </Typography>
-                </div>
-                <CardActions className="mt-1">
-                  <Button
-                    onClick={() => addUserToCompetition(competition._id)}
-                    variant="contained"
-                    style={{ width: "100%" }}
-                    className={`btn-col primary ${
-                      foundUser(competition) ? "register" : ""
-                    }`}
-                  >
-                    {foundUsers(competition) ? "Registered" : "Register"}
-                  </Button>
-                </CardActions>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        width: "60%",
+        mx: "auto",
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: 2,
+        px: 4,
+      }}
+    >
+      {competitions.map((competition, index) => (
+        <Card key={competition._id} className="mb-2">
+          <CardContent>
+            <CardMedia
+              component="img"
+              sx={{
+                maxHeight: "200px",
+                width: "100%",
+              }}
+              src={images[index % 5]}
+              alt="Competition Logo"
+            />
+              <Typography
+              sx={{mt:1, cursor: "pointer"}}
+                variant="h5"
+                component="div"
+                className="pointer"
+                onClick={() => handleCompetitionRedirect(competition)}
+              >
+                {competition.title}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+              >
+                Start - {getFormattedDateTime(competition.start_date)}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                End - {getFormattedDateTime(competition.end_date)}
+              </Typography>
+            <CardActions className="mt-1">
+              <Button
+                onClick={() => addUserToCompetition(competition._id)}
+                variant="contained"
+                style={{ width: "100%" }}
+                className={`btn-col primary ${
+                  foundUser(competition) ? "register" : ""
+                }`}
+              >
+                {foundUsers(competition) ? "Registered" : "Register"}
+              </Button>
+            </CardActions>
+          </CardContent>
+        </Card>
+      ))}
+    </Box>
   );
 };
 
