@@ -63,6 +63,8 @@ const HomePage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dailyProblem, setDailyProblem] = useState({});
   const [problems, setProblems] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searchedProblems, setSearchedproblems] = useState([]);
 
   const getProblems = async () => {
     try {
@@ -74,6 +76,15 @@ const HomePage = () => {
       // setLoading(false);
     }
   };
+
+  const getSearchedProblems = async () => {
+    try {
+      const {data} = await axios.get(`${urlConstants.getSearchedProblems}/${search}`, getConfig());
+      setSearchedproblems(data.problems);
+    }catch(e){
+      console.error(e);
+    }
+  }
 
   const leaderboardData = [
     { rank: 1, user: "CodeMaster", score: 2450 },
@@ -104,6 +115,52 @@ const HomePage = () => {
     //   setLoading(false);
     // }
   };
+
+  const DailyChallenge = ({dailyProblem}) => {
+    return (
+      <Box bgcolor="action.hover" p={3} borderRadius={3}>
+        <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+          {dailyProblem.statement}
+          <Box
+            component="span"
+            color="text.secondary"
+            ml={2}
+            fontSize="0.875rem"
+          >
+            {dailyProblem.id}
+          </Box>
+        </Typography>
+        <Typography variant="body2" color="text.secondary" paragraph>
+          {dailyProblem.description}
+        </Typography>
+        <Box display="flex" justifyContent="space-between" mt={3}>
+          <Box>
+            <Typography variant="caption" color="text.disabled">
+              Difficulty:
+            </Typography>
+            <Typography
+              variant="body2"
+              color={
+                dailyProblem.difficulty === "Easy"
+                  ? "success.main"
+                  : dailyProblem.difficulty === "Medium"
+                  ? "warning.main"
+                  : "error.main"
+              }
+              fontWeight="600"
+            >
+              {dailyProblem.difficulty}
+            </Typography>
+          </Box>
+          <Link to={`/statement/${dailyProblem._id}`}>
+            <ProfessionalButton variant="contained">
+              Solve Challenge
+            </ProfessionalButton>
+          </Link>
+        </Box>
+      </Box>
+    );
+  }
 
   useEffect(() => {
     getData();
@@ -226,47 +283,7 @@ const HomePage = () => {
               icon={<Code />}
               color="warning"
             />
-            <Box bgcolor="action.hover" p={3} borderRadius={3}>
-              <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                {dailyProblem.statement}
-                <Box
-                  component="span"
-                  color="text.secondary"
-                  ml={2}
-                  fontSize="0.875rem"
-                >
-                  {dailyProblem.id}
-                </Box>
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                {dailyProblem.description}
-              </Typography>
-              <Box display="flex" justifyContent="space-between" mt={3}>
-                <Box>
-                  <Typography variant="caption" color="text.disabled">
-                    Difficulty:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color={
-                      dailyProblem.difficulty === "Easy"
-                        ? "success.main"
-                        : dailyProblem.difficulty === "Medium"
-                        ? "warning.main"
-                        : "error.main"
-                    }
-                    fontWeight="600"
-                  >
-                    {dailyProblem.difficulty}
-                  </Typography>
-                </Box>
-                <Link to={`/statement/${dailyProblem._id}`}>
-                  <ProfessionalButton variant="contained">
-                    Solve Challenge
-                  </ProfessionalButton>
-                </Link>
-              </Box>
-            </Box>
+            <DailyChallenge dailyProblem={dailyProblem} />
           </Paper>
 
           <PracticeCalendar problems={problems} />
@@ -334,16 +351,30 @@ const HomePage = () => {
           <Box display="flex" flexDirection="column" gap={3}>
             <TextField
               fullWidth
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                  getSearchedProblems();
+                }
+              }}
               placeholder="Search problems..."
               variant="outlined"
               InputProps={{
                 endAdornment: (
-                  <ProfessionalButton variant="contained" size="small">
+                  <ProfessionalButton
+                    onClick={getSearchedProblems}
+                    variant="contained"
+                    size="small"
+                  >
                     Search
                   </ProfessionalButton>
                 ),
               }}
             />
+            {searchedProblems.map((problem) => (
+              <DailyChallenge dailyProblem={problem} />
+            ))}
             <Link to="competitions">
               <ProfessionalButton
                 fullWidth
@@ -353,13 +384,15 @@ const HomePage = () => {
                 Contest Archive
               </ProfessionalButton>
             </Link>
-            <ProfessionalButton
-              fullWidth
-              variant="outlined"
-              startIcon={<BarChart />}
-            >
-              Progress Analytics
-            </ProfessionalButton>
+            <Link to="/analytics">
+              <ProfessionalButton
+                fullWidth
+                variant="outlined"
+                startIcon={<BarChart />}
+              >
+                Progress Analytics
+              </ProfessionalButton>
+            </Link>
           </Box>
         </Paper>
       </Box>

@@ -30,7 +30,8 @@ export const urlConstants = {
   getAllSubmissions: baseUrl + "api/competitions/getallsubmisions",
   getLeaderboard: baseUrl + "api/competitions/getleaderboard",
   getTopicCounts: baseUrl + "api/problems/topic-counts",
-  getUsers: baseUrl + "api/users"
+  getUsers: baseUrl + "api/users",
+  getSearchedProblems: baseUrl + "api/problems/search"
 };
 
 export const adminRoutes = {

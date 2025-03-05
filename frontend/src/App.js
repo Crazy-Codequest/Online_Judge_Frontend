@@ -26,6 +26,8 @@ import ProfilePage from "./pages/Profile";
 import Admin from "./pages/Admin";
 import CompetitionProblem from "./pages/Competitions/Problems/Statement";
 import Home from "./pages/Home";
+import Problem from "./pages/Problems/Problem";
+import Analytics from "./pages/Analytics";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -89,7 +91,7 @@ function App() {
             {/* <Route index element={<Navigate replace to="/" />} /> */}
 
             <Route path="/problems" element={<ProblemList />} />
-            {/* <Route path="/problem/:id" element={<Problem />} /> */}
+            <Route path="/problem/:id" element={<Problem />} />
             <Route path="/admin/*" element={<Admin />} />
 
             <Route path="/compiler" element={<Compiler />} />
@@ -97,6 +99,7 @@ function App() {
 
             <Route path="/competitions" element={<Competitions />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/analytics" element={<Analytics />} />
 
             <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>
