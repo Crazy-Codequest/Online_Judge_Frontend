@@ -114,10 +114,14 @@ const Competitions = () => {
   return (
     <Box
       sx={{
-        width: "60%",
+        width: { xs: "100%", lg: "60%" },
         mx: "auto",
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateColumns: {
+          xs: "repeat(1, 1fr)",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+        },
         gap: 2,
         px: 4,
       }}
@@ -134,24 +138,21 @@ const Competitions = () => {
               src={images[index % 5]}
               alt="Competition Logo"
             />
-              <Typography
-              sx={{mt:1, cursor: "pointer"}}
-                variant="h5"
-                component="div"
-                className="pointer"
-                onClick={() => handleCompetitionRedirect(competition)}
-              >
-                {competition.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-              >
-                Start - {getFormattedDateTime(competition.start_date)}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                End - {getFormattedDateTime(competition.end_date)}
-              </Typography>
+            <Typography
+              sx={{ mt: 1, cursor: "pointer" }}
+              variant="h5"
+              component="div"
+              className="pointer"
+              onClick={() => handleCompetitionRedirect(competition)}
+            >
+              {competition.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Start - {getFormattedDateTime(competition.start_date)}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              End - {getFormattedDateTime(competition.end_date)}
+            </Typography>
             <CardActions className="mt-1">
               <Button
                 onClick={() => addUserToCompetition(competition._id)}
