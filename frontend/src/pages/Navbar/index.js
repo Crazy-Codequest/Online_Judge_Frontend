@@ -1,4 +1,3 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,11 +12,13 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import GreyCircle from "../../components/GreyCircle";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { CardMedia, IconButton } from "@mui/material";
+import { CardMedia, IconButton, TextField } from "@mui/material";
 import logo from "../../images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useIsTab } from "../../hooks/use-is-tab";
 import { useIsMobile } from "../../hooks/use-is-mobile";
+import { useState } from "react";
+import { setSearch } from "../../features/auth/dataSlice";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -25,9 +26,11 @@ export default function Navbar() {
   const isTab  = useIsTab();
   const isMobile = useIsMobile();
   const {user} = useSelector((state) => state.auth);  
+  const {search} = useSelector((state) => state.data);
 
-  const [anchorElLeft, setAnchorElLeft] = React.useState(null);
-  const [anchorElRight, setAnchorElRight] = React.useState(null);
+  const [anchorElLeft, setAnchorElLeft] = useState(null);
+  const [anchorElRight, setAnchorElRight] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
 
 
   const handleLeftMenuClick = (event) => {
@@ -150,7 +153,15 @@ export default function Navbar() {
             gap: 2,
           }}
         >
-          <SearchOutlinedIcon />
+          {showSearch ? (
+            <TextField onKeyDown={(e) => {
+              if(e.key === "Enter"){
+                navigate(`/problem/search?terms=${search}`)
+              }
+            }} onChange={(e) => dispatch(setSearch(e.target.value))} onBlur={() => setShowSearch(false)} size="small" value={search} />
+          ) : (
+            <SearchOutlinedIcon sx={{cursor: "pointer"}} onClick={() => setShowSearch(true)} />
+          )}
           <GreyCircle sx={{ ml: { xs: 0, md: 2 } }}>
             <DarkModeOutlinedIcon sx={{ width: 18 }} />
           </GreyCircle>

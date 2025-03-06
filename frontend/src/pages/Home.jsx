@@ -12,7 +12,6 @@ import {
   useTheme,
 } from "@mui/material";
 import {
-  CalendarMonth,
   EmojiEvents,
   Announcement,
   School,
@@ -20,29 +19,16 @@ import {
   Code,
   TrendingUp,
 } from "@mui/icons-material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { format } from "date-fns";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Link } from "react-router-dom";
 import { urlConstants } from "../apis";
 import axios from "axios";
 import { getConfig } from "../utils/getConfig";
 import PracticeCalendar from "./Admin/PracticeCalendar";
 import FloatingText from "./FloatingButton";
+import ProfessionalButton from "../components/Button/ProfessionalButton";
+import DailyChallenge from "./Problems/DailyChallenge";
+import useProblem from "../hooks/use-problem.hook";
 
-const ProfessionalButton = styled(Button)(({ theme }) => ({
-  padding: theme.spacing(1.5, 4),
-  borderRadius: "8px",
-  textTransform: "none",
-  transition: "all 0.3s ease",
-  fontWeight: 600,
-  letterSpacing: "0.5px",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: theme.shadows[3],
-  },
-}));
 
 const SectionHeader = ({ title, icon, color = "primary" }) => {
   const theme = useTheme();
@@ -64,7 +50,8 @@ const HomePage = () => {
   const [dailyProblem, setDailyProblem] = useState({});
   const [problems, setProblems] = useState([]);
   const [search, setSearch] = useState("");
-  const [searchedProblems, setSearchedproblems] = useState([]);
+  const { getSearchedProblems,
+    searchedProblems } = useProblem();
 
   const getProblems = async () => {
     try {
@@ -76,15 +63,6 @@ const HomePage = () => {
       // setLoading(false);
     }
   };
-
-  const getSearchedProblems = async () => {
-    try {
-      const {data} = await axios.get(`${urlConstants.getSearchedProblems}/${search}`, getConfig());
-      setSearchedproblems(data.problems);
-    }catch(e){
-      console.error(e);
-    }
-  }
 
   const leaderboardData = [
     { rank: 1, user: "CodeMaster", score: 2450 },
@@ -115,52 +93,6 @@ const HomePage = () => {
     //   setLoading(false);
     // }
   };
-
-  const DailyChallenge = ({dailyProblem}) => {
-    return (
-      <Box bgcolor="action.hover" p={3} borderRadius={3}>
-        <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-          {dailyProblem.statement}
-          <Box
-            component="span"
-            color="text.secondary"
-            ml={2}
-            fontSize="0.875rem"
-          >
-            {dailyProblem.id}
-          </Box>
-        </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
-          {dailyProblem.description}
-        </Typography>
-        <Box display="flex" justifyContent="space-between" mt={3}>
-          <Box>
-            <Typography variant="caption" color="text.disabled">
-              Difficulty:
-            </Typography>
-            <Typography
-              variant="body2"
-              color={
-                dailyProblem.difficulty === "Easy"
-                  ? "success.main"
-                  : dailyProblem.difficulty === "Medium"
-                  ? "warning.main"
-                  : "error.main"
-              }
-              fontWeight="600"
-            >
-              {dailyProblem.difficulty}
-            </Typography>
-          </Box>
-          <Link to={`/statement/${dailyProblem._id}`}>
-            <ProfessionalButton variant="contained">
-              Solve Challenge
-            </ProfessionalButton>
-          </Link>
-        </Box>
-      </Box>
-    );
-  }
 
   useEffect(() => {
     getData();
@@ -355,7 +287,7 @@ const HomePage = () => {
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => {
                 if(e.key === "Enter"){
-                  getSearchedProblems();
+                  getSearchedProblems(search);
                 }
               }}
               placeholder="Search problems..."
@@ -363,7 +295,7 @@ const HomePage = () => {
               InputProps={{
                 endAdornment: (
                   <ProfessionalButton
-                    onClick={getSearchedProblems}
+                    onClick={() => getSearchedProblems(search)}
                     variant="contained"
                     size="small"
                   >
@@ -372,8 +304,8 @@ const HomePage = () => {
                 ),
               }}
             />
-            {searchedProblems.map((problem) => (
-              <DailyChallenge dailyProblem={problem} />
+            {searchedProblems && searchedProblems.map((problem) => (
+              <DailyChallenge key={problem._id} dailyProblem={problem} />
             ))}
             <Link to="competitions">
               <ProfessionalButton

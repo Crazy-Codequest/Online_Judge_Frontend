@@ -7,7 +7,8 @@ export const urlConstants = {
   getCompetitions: baseUrl + "api/competitions",
   createCompetition: baseUrl + "api/competitions/create",
   updateCompetition: baseUrl + "api/competitions/update",
-  registerForCompetiton: baseUrl + "api/competitions/registeruser",
+  registerUserForCompetiton: baseUrl + "api/competitions/registeruser",
+  addUserForCompetiton: baseUrl + "api/competitions/adduser",
   runCode: baseUrl + "api/code/run",
   submitCode: baseUrl + "api/code/submit",
   loginUser: baseUrl + "api/auth/login",
@@ -31,7 +32,7 @@ export const urlConstants = {
   getLeaderboard: baseUrl + "api/competitions/getleaderboard",
   getTopicCounts: baseUrl + "api/problems/topic-counts",
   getUsers: baseUrl + "api/users",
-  getSearchedProblems: baseUrl + "api/problems/search"
+  getSearchedProblems: baseUrl + "api/problems/search",
 };
 
 export const adminRoutes = {

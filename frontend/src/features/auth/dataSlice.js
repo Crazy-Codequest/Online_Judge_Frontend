@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   timestamp: null,
+  search: ""
 };
 
 const dataSlice = createSlice({
@@ -12,9 +13,13 @@ const dataSlice = createSlice({
       const { payload } = action;
       state.timestamp = payload;
     },
+    setSearch: (state, action) => {
+      const { payload } = action;
+      state.search = payload;
+    }
   },
 });
 
-export const { setTimestamp } = dataSlice.actions;
+export const { setTimestamp, setSearch } = dataSlice.actions;
 
 export default dataSlice.reducer;

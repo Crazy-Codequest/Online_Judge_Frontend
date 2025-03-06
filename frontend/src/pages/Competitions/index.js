@@ -28,7 +28,7 @@ const Competitions = () => {
   const addUserToCompetition = async (id) => {
     try {
       await axios.post(
-        urlConstants.registerForCompetiton,
+        urlConstants.registerUserForCompetiton,
         {
           user_id: user._id,
           id,

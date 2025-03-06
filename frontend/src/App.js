@@ -91,7 +91,7 @@ function App() {
             {/* <Route index element={<Navigate replace to="/" />} /> */}
 
             <Route path="/problems" element={<ProblemList />} />
-            <Route path="/problem/:id" element={<Problem />} />
+            <Route path="/problem/search" element={<Problem />} />
             <Route path="/admin/*" element={<Admin />} />
 
             <Route path="/compiler" element={<Compiler />} />
