@@ -16,6 +16,7 @@ import { getConfig } from "../../utils/getConfig";
 import Editor from "@monaco-editor/react";
 import LanguageSelect from "../../components/LanguageSelect";
 import { toast } from "react-toastify";
+import { CODE_SNIPPETS } from "../../data/snippets";
 
 
 const Compiler = ({
@@ -31,12 +32,6 @@ const Compiler = ({
   const [compiler, setCompiler] = useState(false);
   const [testCase, setTestCase] = useState("1.1.1.1");
   const { user } = useSelector((state) => state.auth);
-
-  function onChange(newValue) {
-    console.log(newValue);
-    setCode(newValue);
-  }
-
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[500]),
@@ -123,17 +118,22 @@ const Compiler = ({
     setCode(value);
   }
 
+  const setLanguage = (val) => {
+    setLang(val);
+    setCode(CODE_SNIPPETS[val]);
+  }
 
   return (
     <div className="compiler-design">
       <div className="compiler-page-editor">
-        <LanguageSelect lang={lang} setLang={setLang} />
+        <LanguageSelect lang={lang} setLang={setLanguage} />
         <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
           <Editor
-            code={code}
+            value={code}
             height="100%"
             language={lang}
             onChange={handleEditorChange}
+            defaultValue={CODE_SNIPPETS[lang]}
             options={{ automaticLayout: true }}
           />
         </div>
