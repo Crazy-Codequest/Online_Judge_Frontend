@@ -12,6 +12,7 @@ import { TableContainer, Paper, Button } from "@mui/material";
 import Problems from "./Table/Problems";
 import Submissions from "./Table/Submissions";
 import Leaderboard from "./Table/Leaderboard";
+import CompetitionTerms from "../Terms";
 
 const Competition = () => {
   const params = useParams();
@@ -22,13 +23,25 @@ const Competition = () => {
   const [leaderboard, setLeaderboard] = useState({});
   const [loading, setLoading] = useState(true);
   const [menuOption, setMenuOption] = useState("problems");
+  const [terms, setTerms] = useState(true);
 
   const { user } = useSelector((state) => state.auth);
   const { timestamp } = useSelector((state) => state.data);
 
   const dispatch = useDispatch();
 
-  const getProblems = async () => {
+  const checkTimeStamp = (data) => {
+    console.log(data.fetchedCompetition.users);
+    const timestamp = data.fetchedCompetition.users.filter(
+      (compuser) => compuser.userId === user._id
+    )[0].timestamp;
+    dispatch(setTimestamp(timestamp));
+    if (timestamp) {
+      setTerms(false);
+    }
+  }
+
+  const getCompetitionOverview = async () => {
     try {
       const { data } = await axios.post(
         urlConstants.getCompetition,
@@ -37,12 +50,27 @@ const Competition = () => {
         },
         getConfig()
       );
-      setProblems(data.fetchedCompetition.problems);
-      const timestamp = data.fetchedCompetition.users.filter(
-        (compuser) => compuser.userId === user._id
-      )[0].timestamp;
-      dispatch(setTimestamp(timestamp));
+      checkTimeStamp(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getProblems = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        urlConstants.getCompetition,
+        {
+          id: params.id,
+        },
+        getConfig()
+      );
+      checkTimeStamp(data);
+      setProblems(data.fetchedCompetition.problems); 
     } catch (e) {
+      console.log(e);
+      
       if (
         e.response?.data?.error === "This competition is not currently active"
       ) {
@@ -111,14 +139,36 @@ const Competition = () => {
     return numberOfPassedSubmissions;
   };
 
-  useEffect(() => {
-    getProblems();
-    getSubmissions();
-    getAllSubmissions();
-    getLeaderboard();
-  }, []);
+  const registerUserForCompetiton = async () => {
+    try {
+      await axios.post(
+        urlConstants.registerUserForCompetiton,
+        {
+          user_id: user._id,
+          id: params.id,
+        },
+        getConfig()
+      );
+      await getCompetitionOverview();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  if (loading) {
+  useEffect(() => {
+    if(!terms){
+      getProblems();
+      getSubmissions();
+      getAllSubmissions();
+      getLeaderboard();
+    }
+  }, [terms]);
+
+  if(terms){
+    return <CompetitionTerms onAccept={registerUserForCompetiton} />;
+  }
+
+  if (loading && !problems.length) {
     return <Loading />;
   }
 

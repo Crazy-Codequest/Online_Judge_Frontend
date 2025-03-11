@@ -28,7 +28,7 @@ const Competitions = () => {
   const addUserToCompetition = async (id) => {
     try {
       await axios.post(
-        urlConstants.registerUserForCompetiton,
+        urlConstants.addUserForCompetiton,
         {
           user_id: user._id,
           id,
@@ -54,9 +54,12 @@ const Competitions = () => {
     }
   };
 
-  const getSearchedCompetition = (id) => {
+  const getSearchedCompetition = (competition) => {
     try {
-      navigate(`/competition/${id}`);
+      if (!foundUsers(competition)) {
+        toast.error("Please register for this competition first");
+        return;
+      } navigate(`/competition/${competition._id}`);
     } catch (e) {
       console.log(e);
     }
@@ -77,12 +80,14 @@ const Competitions = () => {
   };
 
   const foundUser = (competition) => {
-    return competition.users.find((user) => user?.userId === user._id);
+    if(!competition.users) return false;
+    return competition.users.find((user) => user.userId === user._id);
   };
 
-  const foundUsers = (competition) => {
+  const foundUsers = (competition) => {    
+    if (!competition.users) return false;
     return competition.users.find(
-      (comp_user) => comp_user?.userId === user._id
+      (comp_user) => comp_user.userId === user._id
     );
   };
 
@@ -97,7 +102,7 @@ const Competitions = () => {
         return;
       }
 
-      getSearchedCompetition(competition._id);
+      getSearchedCompetition(competition);
     } else {
       toast.error("This competition is not currently active");
     }

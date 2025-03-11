@@ -9,6 +9,7 @@ export const urlConstants = {
   updateCompetition: baseUrl + "api/competitions/update",
   registerUserForCompetiton: baseUrl + "api/competitions/registeruser",
   addUserForCompetiton: baseUrl + "api/competitions/adduser",
+  getCompetitionOverview: baseUrl + "api/competitions/overview",
   runCode: baseUrl + "api/code/run",
   submitCode: baseUrl + "api/code/submit",
   loginUser: baseUrl + "api/auth/login",

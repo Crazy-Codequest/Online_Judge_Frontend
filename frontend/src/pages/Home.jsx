@@ -45,7 +45,7 @@ const SectionHeader = ({ title, icon, color = "primary" }) => {
 };
 
 const HomePage = () => {
-  const theme = useTheme();
+  const { palette } = useTheme();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dailyProblem, setDailyProblem] = useState({});
   const [problems, setProblems] = useState([]);
@@ -100,10 +100,10 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Container maxWidth="xl" sx={{ py: 6 }}>
-      <Box sx={{ width: "100%", mb: 10 }}>
+    <Box maxWidth="xl" sx={{ py: 6, px: 4 }}>
+      {/* <Box sx={{ width: "100%", mb: 10 }}>
         <FloatingText />
-      </Box>
+      </Box> */}
       <Box
         sx={{
           display: "grid",
@@ -133,8 +133,6 @@ const HomePage = () => {
             gridArea: "hero",
             p: 4,
             borderRadius: 4,
-            bgcolor: "primary.main",
-            color: "common.white",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -180,8 +178,6 @@ const HomePage = () => {
             gridArea: "techInfo",
             p: 4,
             borderRadius: 4,
-            bgcolor: "warning.main",
-            color: "common.white",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -328,7 +324,7 @@ const HomePage = () => {
           </Box>
         </Paper>
       </Box>
-    </Container>
+    </Box>
   );
 };
 

@@ -17,7 +17,7 @@ const GreyCircle = ({children, sx, onClick}) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "lightgrey",
+          backgroundColor: "background.main",
           cursor: "pointer",
         }}
       >
