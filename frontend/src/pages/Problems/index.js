@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Chip, Paper, Typography } from "@mui/material";
+import { Box, Chip, Paper, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
@@ -18,7 +18,7 @@ const Problems = () => {
   });
   const [topicCounts, setTopicCounts] = useState([]);
 
-  const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const getProblems = async () => {
@@ -157,14 +157,14 @@ const columns = [
               border: "none",
             },
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "#f5f5f5",
+              backgroundColor: theme.palette.secondary.main,
               borderBottom: "none",
             },
             "& .MuiDataGrid-row": {
-              backgroundColor: "white",
+              // backgroundColor: theme.palette.secondary.main,
             },
             "& .MuiDataGrid-row:nth-of-type(odd)": {
-              backgroundColor: "#f9f9f9",
+              backgroundColor: theme.palette.secondary.main,
             },
             "& .MuiDataGrid-virtualScroller": {
               border: "none",
