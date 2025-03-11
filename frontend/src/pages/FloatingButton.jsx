@@ -4,7 +4,7 @@ import { keyframes } from "@mui/system";
 
 const marquee = keyframes`
   0% {
-    transform: translateX(400%);
+    transform: translateX(300%);
   }
   100% {
     transform: translateX(-100%);

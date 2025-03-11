@@ -101,9 +101,9 @@ const HomePage = () => {
 
   return (
     <Box maxWidth="xl" sx={{ py: 6, px: 4 }}>
-      {/* <Box sx={{ width: "100%", mb: 10 }}>
+      <Box sx={{ width: "100%", mb: 10 }}>
         <FloatingText />
-      </Box> */}
+      </Box>
       <Box
         sx={{
           display: "grid",
