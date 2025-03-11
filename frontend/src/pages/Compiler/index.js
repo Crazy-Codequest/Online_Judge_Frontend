@@ -9,6 +9,7 @@ import {
   Typography,
   Container,
   Box,
+  useTheme,
 } from "@mui/material";
 import LanguageSelect from "../../components/LanguageSelect";
 
@@ -17,6 +18,9 @@ const Compiler = () => {
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
   const [lang, setLang] = useState("cpp");
+
+  const theme = useTheme();
+  const isLightMode = theme.palette.mode === "light";
 
   const handleSubmit = async () => {
     try {
@@ -60,19 +64,17 @@ const Compiler = () => {
               height: "4rem",
               display: "flex",
               alignItems: "center",
-              backgroundColor: "#ffffff",
               borderBottom: "1px solid #d3dce6",
             }}
           >
             <Typography
               sx={{
-                backgroundColor: "#f5f5f5",
                 display: "flex",
                 alignItems: "center",
                 pl: 1,
                 fontWeight: 500,
                 fontSize: "16px",
-                borderRight: "1px solid #d3dce6",
+                // borderRight: "1px solid #d3dce6",
                 height: "100%",
                 width: "6rem",
                 color: "rgba(37,38,94,0.7)",
@@ -81,7 +83,22 @@ const Compiler = () => {
               Main.cpp
             </Typography>
             <Box sx={{ ml: 2 }}>
-              <LanguageSelect sx={{ height: "100%" }} lang={lang} setLang={setLang} />
+              <LanguageSelect
+                sx={{
+                  height: "100%",
+                  border: "none",
+                  "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  backgroundColor: "transparent",
+                }}
+                lang={lang}
+                setLang={setLang}
+              />
             </Box>
             <Button
               sx={{ ml: "auto", mr: 2 }}
@@ -105,6 +122,11 @@ const Compiler = () => {
               height="100%"
               language={lang}
               onChange={handleEditorChange}
+              theme={isLightMode ? "vs-light" : "vs-dark"}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 14,
+              }}
             />
           </Box>
           {/* Input */}
@@ -115,7 +137,6 @@ const Compiler = () => {
               multiline
               rows={4}
               variant="outlined"
-              sx={{ backgroundColor: "#fff" }}
               onChange={(e) => setInput(e.target.value)}
             />
           </Box>
@@ -136,7 +157,6 @@ const Compiler = () => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              backgroundColor: "#ffffff",
               borderBottom: "1px solid #d3dce6",
               px: 2,
             }}
@@ -174,7 +194,7 @@ const Compiler = () => {
             value={output}
             readOnly
             sx={{
-              height: {xs: "10rem", md: "38rem"},
+              height: { xs: "10rem", md: "38rem" },
               p: 1,
               width: "100%",
               border: "none",
