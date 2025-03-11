@@ -19,7 +19,7 @@ const Problem = () => {
   }, [term])
 
   return (
-    <Box sx={{ px: 4 }}>
+    <Box sx={{ p: 4 }}>
       {searchedProblems &&
         searchedProblems.map((problem) => (
           <DailyChallenge sx={{mb: 2, width: {xs: "100%", md: "60%", lg: "50%"}, mx: "auto"}} key={problem._id} dailyProblem={problem} />

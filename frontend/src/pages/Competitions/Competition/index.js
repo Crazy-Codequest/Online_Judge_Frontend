@@ -8,7 +8,7 @@ import { urlConstants } from "../../../apis";
 import { getConfig } from "../../../utils/getConfig";
 import CompetitionTimer from "../timer";
 import { setTimestamp } from "../../../features/auth/dataSlice";
-import { TableContainer, Paper, Button } from "@mui/material";
+import { TableContainer, Paper, Button, Box } from "@mui/material";
 import Problems from "./Table/Problems";
 import Submissions from "./Table/Submissions";
 import Leaderboard from "./Table/Leaderboard";
@@ -44,7 +44,7 @@ const Competition = () => {
   const getCompetitionOverview = async () => {
     try {
       const { data } = await axios.post(
-        urlConstants.getCompetition,
+        urlConstants.getCompetitionOverview,
         {
           id: params.id,
         },
@@ -156,6 +156,10 @@ const Competition = () => {
   }
 
   useEffect(() => {
+    getCompetitionOverview();
+  }, [])
+
+  useEffect(() => {
     if(!terms){
       getProblems();
       getSubmissions();
@@ -173,9 +177,17 @@ const Competition = () => {
   }
 
   return (
-    <div className="competition-page">
+    <Box sx={{ height: "90vh", p: 2 }}>
       <CompetitionTimer competitionTimestamp={timestamp} />
-      <div className="header">
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mb: 2,
+          width: { xs: "90%", sm: "70%", md: "60%" },
+          mx: "auto"
+        }}
+      >
         <Button
           className={`width-33 outline-grey black ${
             menuOption === "problems" ? "red" : ""
@@ -203,10 +215,9 @@ const Competition = () => {
         >
           Leaderboard
         </Button>
-      </div>
+      </Box>
       <TableContainer
-        className="table"
-        sx={{ width: "50rem" }}
+        sx={{ width: { xs: "90%", sm: "70%", md: "60%" }, borderRadius: 2, mx: "auto" }}
         component={Paper}
       >
         {menuOption === "problems" && (
@@ -219,7 +230,7 @@ const Competition = () => {
           <Leaderboard leaderboard={leaderboard} />
         )}
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
