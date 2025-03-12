@@ -21,6 +21,9 @@ const Compiler = () => {
 
   const theme = useTheme();
   const isLightMode = theme.palette.mode === "light";
+  const borderColor = theme.palette.divider;
+  const backgroundColor = theme.palette.background.default;
+  const textColor = theme.palette.text.primary;
 
   const handleSubmit = async () => {
     try {
@@ -30,16 +33,11 @@ const Compiler = () => {
         payload,
         getConfig()
       );
-      console.log(data);
       setOutput(data.output);
     } catch (e) {
       console.log(e);
     }
   };
-
-  function handleEditorChange(value) {
-    setCode(value);
-  }
 
   return (
     <Container maxWidth="xl" sx={{ py: 4, overflowX: "hidden" }}>
@@ -50,13 +48,17 @@ const Compiler = () => {
           gap: 4,
           justifyContent: "center",
           width: "100%",
+          height: "85vh",
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "50rem" },
-            border: "1px solid #d3dce6",
-            boxSizing: "border-box",
+            width: { xs: "100%", md: "60%" },
+            height: "100%",
+            border: `1px solid ${borderColor}`,
+            bgcolor: backgroundColor,
+            borderRadius: 2,
+            overflow: "hidden",
           }}
         >
           <Box
@@ -64,20 +66,16 @@ const Compiler = () => {
               height: "4rem",
               display: "flex",
               alignItems: "center",
-              borderBottom: "1px solid #d3dce6",
+              borderBottom: `1px solid ${borderColor}`,
+              px: 2,
             }}
           >
             <Typography
               sx={{
-                display: "flex",
-                alignItems: "center",
-                pl: 1,
                 fontWeight: 500,
                 fontSize: "16px",
-                // borderRight: "1px solid #d3dce6",
-                height: "100%",
-                width: "6rem",
-                color: "rgba(37,38,94,0.7)",
+                color: textColor,
+                flexGrow: 1,
               }}
             >
               Main.cpp
@@ -101,106 +99,86 @@ const Compiler = () => {
               />
             </Box>
             <Button
-              sx={{ ml: "auto", mr: 2 }}
+              sx={{ mr: 2 }}
               variant="contained"
               onClick={handleSubmit}
             >
               Run
             </Button>
           </Box>
-          {/* Editor */}
-          <Box
-            sx={{
-              width: "100%",
-              height: { xs: "20rem", md: "30rem" },
-              p: 1,
-              borderBottom: "1px solid #d3dce6",
-            }}
-          >
+
+          <Box sx={{ height: "70%", p: 1 }}>
             <Editor
               code={code}
               height="100%"
               language={lang}
-              onChange={handleEditorChange}
+              onChange={setCode}
               theme={isLightMode ? "vs-light" : "vs-dark"}
               options={{
                 minimap: { enabled: false },
-                fontSize: 14,
+                fontSize: 16,
               }}
             />
           </Box>
-          {/* Input */}
-          <Box sx={{ width: "100%", height: "8rem" }}>
+
+          <Box
+            sx={{ height: "20%", p: 2, borderTop: `1px solid ${borderColor}` }}
+          >
+            <Typography sx={{ color: textColor, mb: 1 }}>Input:</Typography>
             <TextField
               fullWidth
-              placeholder="Add Input"
+              placeholder="Enter input here..."
               multiline
-              rows={4}
+              rows={3}
               variant="outlined"
               onChange={(e) => setInput(e.target.value)}
             />
           </Box>
         </Box>
 
-        {/* Left Page Editor (Output) */}
         <Box
           sx={{
-            width: { xs: "100%", md: "50rem" },
-            border: "1px solid #d3dce6",
-            boxSizing: "border-box",
+            width: { xs: "100%", md: "40%" }, // Increased width for better proportion
+            height: "100%",
+            border: `1px solid ${borderColor}`,
+            bgcolor: backgroundColor,
+            borderRadius: 2,
+            overflow: "hidden",
           }}
         >
-          {/* Nav (Left Editor) */}
           <Box
             sx={{
               height: "4rem",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              borderBottom: "1px solid #d3dce6",
+              borderBottom: `1px solid ${borderColor}`,
               px: 2,
             }}
           >
-            <Typography
-              sx={{
-                fontWeight: 500,
-                lineHeight: "24px",
-                p: "11px 18px",
-                borderRight: "1px solid #d3dce6",
-                color: "rgba(37,38,94,0.7)",
-              }}
-            >
+            <Typography sx={{ fontWeight: 500, color: textColor }}>
               Output
             </Typography>
-            <Button
-              onClick={() => setOutput("")}
-              variant="outlined"
-              sx={{
-                cursor: "pointer",
-                padding: "6px 16px",
-                fontSize: "14px",
-                lineHeight: "20px",
-                color: "rgba(37,38,94,0.7)",
-                border: "1px solid #d3dce6",
-                borderRadius: "2px",
-              }}
-            >
+            <Button variant="outlined" onClick={() => setOutput("")}>
               Clear
             </Button>
           </Box>
-          {/* Output Textarea */}
+
           <Box
             component="textarea"
             value={output}
             readOnly
             sx={{
-              height: { xs: "10rem", md: "38rem" },
-              p: 1,
+              height: "calc(100% - 4rem)",
+              p: 2,
               width: "100%",
+              bgcolor: "transparent",
+              color: textColor,
               border: "none",
               overflow: "auto",
               outline: "none",
               resize: "none",
+              fontSize: "16px",
             }}
           />
         </Box>

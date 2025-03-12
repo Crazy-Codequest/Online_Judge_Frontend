@@ -199,238 +199,232 @@ const ProfilePage = () => {
     return <Loading />;
   }
 
-  return (
-    <section sx={{ padding: "2rem" }}>
-      <Container py={5}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
-            <Card sx={{ textAlign: "center", mb: 4 }}>
-              <CardContent>
-                <CardMedia
-                  component="img"
-                  alt="avatar"
-                  height="150"
-                  src={newAvatarUrl}
-                  sx={{ width: "150px", margin: "0 auto", borderRadius: "50%" }}
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleAvatarChange}
-                  sx={{ mt: 1 }}
-                >
-                  Change Avatar
+return (
+  <section sx={{ padding: "2rem" }}>
+    <Container sx={{ width: "100%", minHeight: "100vh", py: 5 }}>
+      <Grid container spacing={3} justifyContent="center">
+        {/* Profile Card */}
+        <Grid item xs={12} md={8}>
+          <Card sx={{ textAlign: "center", mb: 4, p: 3 }}>
+            <CardContent>
+              <CardMedia
+                component="img"
+                alt="avatar"
+                height="200"
+                src={newAvatarUrl}
+                sx={{
+                  width: "200px",
+                  height: "200px",
+                  margin: "0 auto",
+                  borderRadius: "50%",
+                }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAvatarChange}
+                sx={{ mt: 2 }}
+              >
+                Change Avatar
+              </Button>
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                {`${userProfile.u_id.firstname} ${userProfile.u_id.lastname}`}
+              </Typography>
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                <Button sx={{ mr: 2 }} variant="contained" color="primary">
+                  Follow
                 </Button>
-                <Typography
-                  variant="subtitle2"
-                  color="textSecondary"
-                  gutterBottom
-                  sx={{ mt: 1 }}
-                >
-                  {`${userProfile.u_id.firstname} ${userProfile.u_id.lastname}`}
-                </Typography>
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
-                  <Button sx={{ mr: 2 }} variant="contained" color="primary">
-                    Follow
-                  </Button>
-                  <Button variant="outlined" onClick={handleAvatarSave}>
+                <Button variant="outlined" onClick={handleAvatarSave}>
+                  Save
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* User Information */}
+        <Grid item xs={12} md={8}>
+          <Card sx={{ width: "100%", p: 3 }}>
+            <CardContent>
+              {editMode ? (
+                <>
+                  <Button
+                    sx={{ mr: 2, mb: 2 }}
+                    variant="contained"
+                    color="primary"
+                    onClick={saveUserProfile}
+                  >
                     Save
                   </Button>
-                </Box>
-              </CardContent>
-            </Card>
-
-            <Card sx={{ width: "100%", my: 2 }}>
-              <CardContent>
-                {editMode ? (
-                  <>
-                    <Button
-                      sx={{ mr: 2, mb: 2 }}
-                      variant="contained"
-                      color="primary"
-                      onClick={saveUserProfile}
-                    >
-                      Save
-                    </Button>
-                    <Button
+                  <Button
+                    sx={{ mb: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleEditClick}
+                  >
+                    Cancel
+                  </Button>
+                  {[
+                    "username",
+                    "firstname",
+                    "lastname",
+                    "email",
+                    "mobile",
+                    "address",
+                  ].map((field) => (
+                    <TextField
+                      key={field}
+                      fullWidth
+                      label={field.charAt(0).toUpperCase() + field.slice(1)}
+                      variant="outlined"
+                      value={editedProfile[field]}
+                      onChange={(e) => handleChange(field, e.target.value)}
                       sx={{ mb: 2 }}
-                      variant="contained"
-                      color="primary"
-                      onClick={handleEditClick}
+                    />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <Button
+                    sx={{ mb: 2 }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleEditClick}
+                  >
+                    Edit Profile
+                  </Button>
+                  {[
+                    "username",
+                    "firstname",
+                    "lastname",
+                    "email",
+                    "mobile",
+                    "address",
+                  ].map((field) => (
+                    <Box
+                      key={field}
+                      sx={{ display: "flex", alignItems: "center", mb: 2 }}
                     >
-                      Edit
-                    </Button>
-                    {[
-                      "username",
-                      "firstname",
-                      "lastname",
-                      "email",
-                      "mobile",
-                      "address",
-                    ].map((field) => (
-                      <TextField
-                        key={field}
-                        fullWidth
-                        label={field.charAt(0).toUpperCase() + field.slice(1)}
-                        variant="outlined"
-                        value={editedProfile[field]}
-                        onChange={(e) => handleChange(field, e.target.value)}
-                        sx={{ mb: 2 }}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      sx={{ mr: 2, mb: 2 }}
-                      variant="contained"
-                      color="primary"
-                      onClick={saveUserProfile}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      sx={{ mb: 2 }}
-                      variant="contained"
-                      color="primary"
-                      onClick={handleEditClick}
-                    >
-                      Edit
-                    </Button>
-                    {[
-                      "username",
-                      "firstname",
-                      "lastname",
-                      "email",
-                      "mobile",
-                      "address",
-                    ].map((field) => (
-                      <>
-                        <ProfileInfoRow
-                          key={field}
-                          label={field.charAt(0).toUpperCase() + field.slice(1)}
-                          value={userProfile.u_id[field]}
-                        />
-                        <Divider />
-                      </>
-                    ))}
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={12}>
-            <Card sx={{ mb: 4 }}>
-              <CardContent>
-                <List>
-                  {editProfile ? (
-                    <>
-                      <Button
-                        sx={{ mr: 2, mb: 2 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={saveSocialProfile}
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ flex: 1, fontWeight: "bold" }}
                       >
-                        Save
-                      </Button>
-                      <Button
-                        sx={{ mb: 2 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSocialEditClick}
-                      >
-                        Edit
-                      </Button>
-                      {[
-                        "website",
-                        "github",
-                        "twitter",
-                        "instagram",
-                        "facebook",
-                      ].map((field) => (
-                        <TextField
-                          key={field}
-                          fullWidth
-                          label={field.charAt(0).toUpperCase() + field.slice(1)}
-                          variant="outlined"
-                          value={editedSocial[field]}
-                          onChange={(e) =>
-                            handleSocialChange(field, e.target.value)
-                          }
-                          sx={{ mb: 2 }}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        sx={{ mr: 2, mb: 2 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={saveSocialProfile}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        sx={{ mb: 2 }}
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSocialEditClick}
-                      >
-                        Edit
-                      </Button>
-                      {[
-                        {
-                          icon: <GlobeIcon />,
-                          text: userProfile.website,
-                          url: userProfile.website,
-                        },
-                        {
-                          icon: <GitHubIcon />,
-                          text: "github",
-                          url: userProfile.github,
-                        },
-                        {
-                          icon: <TwitterIcon />,
-                          text: "twitter",
-                          url: userProfile.twitter,
-                        },
-                        {
-                          icon: <InstagramIcon />,
-                          text: "instagram",
-                          url: userProfile.instagram,
-                        },
-                        {
-                          icon: <FacebookIcon />,
-                          text: "facebook",
-                          url: userProfile.facebook,
-                        },
-                      ].map(({ icon, text, url }) => (
-                        <SocialListItem
-                          key={text}
-                          icon={icon}
-                          text={text}
-                          onClick={() => navigate(url)}
-                        />
-                      ))}
-                    </>
-                  )}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+                        {field.charAt(0).toUpperCase() + field.slice(1)}
+                      </Typography>
+                      <Typography variant="subtitle2" color="textSecondary">
+                        {userProfile.u_id[field]}
+                      </Typography>
+                    </Box>
+                  ))}
+                </>
+              )}
+            </CardContent>
+          </Card>
         </Grid>
-      </Container>
-    </section>
-  );
+
+        {/* Social Links */}
+        <Grid item xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <CardContent>
+              {editProfile ? (
+                <>
+                  <Button
+                    sx={{ mr: 2, mb: 2 }}
+                    variant="contained"
+                    color="primary"
+                    onClick={saveSocialProfile}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    sx={{ mb: 2 }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSocialEditClick}
+                  >
+                    Cancel
+                  </Button>
+                  {[
+                    "website",
+                    "github",
+                    "twitter",
+                    "instagram",
+                    "facebook",
+                  ].map((field) => (
+                    <TextField
+                      key={field}
+                      fullWidth
+                      label={field.charAt(0).toUpperCase() + field.slice(1)}
+                      variant="outlined"
+                      value={editedSocial[field]}
+                      onChange={(e) =>
+                        handleSocialChange(field, e.target.value)
+                      }
+                      sx={{ mb: 2 }}
+                    />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <Button
+                    sx={{ mb: 2 }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSocialEditClick}
+                  >
+                    Edit Social Links
+                  </Button>
+                  {[
+                    {
+                      icon: <GlobeIcon />,
+                      text: userProfile.website,
+                      url: userProfile.website,
+                    },
+                    {
+                      icon: <GitHubIcon />,
+                      text: "GitHub",
+                      url: userProfile.github,
+                    },
+                    {
+                      icon: <TwitterIcon />,
+                      text: "Twitter",
+                      url: userProfile.twitter,
+                    },
+                    {
+                      icon: <InstagramIcon />,
+                      text: "Instagram",
+                      url: userProfile.instagram,
+                    },
+                    {
+                      icon: <FacebookIcon />,
+                      text: "Facebook",
+                      url: userProfile.facebook,
+                    },
+                  ].map(({ icon, text, url }) => (
+                    <SocialListItem
+                      key={text}
+                      icon={icon}
+                      text={text}
+                      onClick={() => navigate(url)}
+                    />
+                  ))}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
+  </section>
+);
+
 
 };
 
