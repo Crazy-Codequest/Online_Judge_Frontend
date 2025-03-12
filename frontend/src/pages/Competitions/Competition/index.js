@@ -184,32 +184,57 @@ const Competition = () => {
           display: "flex",
           justifyContent: "space-between",
           mb: 2,
+          mt: 4,
           width: { xs: "90%", sm: "70%", md: "60%" },
-          mx: "auto"
+          mx: "auto",
         }}
       >
         <Button
-          className={`width-33 outline-grey black ${
-            menuOption === "problems" ? "red" : ""
-          }`}
+          sx={{
+            width: "30%",
+            p: 1,
+            ...(menuOption === "problems" && {
+              bgcolor: "#dc3545",
+              color: "text.primary",
+              "&:hover": {
+                bgcolor: "#b02a37",
+              },
+            }),
+          }}
           variant="outlined"
           onClick={() => setMenuOption("problems")}
         >
-          Problem
+          Problems
         </Button>
         <Button
-          className={`width-33 outline-grey black ${
-            menuOption === "submissions" ? "red" : ""
-          }`}
+          sx={{
+            width: "30%",
+            p: 1,
+            ...(menuOption === "submissions" && {
+              bgcolor: "#dc3545",
+              color: "text.primary",
+              "&:hover": {
+                bgcolor: "#b02a37",
+              },
+            }),
+          }}
           variant="outlined"
           onClick={() => setMenuOption("submissions")}
         >
           Submissions
         </Button>
         <Button
-          className={`width-33 outline-grey black ${
-            menuOption === "leaderboard" ? "red" : ""
-          }`}
+          sx={{
+            width: "30%",
+            p: 1,
+            ...(menuOption === "leaderboard" && {
+              bgcolor: "#dc3545",
+              color: "text.primary",
+              "&:hover": {
+                bgcolor: "#b02a37",
+              },
+            }),
+          }}
           variant="outlined"
           onClick={() => setMenuOption("leaderboard")}
         >
@@ -217,7 +242,11 @@ const Competition = () => {
         </Button>
       </Box>
       <TableContainer
-        sx={{ width: { xs: "90%", sm: "70%", md: "60%" }, borderRadius: 2, mx: "auto" }}
+        sx={{
+          width: { xs: "90%", sm: "70%", md: "60%" },
+          borderRadius: 2,
+          mx: "auto",
+        }}
         component={Paper}
       >
         {menuOption === "problems" && (

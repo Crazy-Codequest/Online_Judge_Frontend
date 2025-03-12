@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { toast } from "react-toastify";
+import { Typography } from "@mui/material";
 
 const CompetitionTimer = ({ competitionTimestamp }) => {
   const duration = 3 * 60 * 60 * 1000;
@@ -55,7 +56,7 @@ const CompetitionTimer = ({ competitionTimestamp }) => {
           >{`${hours} : ${minutes} : ${seconds}`}</Button>
         </div>
       ) : (
-        <p>Competition Ended {endTimeIST}</p>
+        <Typography>Competition Ended {endTimeIST}</Typography>
       )}
     </div>
   );

@@ -13,6 +13,7 @@ import {
   ListItemText,
   Divider,
   TextField,
+  Box,
 } from "@mui/material";
 import {
   GitHub as GitHubIcon,
@@ -199,25 +200,24 @@ const ProfilePage = () => {
   }
 
   return (
-    <section style={{ backgroundColor: "#eee", padding: "2rem" }}>
+    <section sx={{ padding: "2rem" }}>
       <Container py={5}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={12}>
-            <Card className="mb-4" style={{ textAlign: "center" }}>
-              <CardContent className="text-center">
+            <Card sx={{ textAlign: "center", mb: 4 }}>
+              <CardContent>
                 <CardMedia
                   component="img"
                   alt="avatar"
                   height="150"
                   src={newAvatarUrl}
-                  className="rounded-circle mx-auto"
-                  style={{ width: "150px", margin: "0 auto" }}
+                  sx={{ width: "150px", margin: "0 auto", borderRadius: "50%" }}
                 />
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleAvatarChange}
-                  className="mt-1"
+                  sx={{ mt: 1 }}
                 >
                   Change Avatar
                 </Button>
@@ -225,7 +225,7 @@ const ProfilePage = () => {
                   variant="subtitle2"
                   color="textSecondary"
                   gutterBottom
-                  className="mt-1"
+                  sx={{ mt: 1 }}
                 >
                   {`${userProfile.u_id.firstname} ${userProfile.u_id.lastname}`}
                 </Typography>
@@ -236,27 +236,23 @@ const ProfilePage = () => {
                   ref={fileInputRef}
                   onChange={handleFileChange}
                 />
-                <div className="d-flex justify-content-center mt-1">
-                  <Button className="mr-2" variant="contained" color="primary">
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
+                  <Button sx={{ mr: 2 }} variant="contained" color="primary">
                     Follow
                   </Button>
-                  <Button
-                    variant="outlined"
-                    className="ms-1"
-                    onClick={handleAvatarSave}
-                  >
+                  <Button variant="outlined" onClick={handleAvatarSave}>
                     Save
                   </Button>
-                </div>
+                </Box>
               </CardContent>
             </Card>
 
-            <Card className="mb-4" style={{ width: "100%", margin: "1rem" }}>
+            <Card sx={{ width: "100%", my: 2 }}>
               <CardContent>
                 {editMode ? (
                   <>
                     <Button
-                      className="mr-2 mb-2"
+                      sx={{ mr: 2, mb: 2 }}
                       variant="contained"
                       color="primary"
                       onClick={saveUserProfile}
@@ -264,68 +260,36 @@ const ProfilePage = () => {
                       Save
                     </Button>
                     <Button
-                      className="mr-2 mb-2"
+                      sx={{ mb: 2 }}
                       variant="contained"
                       color="primary"
                       onClick={handleEditClick}
                     >
                       Edit
                     </Button>
-                    <TextField
-                      fullWidth
-                      label="User Name"
-                      variant="outlined"
-                      value={editedProfile.username}
-                      onChange={(e) => handleChange("username", e.target.value)}
-                      className="mb-2"
-                    />
-                    <TextField
-                      fullWidth
-                      label="First Name"
-                      variant="outlined"
-                      value={editedProfile.firstname}
-                      onChange={(e) =>
-                        handleChange("firstname", e.target.value)
-                      }
-                      className="mb-2"
-                    />
-                    <TextField
-                      fullWidth
-                      label="Last Name"
-                      variant="outlined"
-                      value={editedProfile.lastname}
-                      onChange={(e) => handleChange("lastname", e.target.value)}
-                      className="mb-2"
-                    />
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      variant="outlined"
-                      value={editedProfile.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      className="mb-2"
-                    />
-                    <TextField
-                      fullWidth
-                      label="Mobile"
-                      variant="outlined"
-                      value={editedProfile.mobile}
-                      onChange={(e) => handleChange("mobile", e.target.value)}
-                      className="mb-2"
-                    />
-                    <TextField
-                      fullWidth
-                      label="Address"
-                      variant="outlined"
-                      value={editedProfile.address}
-                      onChange={(e) => handleChange("address", e.target.value)}
-                      className="mb-2"
-                    />
+                    {[
+                      "username",
+                      "firstname",
+                      "lastname",
+                      "email",
+                      "mobile",
+                      "address",
+                    ].map((field) => (
+                      <TextField
+                        key={field}
+                        fullWidth
+                        label={field.charAt(0).toUpperCase() + field.slice(1)}
+                        variant="outlined"
+                        value={editedProfile[field]}
+                        onChange={(e) => handleChange(field, e.target.value)}
+                        sx={{ mb: 2 }}
+                      />
+                    ))}
                   </>
                 ) : (
                   <>
                     <Button
-                      className="mr-2 mb-2"
+                      sx={{ mr: 2, mb: 2 }}
                       variant="contained"
                       color="primary"
                       onClick={saveUserProfile}
@@ -333,42 +297,30 @@ const ProfilePage = () => {
                       Save
                     </Button>
                     <Button
-                      className="mr-2 mb-2"
+                      sx={{ mb: 2 }}
                       variant="contained"
                       color="primary"
                       onClick={handleEditClick}
                     >
                       Edit
                     </Button>
-                    <ProfileInfoRow
-                      label="User Name"
-                      value={userProfile.u_id.username}
-                    />
-                    <Divider />
-                    <ProfileInfoRow
-                      label="First Name"
-                      value={userProfile.u_id.firstname}
-                    />
-                    <Divider />
-                    <ProfileInfoRow
-                      label="Last Name"
-                      value={userProfile.u_id.lastname}
-                    />
-                    <Divider />
-                    <ProfileInfoRow
-                      label="Email"
-                      value={userProfile.u_id.email}
-                    />
-                    <Divider />
-                    <ProfileInfoRow
-                      label="Mobile"
-                      value={userProfile.u_id.mobile}
-                    />
-                    <Divider />
-                    <ProfileInfoRow
-                      label="Address"
-                      value={userProfile.u_id.address}
-                    />
+                    {[
+                      "username",
+                      "firstname",
+                      "lastname",
+                      "email",
+                      "mobile",
+                      "address",
+                    ].map((field) => (
+                      <>
+                        <ProfileInfoRow
+                          key={field}
+                          label={field.charAt(0).toUpperCase() + field.slice(1)}
+                          value={userProfile.u_id[field]}
+                        />
+                        <Divider />
+                      </>
+                    ))}
                   </>
                 )}
               </CardContent>
@@ -376,14 +328,13 @@ const ProfilePage = () => {
           </Grid>
 
           <Grid item xs={12} md={12}>
-            {/* Social Link Card */}
-            <Card className="mb-4">
+            <Card sx={{ mb: 4 }}>
               <CardContent>
-                <List className="rounded-3">
+                <List>
                   {editProfile ? (
                     <>
                       <Button
-                        className="mr-2 mb-2"
+                        sx={{ mr: 2, mb: 2 }}
                         variant="contained"
                         color="primary"
                         onClick={saveSocialProfile}
@@ -391,68 +342,37 @@ const ProfilePage = () => {
                         Save
                       </Button>
                       <Button
-                        className="mr-2 mb-2"
+                        sx={{ mb: 2 }}
                         variant="contained"
                         color="primary"
                         onClick={handleSocialEditClick}
                       >
                         Edit
                       </Button>
-                      <TextField
-                        fullWidth
-                        label="Website"
-                        variant="outlined"
-                        value={editedSocial.website}
-                        onChange={(e) =>
-                          handleSocialChange("website", e.target.value)
-                        }
-                        className="mb-2"
-                      />
-                      <TextField
-                        fullWidth
-                        label="Github"
-                        variant="outlined"
-                        value={editedSocial.github}
-                        onChange={(e) =>
-                          handleSocialChange("github", e.target.value)
-                        }
-                        className="mb-2"
-                      />
-                      <TextField
-                        fullWidth
-                        label="Twitter"
-                        variant="outlined"
-                        value={editedSocial.twitter}
-                        onChange={(e) =>
-                          handleSocialChange("twitter", e.target.value)
-                        }
-                        className="mb-2"
-                      />
-                      <TextField
-                        fullWidth
-                        label="Instagram"
-                        variant="outlined"
-                        value={editedSocial.instagram}
-                        onChange={(e) =>
-                          handleSocialChange("instagram", e.target.value)
-                        }
-                        className="mb-2"
-                      />
-                      <TextField
-                        fullWidth
-                        label="Facebook"
-                        variant="outlined"
-                        value={editedSocial.facebook}
-                        onChange={(e) =>
-                          handleSocialChange("facebook", e.target.value)
-                        }
-                        className="mb-2"
-                      />
+                      {[
+                        "website",
+                        "github",
+                        "twitter",
+                        "instagram",
+                        "facebook",
+                      ].map((field) => (
+                        <TextField
+                          key={field}
+                          fullWidth
+                          label={field.charAt(0).toUpperCase() + field.slice(1)}
+                          variant="outlined"
+                          value={editedSocial[field]}
+                          onChange={(e) =>
+                            handleSocialChange(field, e.target.value)
+                          }
+                          sx={{ mb: 2 }}
+                        />
+                      ))}
                     </>
                   ) : (
                     <>
                       <Button
-                        className="mr-2 mb-2"
+                        sx={{ mr: 2, mb: 2 }}
                         variant="contained"
                         color="primary"
                         onClick={saveSocialProfile}
@@ -460,38 +380,47 @@ const ProfilePage = () => {
                         Save
                       </Button>
                       <Button
-                        className="mr-2 mb-2"
+                        sx={{ mb: 2 }}
                         variant="contained"
                         color="primary"
                         onClick={handleSocialEditClick}
                       >
                         Edit
                       </Button>
-                      <SocialListItem
-                        icon={<GlobeIcon />}
-                        text={userProfile.website}
-                        onClick={() => navigate(userProfile.website)}
-                      />
-                      <SocialListItem
-                        onClick={() => navigate(userProfile.github)}
-                        icon={<GitHubIcon />}
-                        text="github"
-                      />
-                      <SocialListItem
-                        onClick={() => navigate(userProfile.twitter)}
-                        icon={<TwitterIcon />}
-                        text="twitter"
-                      />
-                      <SocialListItem
-                        onClick={() => navigate(userProfile.instagram)}
-                        icon={<InstagramIcon />}
-                        text="instagram"
-                      />
-                      <SocialListItem
-                        onClick={() => navigate(userProfile.facebook)}
-                        icon={<FacebookIcon />}
-                        text="facebook"
-                      />
+                      {[
+                        {
+                          icon: <GlobeIcon />,
+                          text: userProfile.website,
+                          url: userProfile.website,
+                        },
+                        {
+                          icon: <GitHubIcon />,
+                          text: "github",
+                          url: userProfile.github,
+                        },
+                        {
+                          icon: <TwitterIcon />,
+                          text: "twitter",
+                          url: userProfile.twitter,
+                        },
+                        {
+                          icon: <InstagramIcon />,
+                          text: "instagram",
+                          url: userProfile.instagram,
+                        },
+                        {
+                          icon: <FacebookIcon />,
+                          text: "facebook",
+                          url: userProfile.facebook,
+                        },
+                      ].map(({ icon, text, url }) => (
+                        <SocialListItem
+                          key={text}
+                          icon={icon}
+                          text={text}
+                          onClick={() => navigate(url)}
+                        />
+                      ))}
                     </>
                   )}
                 </List>
@@ -502,6 +431,7 @@ const ProfilePage = () => {
       </Container>
     </section>
   );
+
 };
 
 const SocialListItem = ({ icon, text, onClick }) => (
