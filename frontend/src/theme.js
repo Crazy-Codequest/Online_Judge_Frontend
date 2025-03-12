@@ -50,30 +50,30 @@ export function setUpTheme(mode) {
       ...lightPalette
     }  
     return createTheme({
-    palette,
-    typography: {
-      padding: 0,
-      margin: 0,
-      htmlFontSize: 10,
-      h2: {
-        fontSize: "5rem",
+      palette,
+      typography: {
+        padding: 0,
+        margin: 0,
+        htmlFontSize: 10,
+        h2: {
+          fontSize: "5rem",
+        },
+        body1: {
+          fontSize: "1.4rem",
+        },
+        body2: {
+          fontSize: "1.2rem",
+        },
+        body3: {
+          fontSize: "1.25rem",
+        },
+        body4: {
+          fontSize: "1.6rem",
+        },
       },
-      body1: {
-        fontSize: "1.4rem",
-      },
-      body2: {
-        fontSize: "1.2rem",
-      },
-      body3: {
-        fontSize: "1.25rem",
-      },
-      body4: {
-        fontSize: "1.6rem",
-      },
-    },
-    components: {
-      MuiCssBaseline: {
-        styleOverrides: ({ typography, palette }) => `
+      components: {
+        MuiCssBaseline: {
+          styleOverrides: ({ typography, palette }) => `
           .main-nav-link {
             display: flex;
             padding: 1rem;
@@ -102,48 +102,50 @@ export function setUpTheme(mode) {
             background-color: ${palette.background.primary};
             overflow-x: hidden;
           }
-
+          .custom-toast {
+            font-size: 1.2rem;
+          }
         `,
-      },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 5,
-            textTransform: "none",
-            "&.MuiButton-sizeMedium": {
-              fontSize: "1.6rem",
+        },
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              borderRadius: 5,
+              textTransform: "none",
+              "&.MuiButton-sizeMedium": {
+                fontSize: "1.6rem",
+              },
             },
           },
-        },
-        defaultProps: {
-          variant: "outlined",
-          disableElevation: true,
-          size: "small",
-        },
-      },
-      MuiTextField: {
-        defaultProps: {
-          variant: "outlined",
-          size: "small",
-        },
-      },
-      MuiStack: {
-        defaultProps: {
-          gap: 2,
-        },
-      },
-      MuiChip: {
-        styleOverrides: {
-          root: {
-            borderRadius: 5,
-            paddingInline: "3px",
+          defaultProps: {
+            variant: "outlined",
+            disableElevation: true,
+            size: "small",
           },
         },
-        defaultProps: {
-          size: "small",
-          color: "default",
+        MuiTextField: {
+          defaultProps: {
+            variant: "outlined",
+            size: "small",
+          },
+        },
+        MuiStack: {
+          defaultProps: {
+            gap: 2,
+          },
+        },
+        MuiChip: {
+          styleOverrides: {
+            root: {
+              borderRadius: 5,
+              paddingInline: "3px",
+            },
+          },
+          defaultProps: {
+            size: "small",
+            color: "default",
+          },
         },
       },
-    },
-  });
+    });
 }

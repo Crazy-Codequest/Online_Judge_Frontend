@@ -129,6 +129,7 @@ const Competitions = () => {
         },
         gap: 2,
         px: 4,
+        mt: 4
       }}
     >
       {competitions.map((competition, index) => (

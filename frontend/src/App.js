@@ -10,7 +10,7 @@ import {
 import SignUp from "./pages/Login/Signup";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, logout } from "./features/auth/authSlice";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Loader from "./pages/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,10 +28,25 @@ import CompetitionProblem from "./pages/Competitions/Problems/Statement";
 import Home from "./pages/Home";
 import Problem from "./pages/Problems/Problem";
 import Analytics from "./pages/Analytics";
+import {
+  CheckOutlined,
+  ErrorOutline,
+  InfoOutlined,
+  WarningOutlined,
+} from "@mui/icons-material";
+import { useTheme } from "@mui/material";
+import {
+  useIsSystemDarkMode,
+  useTheme as useThemeContext,
+} from "./ThemeContext";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { palette } = useTheme();
+  const { isSystemDarkMode } = useIsSystemDarkMode();
+  const { themePref } = useThemeContext();
+
 
   const verifyUser = async () => {
     let user = JSON.parse(localStorage.getItem("user"))?.user;
@@ -64,10 +79,9 @@ function App() {
   }
 
   return (
-    <div className="app">
-      {/* <Compiler /> */}
+    <React.Fragment>
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -76,6 +90,28 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        icon={({ type }) => {
+          switch (type) {
+            case "success":
+              return <CheckOutlined sx={{ color: palette.success.main }} />;
+            case "info":
+              return <InfoOutlined sx={{ color: palette.info.main }} />;
+            case "warning":
+              return <WarningOutlined sx={{ color: palette.warning.main }} />;
+            case "error":
+              return <ErrorOutline sx={{ color: palette.error.main }} />;
+            default:
+              return false;
+          }
+        }}
+        theme={
+          themePref === "system"
+            ? isSystemDarkMode
+              ? "dark"
+              : "light"
+            : themePref
+        }
+        toastClassName="custom-toast"
       />
 
       {isAuthenticated ? (
@@ -116,7 +152,7 @@ function App() {
           </Routes>
         </>
       )}
-    </div>
+    </React.Fragment>
   );
 }
 
