@@ -211,7 +211,9 @@ return (
                 component="img"
                 alt="avatar"
                 height="200"
-                src={newAvatarUrl}
+                src={
+                  "https://res.cloudinary.com/drxh2nou0/image/upload/v1741809323/th_u1ragl.jpg"
+                }
                 sx={{
                   width: "200px",
                   height: "200px",
@@ -241,9 +243,9 @@ return (
                 <Button sx={{ mr: 2 }} variant="contained" color="primary">
                   Follow
                 </Button>
-                <Button variant="outlined" onClick={handleAvatarSave}>
+                {/* <Button variant="outlined" onClick={handleAvatarSave}>
                   Save
-                </Button>
+                </Button> */}
               </Box>
             </CardContent>
           </Card>
