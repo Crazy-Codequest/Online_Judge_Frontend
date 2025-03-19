@@ -6,6 +6,8 @@ import StatementPage from "./StatementPage";
 import Loading from "../Loader/Loader";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import { Box, Typography } from "@mui/material";
+import { useIsTab } from "../../hooks/use-is-tab";
 
 const Statement = () => {
   const params = useParams();
@@ -14,6 +16,7 @@ const Statement = () => {
   const [loading, setLoading] = useState(true);
   const [desc, setDesc] = useState(true);
   const [code, setCode] = useState("");
+  const isMobile = useIsTab();
 
   const getData = async () => {
     try {
@@ -41,29 +44,72 @@ const Statement = () => {
   }
 
   return (
-    <div className="problem-page">
-      <div className="flex page">
+    <Box
+      sx={{
+        minHeight: "100vh",
+        p: 4,
+        backgroundImage:
+          "radial-gradient(closest-side at 50% 135%, #ffffff 50%, #eceff1 100%)",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          height: "100%",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+          ...(isMobile && {alignItems: "center"})
+        }}
+      >
         {!desc ? (
-          <div className="left-page">
-            <div className="left-header">
-              <h4 onClick={() => setDesc(true)}>Description</h4>
-              <h4 onClick={() => setDesc(false)}>Submissions</h4>
-            </div>
-            <div className="problem--statement">
-              <div className="problem-title mb-2">Output</div>
-              <span>{output}</span>
-            </div>{" "}
-          </div>
+          <Box
+            sx={{
+              borderRadius: "10px",
+              width: "50vw",
+              mr: 2,
+              height: "100%",
+              backgroundColor: "#fff",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                p: 2,
+                gap: 2,
+              }}
+            >
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() => setDesc(true)}
+              >
+                Description
+              </Typography>
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() => setDesc(false)}
+              >
+                Submissions
+              </Typography>
+            </Box>
+            <Box sx={{ p: 2 }}>
+              <Typography>Output</Typography>
+              <Typography mt={2}>{output}</Typography>
+            </Box>{" "}
+          </Box>
         ) : (
-          <StatementPage
-            description={problem.description}
-            examples={problem.examples}
-            statement={problem.statement}
-            setDesc={setDesc}
-            constraints={problem.constraints}
-          />
+          <Box
+            sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}
+          >
+            <StatementPage
+              description={problem.description}
+              examples={problem.examples}
+              statement={problem.statement}
+              setDesc={setDesc}
+              constraints={problem.constraints}
+            />
+          </Box>
         )}
-        <div className="right-page">
+        <Box sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}>
           <Compiler
             output={output}
             setOutput={setOutput}
@@ -73,10 +119,9 @@ const Statement = () => {
             setDesc={setDesc}
             id={problem._id}
           />
-        </div>
-        <div className="compiler-submit"></div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

@@ -135,7 +135,7 @@ const Compiler = ({
     >
       <Box
         sx={{
-          borderRadius: 1,
+          borderRadius: 2,
           backgroundColor: "#fff",
           height: "80%",
         }}
@@ -210,6 +210,7 @@ const Compiler = ({
           p: "0 1rem",
           borderRadius: "5px",
           backgroundColor: "#fff",
+          borderRadius: 2
         }}
       >
         <Stack

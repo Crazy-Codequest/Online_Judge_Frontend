@@ -1,4 +1,4 @@
-const baseUrl = "https://online-judge-001.onrender.com/";
+const baseUrl = "http://localhost:5000/";
 
 export const urlConstants = {
   getProblem: baseUrl + "api/problems/id",

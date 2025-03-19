@@ -1,3 +1,4 @@
+import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
 
 const StatementPage = ({
@@ -9,39 +10,59 @@ const StatementPage = ({
 }) => {
   const descElements = () => {
     return description.map((line, index) => (
-      <p key={index} className="desc-line mb-1">
+      <Typography key={index} variant="body1">
         {line}
-      </p>
+      </Typography>
     ));
   };
 
   return (
-    <div className="left-page">
-      <div className="left-header">
-        <h4 onClick={() => setDesc(true)}>Description</h4>
-        <h4 onClick={() => setDesc(false)}>Submissions</h4>
-      </div>
-      <div className="problem--statement">
-        <div className="problem-title mb-2">{statement}</div>
+    <Box
+      sx={{
+        backgroundColor: "#fff",
+        p: 2,
+        borderRadius: 2,
+        height: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+        }}
+      >
+        <Typography sx={{ cursor: "pointer" }} onClick={() => setDesc(true)}>
+          Description
+        </Typography>
+        <Typography sx={{ cursor: "pointer" }} onClick={() => setDesc(false)}>
+          Submissions
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          p: 2,
+        }}
+      >
+        <Typography variant="h6">{statement}</Typography>
         {descElements()}
 
         {examples && (
           <>
-            <h3 className="mt-2 mb-2">Examples:</h3>
+            <Typography variant="h6">Examples:</Typography>
             <ul>
               {examples.map((example) => (
                 <main key={example.input}>
                   <div className="mt-2 example">
-                    <span className="bold">Input: </span>
-                    <span>{` ${example.input}`}</span>
+                    <Typography className="bold">Input: </Typography>
+                    <Typography>{` ${example.input}`}</Typography>
                   </div>
                   <div className="example">
-                    <span className="bold">Output: </span>
-                    <span>{example.output}</span>
+                    <Typography className="bold">Output: </Typography>
+                    <Typography>{example.output}</Typography>
                   </div>
                   <div className="example">
-                    <span className="bold">Explanation: </span>
-                    <span>{example.explanation}</span>
+                    <Typography className="bold">Explanation: </Typography>
+                    <Typography>{example.explanation}</Typography>
                   </div>
                 </main>
               ))}
@@ -50,18 +71,20 @@ const StatementPage = ({
         )}
         {constraints && (
           <>
-            <h3 className="mt-2 mb-2">Constraints:</h3>
-            <ul>
+            <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
+              Constraints:
+            </Typography>
+            <List>
               {constraints.map((constraint, index) => (
-                <li key={index} className="mb-1">
-                  {constraint}
-                </li>
+                <ListItem key={index} sx={{ mb: 1 }}>
+                  <ListItemText primary={constraint} />
+                </ListItem>
               ))}
-            </ul>
+            </List>
           </>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
