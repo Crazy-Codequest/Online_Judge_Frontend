@@ -17,6 +17,7 @@ import Editor from "@monaco-editor/react";
 import LanguageSelect from "../../components/LanguageSelect";
 import { toast } from "react-toastify";
 import { CODE_SNIPPETS } from "../../data/snippets";
+import { Box, TextField, Typography } from "@mui/material";
 
 
 const Compiler = ({
@@ -124,10 +125,29 @@ const Compiler = ({
   }
 
   return (
-    <div className="compiler-design">
-      <div className="compiler-page-editor">
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box
+        sx={{
+          borderRadius: 1,
+          backgroundColor: "#fff",
+          height: "80%",
+        }}
+      >
         <LanguageSelect lang={lang} setLang={setLanguage} />
-        <div className={`compiler-body${compiler ? "-bottom" : ""}`}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            height: compiler ? "60%" : "100%",
+          }}
+        >
           <Editor
             value={code}
             height="100%"
@@ -136,40 +156,75 @@ const Compiler = ({
             defaultValue={CODE_SNIPPETS[lang]}
             options={{ automaticLayout: true }}
           />
-        </div>
+        </Box>
         {compiler && (
-          <div className="compiler-bottom">
-            <main className="header">
-              <div className="compiler-bottom-header-left">
-                <p>TestCase</p>
-                <p>Code Result</p>
-              </div>
-              <div
+          <Box
+            sx={{
+              height: "40%",
+              backgroundColor: "#fff",
+              fontSize: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            <Box
+              sx={{
+                p: "0.2rem 1rem",
+                backgroundImage:
+                  "radial-gradient(closest-side at 50% 135%, #ffffff 50%, #eceff1 100%)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ cursor: "pointer", display: "flex", gap: 2 }}>
+                <Typography>TestCase</Typography>
+                <Typography>Code Result</Typography>
+              </Box>
+              <Box
                 onClick={() => setCompiler((prev) => !prev)}
-                className="compiler-bottom-header-right"
+                sx={{ cursor: "pointer" }}
               >
                 <ArrowDropUpIcon />
-              </div>
-            </main>
-            <textarea
+              </Box>
+            </Box>
+            <TextField
               value={testCase}
               onChange={(e) => setTestCase(e.target.value)}
-              className="testcase"
+              variant="outlined"
+              multiline
+              rows={5}
+              sx={{
+                m: 1,
+                width: "90%"
+              }}
             />
-          </div>
+          </Box>
         )}
-      </div>
-      <div className="compiler-footer">
-        <div onClick={() => setCompiler((prev) => !prev)}>
-          <h4 className="console">
-            Console
-            <ArrowDropUpIcon />
-          </h4>
-        </div>
-
+      </Box>
+      <Box
+        sx={{
+          height: "8%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: "0 1rem",
+          borderRadius: "5px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Stack
+          onClick={() => setCompiler((prev) => !prev)}
+          sx={{ cursor: "pointer" }}
+          direction={0}
+          alignItems="center"
+          gap={0}
+        >
+          <Typography>Console</Typography>
+          <ArrowDropUpIcon />
+        </Stack>
         <Buttons />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
