@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
@@ -12,6 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import LanguageSelect from "../../components/LanguageSelect";
+import { CODE_SNIPPETS } from "../../data/snippets";
 
 const Compiler = () => {
   const [code, setCode] = useState("");
@@ -38,6 +39,17 @@ const Compiler = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    if(lang){
+      setCode(CODE_SNIPPETS[lang]);
+    }
+  }, [lang]);
+
+  const setLanguage = (value) => {
+    setLang(value);
+    setCode(CODE_SNIPPETS[value]);
+  }
 
   return (
     <Container maxWidth="xl" sx={{ py: 4, overflowX: "hidden" }}>
@@ -95,23 +107,20 @@ const Compiler = () => {
                   backgroundColor: "transparent",
                 }}
                 lang={lang}
-                setLang={setLang}
+                setLang={setLanguage}
               />
             </Box>
-            <Button
-              sx={{ mr: 2 }}
-              variant="contained"
-              onClick={handleSubmit}
-            >
+            <Button sx={{ mr: 2 }} variant="contained" onClick={handleSubmit}>
               Run
             </Button>
           </Box>
 
           <Box sx={{ height: "70%", p: 1 }}>
             <Editor
-              code={code}
+              value={code}
               height="100%"
               language={lang}
+              defaultValue={CODE_SNIPPETS[lang]}
               onChange={setCode}
               theme={isLightMode ? "vs-light" : "vs-dark"}
               options={{
