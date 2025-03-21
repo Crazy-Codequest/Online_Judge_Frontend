@@ -58,7 +58,7 @@ const Statement = () => {
           height: "100%",
           flexDirection: { xs: "column", md: "row" },
           gap: 2,
-          ...(isMobile && {alignItems: "center"})
+          ...(isMobile && { alignItems: "center" }),
         }}
       >
         {!desc ? (
@@ -67,7 +67,7 @@ const Statement = () => {
               borderRadius: "10px",
               width: "50vw",
               mr: 2,
-              height: "100%",
+              height: "90vh",
               backgroundColor: "#fff",
             }}
           >
@@ -80,12 +80,14 @@ const Statement = () => {
             >
               <Typography
                 sx={{ cursor: "pointer" }}
+                variant="h2"
                 onClick={() => setDesc(true)}
               >
                 Description
               </Typography>
               <Typography
                 sx={{ cursor: "pointer" }}
+                variant="h2"
                 onClick={() => setDesc(false)}
               >
                 Submissions
@@ -97,9 +99,7 @@ const Statement = () => {
             </Box>{" "}
           </Box>
         ) : (
-          <Box
-            sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}
-          >
+          <Box sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}>
             <StatementPage
               description={problem.description}
               examples={problem.examples}

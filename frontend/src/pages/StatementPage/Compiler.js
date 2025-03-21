@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import AceEditor from "react-ace";
@@ -123,6 +123,12 @@ const Compiler = ({
     setLang(val);
     setCode(CODE_SNIPPETS[val]);
   }
+
+  useEffect(() => {
+    if(lang){
+      setCode(CODE_SNIPPETS[lang]);
+    }
+  }, [lang]);
 
   return (
     <Box

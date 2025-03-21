@@ -22,7 +22,7 @@ const StatementPage = ({
         backgroundColor: "#fff",
         p: 2,
         borderRadius: 2,
-        height: "100%",
+        minHeight: "90vh",
       }}
     >
       <Box
@@ -31,10 +31,18 @@ const StatementPage = ({
           gap: 2,
         }}
       >
-        <Typography sx={{ cursor: "pointer" }} onClick={() => setDesc(true)}>
+        <Typography
+          variant="h2"
+          sx={{ cursor: "pointer" }}
+          onClick={() => setDesc(true)}
+        >
           Description
         </Typography>
-        <Typography sx={{ cursor: "pointer" }} onClick={() => setDesc(false)}>
+        <Typography
+          variant="h2"
+          sx={{ cursor: "pointer" }}
+          onClick={() => setDesc(false)}
+        >
           Submissions
         </Typography>
       </Box>
@@ -48,36 +56,56 @@ const StatementPage = ({
 
         {examples && (
           <>
-            <Typography variant="h6">Examples:</Typography>
+            <Typography mt={2} variant="h6">
+              Examples:
+            </Typography>
             <ul>
               {examples.map((example) => (
-                <main key={example.input}>
-                  <div className="mt-2 example">
-                    <Typography className="bold">Input: </Typography>
+                <Box
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
+                  <Box>
+                    <Typography fontWeight="bold">Input: </Typography>
                     <Typography>{` ${example.input}`}</Typography>
-                  </div>
-                  <div className="example">
-                    <Typography className="bold">Output: </Typography>
+                  </Box>
+                  <Box>
+                    <Typography fontWeight="bold">Output: </Typography>
                     <Typography>{example.output}</Typography>
-                  </div>
-                  <div className="example">
-                    <Typography className="bold">Explanation: </Typography>
+                  </Box>
+                  <Box>
+                    <Typography fontWeight="bold">Explanation: </Typography>
                     <Typography>{example.explanation}</Typography>
-                  </div>
-                </main>
+                  </Box>
+                </Box>
               ))}
             </ul>
           </>
         )}
         {constraints && (
           <>
-            <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
+            <Typography variant="h6" sx={{ mt: 2 }}>
               Constraints:
             </Typography>
-            <List>
+            <List sx={{ listStyleType: "disc", pl: 2, fontSize: "1.5rem" }}>
               {constraints.map((constraint, index) => (
-                <ListItem key={index} sx={{ mb: 1 }}>
-                  <ListItemText primary={constraint} />
+                <ListItem
+                  key={index}
+                  sx={{
+                    listStyleType: "disc",
+                    display: "list-item",
+                    py: 0,
+                    margin: 0,
+                  }}
+                >
+                  <ListItemText
+                    primary={constraint}
+                    sx={{ marginLeft: "-10px" }}
+                  />
                 </ListItem>
               ))}
             </List>

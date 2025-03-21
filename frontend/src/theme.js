@@ -56,7 +56,8 @@ export function setUpTheme(mode) {
         margin: 0,
         htmlFontSize: 10,
         h2: {
-          fontSize: "5rem",
+          fontSize: "2rem",
+          fontWeight: "bold"
         },
         body1: {
           fontSize: "1.4rem",
