@@ -82,7 +82,7 @@ const CompetitionTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {competitions.map((competition) => (
+            {competitions.length > 0 && competitions.map((competition) => (
               <TableRow key={competition._id}>
                 <TableCell className="center">{competition.title}</TableCell>
                 <TableCell className="center">

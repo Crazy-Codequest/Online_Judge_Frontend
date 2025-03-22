@@ -39,9 +39,6 @@ const Statement = () => {
     getData();
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <Box
@@ -60,8 +57,20 @@ const Statement = () => {
           gap: 2,
           ...(isMobile && { alignItems: "center" }),
         }}
-      >
-        {!desc ? (
+      > {
+            loading ? <Box
+            sx={{
+              borderRadius: "10px",
+              width: "50vw",
+              mr: 2,
+              height: "90vh",
+              backgroundColor: "#fff",
+              px: 2,
+              py: 4
+            }}
+          ><Typography variant="h6">Loading...</Typography>
+          </Box>:
+        !desc ? (
           <Box
             sx={{
               borderRadius: "10px",
@@ -100,13 +109,16 @@ const Statement = () => {
           </Box>
         ) : (
           <Box sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}>
-            <StatementPage
-              description={problem.description}
-              examples={problem.examples}
-              statement={problem.statement}
-              setDesc={setDesc}
-              constraints={problem.constraints}
-            />
+            {
+            loading ? <Typography>Loading...</Typography> :
+              <StatementPage
+                description={problem.description}
+                examples={problem.examples}
+                statement={problem.statement}
+                setDesc={setDesc}
+                constraints={problem.constraints}
+            /> 
+            }
           </Box>
         )}
         <Box sx={{ borderRadius: "10px", width: { xs: "90vw", md: "50vw" } }}>

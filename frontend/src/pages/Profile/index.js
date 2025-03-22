@@ -29,8 +29,16 @@ import Loading from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
+const CLOUDINARY_URL =
+    "https://api.cloudinary.com/v1_1/drchiragb/image/upload";
+const CLOUDINARY_UPLOAD_PRESET = "ekj2agnn";
+const cloudName = "drchiragb";
+
+
 const ProfilePage = () => {
-  const [newAvatarUrl, setNewAvatarUrl] = useState({});
+  const { user } = useSelector((state) => state.auth);
+
+  const [newAvatarUrl, setNewAvatarUrl] = useState(null);
   const fileInputRef = useRef(null);
   const [profile, setProfile] = useState({});
   const [userProfile, setUserProfile] = useState({});
@@ -39,9 +47,9 @@ const ProfilePage = () => {
   const [editedSocial, setEditedSocial] = useState({});
   const [editedProfile, setEditedProfile] = useState({});
 
+
   const [loading, setLoading] = useState(true);
 
-  const { user } = useSelector((state) => state.auth);
 
   const handleEditClick = () => {
     setEditedProfile({
@@ -96,15 +104,21 @@ const ProfilePage = () => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
+    if(!file) return;
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setNewAvatarUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("public_id", `${user._id}-profilepic`); 
+
+    try{
+      const res = await axios.post(CLOUDINARY_URL, formData);
+      setNewAvatarUrl(res.data.secure_url);
+    }catch(e){
+      console.log(e);
+      
     }
   };
 
@@ -195,6 +209,17 @@ const ProfilePage = () => {
     socialProfile();
   }, []);
 
+  useEffect(() => {
+    if(user._id){
+      const profileUrl =
+        `https://res.cloudinary.com/${cloudName}/image/upload/${
+          user._id
+        }-profilepic?timestamp=${new Date().getTime()}`;
+        console.log(profileUrl);
+        setNewAvatarUrl(profileUrl);
+    }
+  }, [user])
+
   if (loading) {
     return <Loading />;
   }
@@ -212,7 +237,8 @@ return (
                 alt="avatar"
                 height="200"
                 src={
-                  "https://res.cloudinary.com/drxh2nou0/image/upload/v1741809323/th_u1ragl.jpg"
+                  newAvatarUrl ||
+                  `https://res.cloudinary.com/drchiragb/image/upload/${user._id}-profilepic`
                 }
                 sx={{
                   width: "200px",

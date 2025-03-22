@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 const DailyChallenge = ({ dailyProblem, sx }) => {
 return (
+    dailyProblem &&
     <Box sx={sx} bgcolor="action.hover" p={3} borderRadius={3}>
     <Typography variant="subtitle1" fontWeight={600} gutterBottom>
         {dailyProblem.statement}

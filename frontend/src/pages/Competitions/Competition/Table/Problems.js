@@ -1,48 +1,92 @@
 import React from "react";
-
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 
 const Problems = ({ problems, verifySubmissions }) => {
   const navigate = useNavigate();
+
+  const columns = [
+    {
+      field: "statement",
+      headerName: "Statement",
+      flex: 2,
+      sortable: true,
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            cursor: "pointer",
+            color: "blue",
+            "&:hover": { textDecoration: "underline" },
+          }}
+          onClick={() => navigate(`/competition/statement/${params.row._id}`)}
+        >
+          {params.value}
+        </Typography>
+      ),
+    },
+    {
+      field: "topic",
+      headerName: "Topic",
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => <Typography>{params.value}</Typography>,
+    },
+    {
+      field: "difficulty",
+      headerName: "Difficulty",
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => <Typography>{params.value}</Typography>,
+    },
+    {
+      field: "verdict",
+      headerName: "Verdict",
+      flex: 1,
+      sortable: false,
+      valueGetter: (params) =>
+        verifySubmissions(params?.row?._id) > 0 ? "Passed" : "NA",
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            color: params.value === "Passed" ? "green" : "red",
+          }}
+        >
+          {params.value}
+        </Typography>
+      ),
+    },
+  ];
+
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell className="table-header">Statement</TableCell>
-          <TableCell className="table-header">Topic</TableCell>
-          <TableCell className="table-header">Difficulty</TableCell>
-          <TableCell className="table-header">Verdict</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {problems.map((problem) => (
-          <TableRow
-            className={`${verifySubmissions(problem._id) > 0 ? "green" : ""}`}
-            key={problem._id}
-          >
-            <TableCell
-              className={`pointer`}
-              onClick={() => navigate(`/competition/statement/${problem._id}`)}
-            >
-              {problem.statement}
-            </TableCell>
-            <TableCell className="grey">{problem.topic}</TableCell>
-            <TableCell className="grey">{problem.difficulty}</TableCell>
-            <TableCell className="grey">
-              {verifySubmissions(problem._id) > 0 ? "Passed" : "NA"}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <Box sx={{ width: "100%", height: "auto" }}>
+      <DataGrid
+        rows={problems}
+        columns={columns}
+        getRowId={(row) => row._id}
+        autoHeight
+        disableColumnSeparator
+        disableSelectionOnClick
+        hideFooterSelectedRowCount
+        getRowClassName={(params) =>
+          verifySubmissions(params.row._id) > 0 ? "green-row" : ""
+        }
+        sx={{
+          border: "none",
+          "& .MuiDataGrid-cell": {
+            padding: "8px",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "#f5f5f5",
+            fontWeight: "bold",
+          },
+          "& .green-row": {
+            backgroundColor: "rgba(0, 255, 0, 0.2)", // Light green for passed verdict
+          },
+        }}
+      />
+    </Box>
   );
 };
 
