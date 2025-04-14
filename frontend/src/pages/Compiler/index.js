@@ -52,7 +52,19 @@ const Compiler = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4, overflowX: "hidden" }}>
+    <Container
+      maxWidth="xl"
+      sx={{
+        py: 4,
+        overflowX: "hidden",
+        minHeight: "100vh",
+        backgroundImage: `radial-gradient(
+            closest-side at 50% 135%,
+          #ffffff 50%,
+          #eceff1 100%
+        )`,
+      }}
+    >
       <Box
         sx={{
           display: "flex",

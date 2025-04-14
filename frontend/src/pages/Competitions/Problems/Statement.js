@@ -73,10 +73,10 @@ const CompetitionProblem = () => {
         padding: "4rem",
         pt: 0,
         backgroundImage: `radial-gradient(
-      closest-side at 50% 135%,
-    #ffffff 50%,
-    #eceff1 100%
-  )`,
+            closest-side at 50% 135%,
+          #ffffff 50%,
+          #eceff1 100%
+        )`,
       }}
     >
       <Box sx={{ mr: 2, my: 2 }}>
