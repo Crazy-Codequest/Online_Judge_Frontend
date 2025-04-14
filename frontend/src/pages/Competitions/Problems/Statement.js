@@ -9,6 +9,7 @@ import Compiler from "../../StatementPage/Compiler";
 import { useSelector } from "react-redux";
 import { setTimestamp } from "../../../features/auth/dataSlice";
 import CompetitionTimer from "../timer";
+import { Box, Divider, Typography } from "@mui/material";
 
 const CompetitionProblem = () => {
   const params = useParams();
@@ -64,32 +65,84 @@ const CompetitionProblem = () => {
   }
 
   return (
-    <div className="competition-problem-page">
-      <p className="mr-2 mb-1">
+    <Box
+      sx={{
+        width: "100vw",
+        position: "absolute",
+        minHeight: "105vh",
+        padding: "4rem",
+        pt: 0,
+        backgroundImage: `radial-gradient(
+      closest-side at 50% 135%,
+    #ffffff 50%,
+    #eceff1 100%
+  )`,
+      }}
+    >
+      <Box sx={{ mr: 2, my: 2 }}>
         <CompetitionTimer competitionTimestamp={timestamp} />
-      </p>
-      <div className="flex">
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+        }}
+      >
         {!desc ? (
-          <div className="left-page">
-            <div className="left-header">
-              <h4 onClick={() => setDesc(true)}>Description</h4>
-              <h4 onClick={() => setDesc(false)}>Submissions</h4>
-            </div>
-            <div className="problem--statement">
-              <div className="problem-title mb-2">Output</div>
-              <span>{output}</span>
-            </div>{" "}
-          </div>
+          <Box
+            sx={{
+              width: { xs: "100%", md: "50%" },
+              backgroundColor: "#fff",
+              borderRadius: 2,
+              p: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+              }}
+            >
+              <Typography
+                variant="h2"
+                sx={{ cursor: "pointer" }}
+                onClick={() => setDesc(true)}
+              >
+                Description
+              </Typography>
+              <Typography
+                variant="h2"
+                sx={{ cursor: "pointer" }}
+                onClick={() => setDesc(false)}
+              >
+                Submissions
+              </Typography>
+            </Box>
+            <Divider sx={{mt: 1}} />
+            <Box sx={{ pt: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ cursor: "pointer", mb: 2 }}
+                onClick={() => setDesc(false)}
+              >
+                Output
+              </Typography>
+              <Typography>{output}</Typography>
+            </Box>
+          </Box>
         ) : (
-          <StatementPage
-            description={problem.description}
-            examples={problem.examples}
-            statement={problem.statement}
-            setDesc={setDesc}
-            constraints={problem.constraints}
-          />
+          <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+            <StatementPage
+              description={problem.description}
+              examples={problem.examples}
+              statement={problem.statement}
+              setDesc={setDesc}
+              constraints={problem.constraints}
+            />
+          </Box>
         )}
-        <div className="right-page">
+        <Box sx={{ height: "90vh", width: { xs: "100%", md: "50%" } }}>
           <Compiler
             output={output}
             setOutput={setOutput}
@@ -100,10 +153,9 @@ const CompetitionProblem = () => {
             id={problem._id}
             c_id="6562325b5905a5ec08fabd37"
           />
-        </div>
-        <div className="compiler-submit"></div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
