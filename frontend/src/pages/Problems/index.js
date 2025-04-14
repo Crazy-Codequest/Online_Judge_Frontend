@@ -56,9 +56,13 @@ const columns = [
     flex: 2,
     sortable: true,
     renderCell: (params) => (
-      <Link style={{
-        color: "inherit", textDecoration: "none"
-      }} to={`/statement/${params.row._id}`}>
+      <Link
+        style={{
+          color: "inherit",
+          textDecoration: "none",
+        }}
+        to={`/statement/${params.row._id}`}
+      >
         <span style={{ cursor: "pointer" }}>{params.value}</span>
       </Link>
     ),
@@ -71,7 +75,7 @@ const columns = [
     valueGetter: (value, row, column, apiRef) => {
       const descArray = value;
       if (Array.isArray(descArray)) {
-        const formattedDesc = descArray.join(" "); 
+        const formattedDesc = descArray.join(" ");
         return formattedDesc.length > 100
           ? `${formattedDesc.substring(0, 100)}...`
           : formattedDesc;
@@ -88,11 +92,10 @@ const columns = [
     sortable: true,
   },
   {
-    field: "competition_problem",
-    headerName: "Competition Problem",
+    field: "topic",
+    headerName: "Topic",
     flex: 1,
     sortable: true,
-    valueGetter: (params) => (params.value ? "Yes" : "No"),
   },
 ];
 

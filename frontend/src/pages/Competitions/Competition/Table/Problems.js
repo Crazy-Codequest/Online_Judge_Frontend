@@ -14,6 +14,7 @@ const Problems = ({ problems, verifySubmissions }) => {
       sortable: true,
       renderCell: (params) => (
         <Typography
+          noWrap
           sx={{
             cursor: "pointer",
             color: "blue",
@@ -30,14 +31,14 @@ const Problems = ({ problems, verifySubmissions }) => {
       headerName: "Topic",
       flex: 1,
       sortable: true,
-      renderCell: (params) => <Typography>{params.value}</Typography>,
+      renderCell: (params) => <Typography noWrap>{params.value}</Typography>,
     },
     {
       field: "difficulty",
       headerName: "Difficulty",
       flex: 1,
       sortable: true,
-      renderCell: (params) => <Typography>{params.value}</Typography>,
+      renderCell: (params) => <Typography noWrap>{params.value}</Typography>,
     },
     {
       field: "verdict",

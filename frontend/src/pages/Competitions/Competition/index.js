@@ -31,15 +31,12 @@ const Competition = () => {
   const dispatch = useDispatch();
 
   const checkTimeStamp = (data) => {
-    console.log(data.fetchedCompetition.users);
-    const timestamp = data.fetchedCompetition.users.filter(
-      (compuser) => compuser.userId === user._id
-    )[0].timestamp;
+    const timestamp = data?.fetchedCompetition?.user?.timestamp;
     dispatch(setTimestamp(timestamp));
     if (timestamp) {
       setTerms(false);
     }
-  }
+  }  
 
   const getCompetitionOverview = async () => {
     try {
@@ -47,6 +44,7 @@ const Competition = () => {
         urlConstants.getCompetitionOverview,
         {
           id: params.id,
+          userId: user._id
         },
         getConfig()
       );
@@ -66,7 +64,6 @@ const Competition = () => {
         },
         getConfig()
       );
-      checkTimeStamp(data);
       setProblems(data.fetchedCompetition.problems); 
     } catch (e) {
       console.log(e);

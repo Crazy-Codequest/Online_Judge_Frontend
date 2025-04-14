@@ -40,10 +40,10 @@ const Competitions = () => {
           competition._id === id
             ? {
                 ...competition,
-                users: [
-                  ...competition.users,
-                  { userId: user._id, timestamp: new Date() },
-                ],
+                user: {
+                  ...competition.user,
+                  userId: user._id, timestamp: new Date() ,
+                },
               }
             : competition
         )
@@ -56,7 +56,7 @@ const Competitions = () => {
 
   const getSearchedCompetition = (competition) => {
     try {
-      if (!foundUsers(competition)) {
+      if (!foundUser(competition)) {
         toast.error("Please register for this competition first");
         return;
       } navigate(`/competition/${competition._id}`);
@@ -64,11 +64,11 @@ const Competitions = () => {
       console.log(e);
     }
   };
-
+  
   const getCompetitions = async () => {
     try {
       const { data } = await axios.get(
-        urlConstants.getCompetitions,
+        `${urlConstants.getCompetitions}?id=${user._id}`,
         getConfig()
       );
       setCompetitions(data.competitions);
@@ -79,16 +79,9 @@ const Competitions = () => {
     }
   };
 
-  const foundUser = (competition) => {
-    if(!competition.users) return false;
-    return competition.users.find((user) => user.userId === user._id);
-  };
-
-  const foundUsers = (competition) => {    
-    if (!competition.users) return false;
-    return competition.users.find(
-      (comp_user) => comp_user.userId === user._id
-    );
+  const foundUser = (competition) => {    
+    if(!competition.user) return false;
+    return competition.user["userId"] === user._id;
   };
 
   const handleCompetitionRedirect = (competition) => {
@@ -97,7 +90,7 @@ const Competitions = () => {
       currentDate >= new Date(competition.start_date) &&
       currentDate <= new Date(competition.end_date)
     ) {
-      if (foundUser(competition)) {
+      if (!foundUser(competition)) {
         toast.error("Please register for this competition first");
         return;
       }
@@ -168,7 +161,7 @@ const Competitions = () => {
                   foundUser(competition) ? "register" : ""
                 }`}
               >
-                {foundUsers(competition) ? "Registered" : "Register"}
+                {foundUser(competition) ? "Registered" : "Register"}
               </Button>
             </CardActions>
           </CardContent>
