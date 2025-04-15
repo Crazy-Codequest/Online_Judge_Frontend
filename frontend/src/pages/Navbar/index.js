@@ -12,14 +12,29 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import GreyCircle from "../../components/GreyCircle";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { CardMedia, IconButton, Popover, TextField, ToggleButton, ToggleButtonGroup, useTheme } from "@mui/material";
+import {
+  CardMedia,
+  IconButton,
+  Popover,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  useTheme,
+  Badge,
+  Modal,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import logo from "../../images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useIsTab } from "../../hooks/use-is-tab";
 import { useIsMobile } from "../../hooks/use-is-mobile";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { setSearch } from "../../features/auth/dataSlice";
 import {ThemeContext} from "../../ThemeContext";
+import app from "../../config/firebase";
+import {getMessaging, onMessage, getToken} from "firebase/messaging";
 
 export default function Navbar() {
   const { palette } = useTheme();
@@ -30,27 +45,30 @@ export default function Navbar() {
   const {user} = useSelector((state) => state.auth);  
   const {search} = useSelector((state) => state.data);
 
-  const [anchorElLeft, setAnchorElLeft] = useState(null);
-  const [anchorElRight, setAnchorElRight] = useState(null);
+  const [anchorElLeft, setAnchorelLeft] = useState(null);
+  const [anchorElRight, setAnchorelRight] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [anchorSettingsEl, setAnchorSettingsEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationsAnchor, setNotificationsAnchor] = useState(null);
+  const [badgeCount, setbadgeCount] = useState(0);
 
   const { themePref, toggleTheme } = useContext(ThemeContext);
 
   const handleLeftMenuClick = (event) => {
-    setAnchorElLeft(event.currentTarget);
+    setAnchorelLeft(event.currentTarget);
   };
 
   const handleRightMenuClick = (event) => {
-    setAnchorElRight(event.currentTarget);
+    setAnchorelRight(event.currentTarget);
   };
 
   const handleLeftMenuClose = () => {
-    setAnchorElLeft(null);
+    setAnchorelLeft(null);
   };
 
   const handleRightMenuClose = () => {
-    setAnchorElRight(null);
+    setAnchorelRight(null);
   };
 
   const handleSettingsClose = () => {
@@ -77,6 +95,15 @@ export default function Navbar() {
   const handleSettingsMenuOpen = (e) => {
     setAnchorSettingsEl(e.currentTarget);
   };
+
+  const handleOpenNotifications = (event) => {
+    setNotificationsAnchor(event.currentTarget);
+  }
+
+  const handleCloseNotifications = () => {
+    setNotificationsAnchor(null);
+    setbadgeCount(0);
+  }
 
   const settingsId = "primary-theme-menu";
   const isSettingsOpen = Boolean(anchorSettingsEl);
@@ -112,7 +139,44 @@ export default function Navbar() {
     </Popover>
   );
 
+  const messaging = getMessaging(app);
 
+  useEffect(() => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        getToken(messaging, {
+          vapidKey:
+            "BGAXG2l9occppUVO9zV8ylwn-PInDSYT5jqEWdoYQZIPqyDt8bW3_kedTikf5oZM_h0ufWIza3X2O8O_aypW6AI",
+        })
+          .then((currentToken) => {
+             if (currentToken) {
+               console.log("FCM Token:", currentToken);
+               // Use or store the token as needed.
+             } else {
+               console.log(
+                 "No registration token available. Request permission to generate one."
+               );
+             }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  }, []);
+
+  onMessage(messaging, (payload) => {
+    console.log(payload, "payload");
+    const notifs = [
+      ...notifications,
+      {
+        title: payload.notification.title,
+        body: payload.notification.body,
+      },
+    ];
+    setNotifications(notifs);
+    setbadgeCount(notifs.length);
+  });
 
   return (
     <Box
@@ -237,7 +301,17 @@ export default function Navbar() {
             />
           </GreyCircle>
 
-          <NotificationsNoneOutlinedIcon />
+          <Badge
+            badgeContent={notifications.length}
+            color="error"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          >
+            <NotificationsNoneOutlinedIcon
+              onClick={handleOpenNotifications}
+              sx={{ cursor: "pointer" }}
+              anchorEl={notificationsAnchor}
+            />
+          </Badge>
 
           <GreyCircle
             sx={{ ml: { xs: 0, md: 5 } }}
@@ -249,7 +323,7 @@ export default function Navbar() {
 
         <Menu
           id="menu-appbar"
-          anchorEl={anchorElLeft}
+          anchorel={anchorElLeft}
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
@@ -298,7 +372,7 @@ export default function Navbar() {
         </Menu>
         <Menu
           id="left-menu-appbar"
-          anchorEl={anchorElRight}
+          anchorel={anchorElRight}
           anchorOrigin={{
             vertical: "top",
             horizontal: "left",
@@ -333,6 +407,25 @@ export default function Navbar() {
         </Menu>
       </Toolbar>
       {renderTheme}
+      <Popover
+        id="notifications-popover"
+        open={Boolean(notificationsAnchor)}
+        anchorEl={notificationsAnchor}
+        onClose={handleCloseNotifications}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Box sx={{ p:2, maxHeight: "50vh", overflowY: "auto" }}>
+          <Typography variant="h6">Notifications</Typography>
+          <List>
+            {notifications.map((notification, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={notification.title} secondary={notification.body} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Popover>
     </Box>
   );
 }
