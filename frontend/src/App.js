@@ -135,7 +135,7 @@ function App() {
             <Route path="/" index element={<Home />} />
             <Route path="/statement/:id" element={<StatementPage />} />
             <Route
-              path="/competition/statement/:id"
+              path="/competition/:c_id/statement/:id"
               element={<CompetitionProblem />}
             />
             {/* <Route index element={<Navigate replace to="/" />} /> */}

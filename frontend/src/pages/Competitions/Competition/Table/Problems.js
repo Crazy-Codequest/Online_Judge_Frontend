@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Problems = ({ problems, verifySubmissions }) => {
   const navigate = useNavigate();
+  const {id} = useParams();
 
   const columns = [
     {
@@ -20,7 +21,7 @@ const Problems = ({ problems, verifySubmissions }) => {
             color: "blue",
             "&:hover": { textDecoration: "underline" },
           }}
-          onClick={() => navigate(`/competition/statement/${params.row._id}`)}
+          onClick={() => navigate(`/competition/${id}/statement/${params.row._id}`)}
         >
           {params.value}
         </Typography>
