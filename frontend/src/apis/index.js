@@ -34,6 +34,9 @@ export const urlConstants = {
   getTopicCounts: baseUrl + "api/problems/topic-counts",
   getUsers: baseUrl + "api/users",
   getSearchedProblems: baseUrl + "api/problems/search",
+  getAllNotifications: baseUrl + "api/notifications",
+  createNotification: baseUrl + "api/notifications/create",
+  markNotificationAsRead: baseUrl + "api/notifications/mark-as-read",
 };
 
 export const adminRoutes = {

@@ -35,6 +35,9 @@ import { setSearch } from "../../features/auth/dataSlice";
 import {ThemeContext} from "../../ThemeContext";
 import app from "../../config/firebase";
 import {getMessaging, onMessage, getToken} from "firebase/messaging";
+import axios from "axios";
+import { urlConstants } from "../../apis";
+import { getConfig } from "../../utils/getConfig";
 
 export default function Navbar() {
   const { palette } = useTheme();
@@ -108,9 +111,19 @@ export default function Navbar() {
   const settingsId = "primary-theme-menu";
   const isSettingsOpen = Boolean(anchorSettingsEl);
 
+  const getAllNotifications = async () => {
+    try {
+      const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user._id}`, getConfig());
+      setNotifications(res.data);
+      console.log(res);
+    }catch(e){
+      console.log(e);
+    }
+  }
 
   const renderTheme = (
     <Popover
+      disableScrollLock
       id={settingsId}
       open={isSettingsOpen}
       anchorEl={anchorSettingsEl}
@@ -177,6 +190,10 @@ export default function Navbar() {
     setNotifications(notifs);
     setbadgeCount(notifs.length);
   });
+
+  useEffect(() => {
+    getAllNotifications();
+  }, [])
 
   return (
     <Box
@@ -322,6 +339,7 @@ export default function Navbar() {
         </Box>
 
         <Menu
+          disableScrollLock
           id="menu-appbar"
           anchorel={anchorElLeft}
           anchorOrigin={{
@@ -371,6 +389,7 @@ export default function Navbar() {
           )}
         </Menu>
         <Menu
+          disableScrollLock
           id="left-menu-appbar"
           anchorel={anchorElRight}
           anchorOrigin={{
@@ -408,6 +427,7 @@ export default function Navbar() {
       </Toolbar>
       {renderTheme}
       <Popover
+        disableScrollLock
         id="notifications-popover"
         open={Boolean(notificationsAnchor)}
         anchorEl={notificationsAnchor}
@@ -415,12 +435,15 @@ export default function Navbar() {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Box sx={{ p:2, maxHeight: "50vh", overflowY: "auto" }}>
+        <Box sx={{ p: 2, maxHeight: "50vh", overflowY: "auto" }}>
           <Typography variant="h6">Notifications</Typography>
           <List>
             {notifications.map((notification, index) => (
               <ListItem key={index}>
-                <ListItemText primary={notification.title} secondary={notification.body} />
+                <ListItemText
+                  primary={notification.title}
+                  secondary={notification.body}
+                />
               </ListItem>
             ))}
           </List>
