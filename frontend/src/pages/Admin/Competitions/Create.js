@@ -9,6 +9,7 @@ import {
   DialogActions,
   Chip,
   MenuItem,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
@@ -144,12 +145,28 @@ const Create = ({
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
     >
-      <DialogTitle className="mt-2 ml-2">Create Competition</DialogTitle>
-      <DialogContent className="dialog-content">
-        <DialogContentText>Enter competition details</DialogContentText>
-        <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
+      <DialogTitle sx={{ mt: 2, ml: 2 }}>Create Competition</DialogTitle>
+      <DialogContent
+        sx={{
+          p: "2rem",
+          width: "80%",
+          margin: "0 auto",
+        }}
+      >
+        <DialogContentText sx={{ mb: 2 }}>
+          Enter competition details
+        </DialogContentText>
+        <Box
+          onClick={() => setOpenCreateDialog(false)}
+          sx={{
+            position: "absolute",
+            cursor: "pointer",
+            top: "2rem",
+            right: "2rem",
+          }}
+        >
           <CloseIcon />
-        </div>
+        </Box>
         <TextField
           label="Title"
           variant="outlined"
@@ -158,7 +175,7 @@ const Create = ({
           name="title"
           value={newCompetition.title}
           onChange={handleInputChange}
-          className="mt-1"
+          sx={{ my: 2 }}
         />
         <CustomDatepicker
           start_date={newCompetition.start_date}
@@ -172,7 +189,7 @@ const Create = ({
           margin="dense"
           name="users"
           select
-          className="mt-3"
+          sx={{ mt: 2 }}
           value=""
           onChange={(e) => handleAddUser(e.target.value)}
         >
@@ -182,16 +199,16 @@ const Create = ({
             </MenuItem>
           ))}
         </TextField>
-        <div className="mt-2">
+        <Box sx={{ my: 1 }}>
           {newCompetition.users.map((user, index) => (
             <Chip
               key={index}
               label={`${user.firstname} ${user.lastname}`}
               onDelete={() => handleRemoveItem(index, "users")}
-              className="mr-2"
+              sx={{ mr: 2, mt: 1 }}
             />
           ))}
-        </div>
+        </Box>
         <TextField
           label="Problem Ids"
           variant="outlined"
@@ -199,7 +216,7 @@ const Create = ({
           margin="dense"
           name="problems"
           select
-          className="mt-1"
+          sx={{ mt: 1 }}
           value=""
           onChange={(e) => handleAddProblem(e.target.value)}
         >
@@ -209,18 +226,25 @@ const Create = ({
             </MenuItem>
           ))}
         </TextField>
-        <div className="mt-2">
+        <Box sx={{ mt: 2 }}>
           {newCompetition.problems.map((problem, index) => (
             <Chip
               key={index}
               label={problem.statement}
               onDelete={() => handleRemoveItem(index, "problems")}
-              className="mr-2"
+              sx={{ mr: 2, mt: 1 }}
             />
           ))}
-        </div>
+        </Box>
       </DialogContent>
-      <DialogActions className="action-buttons">
+      <DialogActions
+        sx={{
+          mb: 2,
+          mr: 2,
+          display: "flex",
+          gap: "1rem",
+        }}
+      >
         <Button onClick={handleCreateCompetition}>Create</Button>
         <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
       </DialogActions>

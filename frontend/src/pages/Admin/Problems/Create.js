@@ -7,6 +7,7 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  Box,
 } from "@mui/material";
 import axios from "axios";
 import { urlConstants } from "../../../apis";
@@ -28,6 +29,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
     description: [""],
     constraints: [""],
     examples: [],
+    testCases: []
   });
   const handleCreateProblem = async () => {
     try {
@@ -67,12 +69,32 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
     }));
   };
 
+  const handleTestCaseChange = (index, field, value) => {
+    const updatedTestCases = [...newProblem.testCases];
+    updatedTestCases[index][field] = value;
+
+    setNewProblem((prevProblem) => ({
+      ...prevProblem,
+      testCases: updatedTestCases,
+    }));
+  };
+
   const handleAddExample = () => {
     setNewProblem((prevProblem) => ({
       ...prevProblem,
       examples: [
         ...prevProblem.examples,
         { input: "", output: "", explanation: "" },
+      ],
+    }));
+  };
+
+  const handleAddTestCase = () => {
+    setNewProblem((prevProblem) => ({
+      ...prevProblem,
+      testCases: [
+        ...prevProblem.testCases,
+        { input: "", output: "" },
       ],
     }));
   };
@@ -84,6 +106,16 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
     setNewProblem((prevProblem) => ({
       ...prevProblem,
       examples: updatedExamples,
+    }));
+  };
+
+  const handleDeleteTestCase = (index) => {
+    const updatedTestCases = [...newProblem.examples];
+    updatedTestCases.splice(index, 1);
+
+    setNewProblem((prevProblem) => ({
+      ...prevProblem,
+      testCases: updatedTestCases,
     }));
   };
 
@@ -101,13 +133,28 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
       fullWidth
       maxWidth={false}
       fullScreen
+      sx={{ overflowY: "hidden" }}
     >
-      <DialogTitle className="mt-2 ml-2">Create Problem</DialogTitle>
-      <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
+      <DialogTitle sx={{ mt: 2, ml: 2 }}>Create Problem</DialogTitle>
+      <Box
+        onClick={() => setOpenCreateDialog(false)}
+        sx={{
+          position: "absolute",
+          cursor: "pointer",
+          top: "2rem",
+          right: "2rem",
+        }}
+      >
         <CloseIcon />
-      </div>
-      <DialogContent className="dialog-content">
-        <DialogContentText>Enter problem details</DialogContentText>
+      </Box>
+      <DialogContent
+        sx={{
+          p: "2rem",
+          width: "80%",
+          margin: "0 auto",
+        }}
+      >
+        <DialogContentText mb={2}>Enter problem details</DialogContentText>
         <TextField
           label="Statement"
           variant="outlined"
@@ -117,15 +164,14 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           value={newProblem.statement}
           onChange={handleInputChange}
         />
-        <div className="flex-end">
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <TextField
             label="Difficulty"
             variant="outlined"
-            className="mt-1"
             margin="dense"
             name="difficulty"
             select
-            style={{ width: "45%" }}
+            sx={{ width: "45%", mt: 2 }}
             value={newProblem.difficulty}
             onChange={handleInputChange}
           >
@@ -141,20 +187,20 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
             fullWidth
             name="topic"
             select
-            style={{ width: "45%" }}
+            sx={{ width: "45%", mt: 2 }}
             margin="dense"
             onChange={handleInputChange}
           >
             <MenuItem value="strings">Strings</MenuItem>
             <MenuItem value="arrays">Arrays</MenuItem>
           </TextField>
-        </div>
+        </Box>
 
         <TextField
           value={newProblem.competition_problem}
           label="Competition Problem"
           variant="outlined"
-          className="mt-1"
+          sx={{ mt: 2 }}
           fullWidth
           margin="dense"
           name="competition_problem"
@@ -169,7 +215,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           value={newProblem.description?.join("\n")}
           label="Description"
           variant="outlined"
-          className="mt-1"
+          sx={{ mt: 2 }}
           fullWidth
           multiline
           rows={3}
@@ -183,7 +229,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           value={newProblem.constraints?.join("\n")}
           label="Constraints"
           variant="outlined"
-          className="mt-1"
+          sx={{ mt: 2 }}
           fullWidth
           multiline
           rows={3}
@@ -193,10 +239,17 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
             handleArrayInputChange("constraints", e.target.value.split("\n"))
           }
         />
-        {newProblem.examples?.length && (
-          <div className="examples mt-2">
+        {newProblem?.examples && newProblem.examples?.length && (
+          <Box
+            sx={{
+              height: "12rem",
+              p: "2rem",
+              overflowY: "scroll",
+              mt: 2,
+            }}
+          >
             {newProblem.examples.map((example, index) => (
-              <div key={index}>
+              <Box key={index}>
                 <TextField
                   label="Input Example"
                   variant="outlined"
@@ -236,13 +289,58 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
                 <IconButton onClick={() => handleDeleteExample(index)}>
                   <DeleteIcon />
                 </IconButton>
-              </div>
+              </Box>
             ))}
-          </div>
+          </Box>
         )}
-        <Button onClick={handleAddExample}>Add Example</Button>
+        <Button sx={{ display: "block", mt: 2 }} onClick={handleAddExample}>
+          Add Example
+        </Button>
+
+        {newProblem.testCases?.length && (
+          <Box className="examples mt-2">
+            {newProblem.testCases.map((testcase, index) => (
+              <Box key={index}>
+                <TextField
+                  label="Input"
+                  variant="outlined"
+                  fullWidth
+                  margin="dense"
+                  name={`inputExample-${index}`}
+                  value={testcase.input}
+                  onChange={(e) =>
+                    handleTestCaseChange(index, "input", e.target.value)
+                  }
+                />
+
+                <TextField
+                  label="Output"
+                  variant="outlined"
+                  fullWidth
+                  margin="dense"
+                  name={`outputExample-${index}`}
+                  value={testcase.output}
+                  onChange={(e) =>
+                    handleTestCaseChange(index, "output", e.target.value)
+                  }
+                />
+                <IconButton onClick={() => handleDeleteTestCase(index)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
+        )}
+        <Button sx={{ mt: 2 }} onClick={handleAddTestCase}>
+          Add TestCases
+        </Button>
       </DialogContent>
-      <DialogActions className="action-buttons">
+      <DialogActions sx={{
+        mb: 2,
+        mr: 2,
+        display: "flex",
+        gap: "1rem",
+      }}>
         <Button onClick={handleCreateProblem}>Create</Button>
         <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
       </DialogActions>
