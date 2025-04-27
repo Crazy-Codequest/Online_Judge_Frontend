@@ -1,51 +1,50 @@
-import React, { useContext, useRef, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-// import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useRef, useState } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Box,
+  Typography,
+  Container,
+  CircularProgress,
+  Link,
+  CardMedia,
+} from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import logoImage from "../../images/logo.png";
+import bgImg from "../../images/bg2.avif";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { loginSuccess } from "../../features/auth/authSlice";
-import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 import { toast } from "react-toastify";
 import { urlConstants } from "../../apis";
+import { useNavigate } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Chirag
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: { main: "#3F51B5" },
+    secondary: { main: "#9c27b0" },
+  },
+  shape: { borderRadius: 8 },
+  typography: {
+    fontFamily: '"Roboto Mono", monospace',
+    h5: { fontWeight: 600 },
+  },
+});
 
-const SignUp = () => {
+export default function SignUp() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(formRef.current);
+
     try {
       const user = await axios.post(urlConstants.registerUser, {
         email: data.get("email"),
@@ -54,142 +53,168 @@ const SignUp = () => {
         lastname: data.get("lastname"),
         username: data.get("username"),
       });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          user: user.data.user,
-        })
-      );
+      localStorage.setItem("user", JSON.stringify({ user: user.data.user }));
       localStorage.setItem("token", user.data.token);
-      dispatch(
-        loginSuccess({
-          user: user.data.user,
-        })
-      );
+      dispatch(loginSuccess({ user: user.data.user }));
     } catch (e) {
       console.log(e);
-      toast.error(e.response.data);
+      toast.error(e.response?.data || "Registration failed!");
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundImage: `url(${bgImg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          p: 2,
+        }}
+      >
+        <Container
+          maxWidth="xs"
           sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            bgcolor: "rgba(0,0,0,0.7)",
+            py: 4,
+            px: 3,
+            borderRadius: 2,
+            boxShadow: 3,
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={logoImage}
+              alt="Platform Logo"
+              sx={{
+                maxWidth: "80px",
+              }}
+            />
+          </Box>
+
+          <Typography variant="h5" align="center" gutterBottom>
+            Sign Up
           </Typography>
+
           <Box
             component="form"
             ref={formRef}
             onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
           >
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Confirm Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="username"
-              label="Username"
-              id="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="firstname"
               label="First Name"
               name="firstname"
-              autoFocus
+              fullWidth
+              required
+              margin="normal"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
             />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="lastname"
               label="Last Name"
               name="lastname"
-              autoFocus
+              fullWidth
+              required
+              margin="normal"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+            <TextField
+              label="Username"
+              name="username"
+              fullWidth
+              required
+              margin="normal"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
             />
+            <TextField
+              label="Email Address"
+              name="email"
+              fullWidth
+              required
+              margin="normal"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              fullWidth
+              required
+              margin="normal"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+            />
+
             <Button
               type="submit"
-              fullWidth
               variant="contained"
+              color="primary"
+              fullWidth
+              sx={{
+                mt: 2,
+                py: 1,
+                fontWeight: "bold",
+                borderRadius: 2,
+                boxShadow: "none",
+                transition: "box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  boxShadow: "0 0 10px 2px #39ff14",
+                },
+              }}
               disabled={loading}
-              sx={{ mt: 3, mb: 2 }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "Sign Up"
+                <Typography variant="h6">Sign Up</Typography>
               )}
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signin" variant="body2">
-                  {"Already have an account? SIgn In"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </div>
-  );
-};
 
-export default SignUp;
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                Already have an account?
+                <Button
+                  onClick={() => navigate("/signin")}
+                  variant="text"
+                  size="small"
+                  sx={{ textTransform: "none", ml: 1 }}
+                >
+                  <Typography sx={{ color: "primary.main" }} variant="h6">
+                    Sign In
+                  </Typography>
+                </Button>
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      <Box component="footer" sx={{ textAlign: "center", py: 2 }}>
+        <Typography variant="body2" color="textSecondary">
+          © {new Date().getFullYear()} Coding Platform. All rights reserved.
+        </Typography>
+      </Box>
+    </ThemeProvider>
+  );
+}
