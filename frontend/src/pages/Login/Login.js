@@ -13,17 +13,34 @@ import {
   Container,
   CircularProgress,
 } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/auth/authSlice";
 import axios from "axios";
 import { urlConstants } from "../../apis";
 import { toast } from "react-toastify";
-import logo from "../../images/logo.png";
+import logoImage from "../../images/logo.png";
+import bgImg from "../../images/bg2.avif";
+import { useNavigate } from "react-router-dom";
 
-const SignIn = () => {
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: { main: "#3F51B5" },
+    secondary: { main: "#9c27b0" },
+  },
+  shape: { borderRadius: 8 },
+  typography: {
+    fontFamily: '"Roboto Mono", monospace',
+    h5: { fontWeight: 600 },
+  },
+});
+
+export default function SignIn() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,102 +71,133 @@ const SignIn = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 8,
+          minHeight: "100vh",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          backgroundImage: `url(${bgImg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          p: 2,
         }}
       >
-        <Avatar
-          src={logo}
+        <Container
+          maxWidth="xs"
           sx={{
-            width: 80,
-            height: 80,
-            mb: 2,
+            bgcolor: "rgba(0,0,0,0.7)",
+            py: 4,
+            px: 3,
+            borderRadius: 2,
+            boxShadow: 3,
           }}
-          variant="rounded"
-        />
-        <Typography component="h1" variant="h5">
-          Sign In
-        </Typography>
-
-        <Box
-          component="form"
-          ref={formRef}
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ mt: 3 }}
         >
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            defaultValue="test@gmail.com"
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            defaultValue="Test@123"
-          />
-          <FormControlLabel
-            control={<Checkbox color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={loading}
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Avatar
+              src={logoImage}
+              sx={{
+                width: 80,
+                height: 80,
+                bgcolor: "transparent",
+              }}
+              variant="rounded"
+            />
+          </Box>
+
+          <Typography variant="h5" align="center" gutterBottom>
+            Sign In
+          </Typography>
+
+          <Box
+            component="form"
+            ref={formRef}
+            onSubmit={handleSubmit}
+            noValidate
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Sign In"
-            )}
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2" underline="hover">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2" underline="hover">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: 2,
+                py: 1,
+                fontWeight: "bold",
+                borderRadius: 2,
+                boxShadow: "none",
+                transition: "box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  boxShadow: "0 0 10px 2px #39ff14",
+                },
+              }}
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                <Typography variant="h6">Sign In</Typography>
+              )}
+            </Button>
+
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                Don't have an account?
+                <Button
+                  onClick={() => navigate("/signup")}
+                  variant="text"
+                  size="small"
+                  sx={{ textTransform: "none", ml: 1 }}
+                >
+                  <Typography sx={{ color: "primary.main" }} variant="h6">
+                    Sign Up
+                  </Typography>
+                </Button>
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
       </Box>
 
-      <Box sx={{ mt: 8, mb: 4 }}>
-        <Typography variant="body2" color="text.secondary" align="center">
-          {"Copyright © "}
-          <Link color="inherit" href="https://mui.com/" underline="hover">
-            Chirag
-          </Link>{" "}
-          {new Date().getFullYear()}
-          {"."}
+      {/* Footer */}
+      <Box component="footer" sx={{ textAlign: "center", py: 2 }}>
+        <Typography variant="body2" color="textSecondary">
+          © {new Date().getFullYear()} Coding Platform. All rights reserved.
         </Typography>
       </Box>
-    </Container>
+    </ThemeProvider>
   );
-};
-
-export default SignIn;
+}
