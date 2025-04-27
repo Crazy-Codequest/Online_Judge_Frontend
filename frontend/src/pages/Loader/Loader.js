@@ -1,12 +1,19 @@
-// Loading.js
-
 import React from "react";
+import { Box, Typography } from "@mui/material";
 
 const Loading = () => {
   return (
-    <div className="loading-container">
-      <p>Loading...</p>
-    </div>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      bgcolor="background.default"
+    >
+      <Typography variant="h5" color="text.secondary">
+        Loading...
+      </Typography>
+    </Box>
   );
 };
 

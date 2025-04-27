@@ -13,6 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import { Typography } from "@mui/material";
 
 const Sidebar = ({
   setOpenCreateDialog,
@@ -30,7 +31,9 @@ const Sidebar = ({
     <ReactSidebar
       collapsed={sidebarCollapsed}
       collapseSidebar={collapseSidebar}
-      className="admin-panel"
+      style={{
+        width: "20%",
+      }}
     >
       <Menu>
         <MenuItem
@@ -38,16 +41,21 @@ const Sidebar = ({
           className="menu1"
           icon={<MenuRoundedIcon />}
         >
-          <h2>Admin</h2>
+          <Typography variant="h6">Admin</Typography>
         </MenuItem>
-        <MenuItem icon={<GridViewRoundedIcon />}> Dashboard </MenuItem>
-        <SubMenu label="Users" icon={<PersonIcon />}>
+        <MenuItem
+          onClick={() => setCurrentState("Problems")}
+          icon={<GridViewRoundedIcon />}
+        >
+          {" "}
+          <Typography>Dashboard</Typography>
+        </MenuItem>
+        <SubMenu label={<Typography>Users </Typography>} icon={<PersonIcon />}>
           <MenuItem
             onClick={() => setCurrentState("Users")}
             icon={<AccountCircleRoundedIcon />}
           >
-            {" "}
-            User Table{" "}
+            <Typography> User Table </Typography>
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -56,17 +64,18 @@ const Sidebar = ({
             }}
             icon={<ShieldRoundedIcon />}
           >
-            {" "}
-            Create User{" "}
+            <Typography> Create User </Typography>
           </MenuItem>
         </SubMenu>
-        <SubMenu label="Problems" icon={<SettingsApplicationsRoundedIcon />}>
+        <SubMenu
+          label={<Typography>Problems </Typography>}
+          icon={<SettingsApplicationsRoundedIcon />}
+        >
           <MenuItem
             onClick={() => setCurrentState("Problems")}
             icon={<AccountCircleRoundedIcon />}
           >
-            {" "}
-            Problem Table{" "}
+            <Typography>Problem Table </Typography>
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -75,17 +84,18 @@ const Sidebar = ({
             }}
             icon={<ShieldRoundedIcon />}
           >
-            {" "}
-            Create Problem{" "}
+            <Typography>Create Problem </Typography>
           </MenuItem>
         </SubMenu>
-        <SubMenu label="Competitions" icon={<PersonIcon />}>
+        <SubMenu
+          label={<Typography>Competitions</Typography>}
+          icon={<PersonIcon />}
+        >
           <MenuItem
             onClick={() => setCurrentState("Competitions")}
             icon={<AccountCircleRoundedIcon />}
           >
-            {" "}
-            Competition Table{" "}
+            <Typography> Competition Table </Typography>
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -94,8 +104,7 @@ const Sidebar = ({
             }}
             icon={<ShieldRoundedIcon />}
           >
-            {" "}
-            Create Competition{" "}
+            <Typography> Create Competition </Typography>
           </MenuItem>
         </SubMenu>
         <MenuItem
@@ -105,8 +114,7 @@ const Sidebar = ({
           }}
           icon={<LogoutRoundedIcon />}
         >
-          {" "}
-          Logout{" "}
+          <Typography>Logout</Typography>
         </MenuItem>
       </Menu>
     </ReactSidebar>

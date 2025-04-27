@@ -130,7 +130,6 @@ export default function Navbar() {
       onClose={handleSettingsClose}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "left",
       }}
     >
       <ToggleButtonGroup
@@ -344,12 +343,12 @@ export default function Navbar() {
           anchorel={anchorElLeft}
           anchorOrigin={{
             vertical: "top",
-            horizontal: "right",
+            horizontal: "left",
           }}
           keepMounted
           transformOrigin={{
             vertical: "top",
-            horizontal: "right",
+            horizontal: "left",
           }}
           open={Boolean(anchorElLeft)}
           onClose={handleLeftMenuClose}
@@ -394,12 +393,12 @@ export default function Navbar() {
           anchorel={anchorElRight}
           anchorOrigin={{
             vertical: "top",
-            horizontal: "left",
+            horizontal: "right",
           }}
           keepMounted
           transformOrigin={{
             vertical: "top",
-            horizontal: "left",
+            horizontal: "right",
           }}
           open={Boolean(anchorElRight)}
           onClose={handleRightMenuClose}

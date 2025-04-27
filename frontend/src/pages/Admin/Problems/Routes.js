@@ -3,6 +3,7 @@ import Table from "./Table";
 import Create from "./Create";
 import Edit from "./Edit";
 import Delete from "./Delete";
+import { Box } from "@mui/material";
 
 const ProblemRoutes = ({
   openCreateProblemDialog,
@@ -15,7 +16,7 @@ const ProblemRoutes = ({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [problemsData, setProblemsData] = useState([]);
   return (
-    <div className="problems-container">
+    <Box sx={{ width: "100%", padding: "20px" }}>
       <Table
         problems={problems}
         setProblems={setProblems}
@@ -52,7 +53,7 @@ const ProblemRoutes = ({
         problems={problems}
         setProblems={setProblems}
       />
-    </div>
+    </Box>
   );
 };
 

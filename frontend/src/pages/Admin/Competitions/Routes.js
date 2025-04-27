@@ -3,6 +3,7 @@ import Table from "./Table";
 import Create from "./Create";
 import Edit from "./Edit";
 import Delete from "./Delete";
+import { Box } from "@mui/material";
 
 const CompetitonHandle = ({ openCreateDialog, setOpenCreateDialog }) => {
   const [competitionsData, setCompetitionsData] = useState([]);
@@ -11,7 +12,7 @@ const CompetitonHandle = ({ openCreateDialog, setOpenCreateDialog }) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [competitions, setCompetitions] = useState([]);
   return (
-    <>
+    <Box sx={{ width: "100%", padding: "20px" }}>
       <Table
         selectedCompetition={selectedCompetition}
         setSelectedCompetition={setSelectedCompetition}
@@ -47,7 +48,7 @@ const CompetitonHandle = ({ openCreateDialog, setOpenCreateDialog }) => {
         competitions={competitions}
         setCompetitions={setCompetitions}
       />
-    </>
+    </Box>
   );
 };
 export default CompetitonHandle;

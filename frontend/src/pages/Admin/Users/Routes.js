@@ -3,6 +3,7 @@ import UserTable from "./Table";
 import CreateUser from "./Create";
 import Edit from "./Edit";
 import Delete from "./Delete";
+import { Box } from "@mui/material";
 
 const UserLogic = ({ openCreateDialog, setOpenCreateDialog }) => {
   const [usersData, setUsersData] = useState([]);
@@ -12,7 +13,7 @@ const UserLogic = ({ openCreateDialog, setOpenCreateDialog }) => {
   const [users, setUsers] = useState([]);
 
   return (
-    <>
+    <Box sx={{ width: "100%", padding: "20px" }}>
       <UserTable
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
@@ -48,7 +49,7 @@ const UserLogic = ({ openCreateDialog, setOpenCreateDialog }) => {
         users={users}
         setUsers={setUsers}
       />
-    </>
+    </Box>
   );
 };
 export default UserLogic;

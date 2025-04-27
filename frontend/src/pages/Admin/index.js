@@ -3,6 +3,7 @@ import UserLogic from "./Users/Routes";
 import Sidebar from "./Sidebar";
 import ProblemRoutes from "./Problems/Routes";
 import CompetitonHandle from "./Competitions/Routes";
+import { Box } from "@mui/material";
 
 const Admin = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -11,7 +12,7 @@ const Admin = () => {
   const [currentState, setCurrentState] = useState("Problems");
 
   return (
-    <div className="admin-page">
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar
         setOpenCreateDialog={setOpenCreateDialog}
         sidebarCollapsed={sidebarCollapsed}
@@ -37,7 +38,7 @@ const Admin = () => {
           setOpenCreateDialog={setOpenCreateDialog}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

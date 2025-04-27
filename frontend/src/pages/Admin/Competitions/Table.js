@@ -66,7 +66,7 @@ const CompetitionTable = ({
   }, [pageNumber, competitionsData]);
 
   return (
-    <div className={`users-page ${openCreateDialog ? "collapse" : ""}`}>
+    <>
       <TableContainer
         className="table"
         sx={{ width: "80%", margin: "2rem auto" }}
@@ -121,7 +121,7 @@ const CompetitionTable = ({
         onChange={handleChangePage}
         sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       />
-    </div>
+    </>
   );
 };
 

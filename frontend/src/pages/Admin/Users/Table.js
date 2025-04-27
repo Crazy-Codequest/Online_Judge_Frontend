@@ -64,7 +64,7 @@ const UserTable = ({
   }, [pageNumber, usersData]);
 
   return (
-    <div className={`users-page ${openCreateDialog ? "collapse" : ""}`}>
+    <>
       <TableContainer
         className="table"
         sx={{ width: "100%", margin: "2rem auto" }}
@@ -117,7 +117,7 @@ const UserTable = ({
         onChange={handleChangePage}
         sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       />
-    </div>
+    </>
   );
 };
 
