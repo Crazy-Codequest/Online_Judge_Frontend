@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import getFormattedDateTime from "../../../../utils/time";
 
 const Submissions = ({ allSubmissions }) => {
-  const navigate = useNavigate();
+  if(!allSubmissions) return null;
   return (
     <Table>
       <TableHead>
@@ -25,7 +25,7 @@ const Submissions = ({ allSubmissions }) => {
       <TableBody>
         {allSubmissions.map((submission) => (
           <TableRow key={submission._id}>
-            <TableCell>{submission.u_id.username}</TableCell>
+            <TableCell>{submission.user?.username}</TableCell>
             <TableCell className="grey">{submission.verdict}</TableCell>
             <TableCell className="grey">
               {getFormattedDateTime(submission.submitted_at)}

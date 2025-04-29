@@ -128,6 +128,7 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+              defaultValue="test@gmail.com"
             />
             <TextField
               margin="normal"
@@ -139,6 +140,7 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
               InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+              defaultValue="Test@123"
             />
 
             <Button

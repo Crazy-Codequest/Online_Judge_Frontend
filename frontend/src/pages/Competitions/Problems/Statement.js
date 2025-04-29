@@ -9,7 +9,7 @@ import Compiler from "../../StatementPage/Compiler";
 import { useSelector } from "react-redux";
 import { setTimestamp } from "../../../features/auth/dataSlice";
 import CompetitionTimer from "../timer";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Skeleton, Typography } from "@mui/material";
 
 const CompetitionProblem = () => {
   const params = useParams();
@@ -27,7 +27,7 @@ const CompetitionProblem = () => {
       const timestamp = await axios.post(
         urlConstants.getTimestamp,
         {
-          id: "6562325b5905a5ec08fabd37",
+          id: "680e852aeb911a0106b3410b",
           userId: user._id,
         },
         getConfig()
@@ -60,9 +60,6 @@ const CompetitionProblem = () => {
     if (!timestamp) getTimestamp();
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <Box
@@ -90,6 +87,7 @@ const CompetitionProblem = () => {
         }}
       >
         {!desc ? (
+          loading ? <Skeleton variant="rectangular" width="100%" height="90vh" /> :
           <Box
             sx={{
               width: { xs: "100%", md: "50%" },
@@ -139,6 +137,7 @@ const CompetitionProblem = () => {
               statement={problem.statement}
               setDesc={setDesc}
               constraints={problem.constraints}
+              loading={loading}
             />
           </Box>
         )}

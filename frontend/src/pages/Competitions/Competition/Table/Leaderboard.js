@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import getFormattedDateTime from "../../../../utils/time";
 
 const Submissions = ({ leaderboard }) => {
-  const navigate = useNavigate();
+  if(!leaderboard) return null;
+  
   return (
     <Table>
       <TableHead>
