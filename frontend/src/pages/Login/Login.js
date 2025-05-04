@@ -20,7 +20,7 @@ import axios from "axios";
 import { urlConstants } from "../../apis";
 import { toast } from "react-toastify";
 import logoImage from "../../images/logo.png";
-import bgImg from "../../images/bg2.avif";
+import bgImg from "../../images/onboarding.png";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({

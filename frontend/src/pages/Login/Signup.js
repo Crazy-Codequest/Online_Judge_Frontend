@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import logoImage from "../../images/logo.png";
-import bgImg from "../../images/bg2.avif";
+import bgImg from "../../images/onboarding.png";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/auth/authSlice";
 import axios from "axios";
@@ -85,7 +85,7 @@ export default function SignUp() {
           maxWidth="xs"
           sx={{
             bgcolor: "rgba(0,0,0,0.7)",
-            py: 4,
+            py: 1,
             px: 3,
             borderRadius: 2,
             boxShadow: 3,
