@@ -22,6 +22,8 @@ import { toast } from "react-toastify";
 import logoImage from "../../images/logo.png";
 import bgImg from "../../images/onboarding.png";
 import { useNavigate } from "react-router-dom";
+import useGoogleSignIn from "./hooks/use-google-signin.hook";
+import GoogleButton from "./components/google-button";
 
 const theme = createTheme({
   palette: {
@@ -31,7 +33,6 @@ const theme = createTheme({
   },
   shape: { borderRadius: 8 },
   typography: {
-    fontFamily: '"Roboto Mono", monospace',
     h5: { fontWeight: 600 },
   },
 });
@@ -41,6 +42,8 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
   const navigate = useNavigate();
+
+  const { handleGoogleSignIn } = useGoogleSignIn();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -70,6 +73,9 @@ export default function SignIn() {
     }
   };
 
+ 
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -90,7 +96,7 @@ export default function SignIn() {
           maxWidth="xs"
           sx={{
             bgcolor: "rgba(0,0,0,0.7)",
-            py: 4,
+            py: 1,
             px: 3,
             borderRadius: 2,
             boxShadow: 3,
@@ -167,6 +173,22 @@ export default function SignIn() {
                 <Typography variant="h6">Sign In</Typography>
               )}
             </Button>
+            <Box
+              sx={{
+                mt: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+                flexDirection: "column",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                or
+              </Typography>
+
+              <GoogleButton handleGoogleSignIn={handleGoogleSignIn} />
+            </Box>
 
             <Box
               sx={{

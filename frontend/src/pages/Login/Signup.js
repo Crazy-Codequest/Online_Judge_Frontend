@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Link,
   CardMedia,
+  Stack,
 } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import logoImage from "../../images/logo.png";
@@ -20,6 +21,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { urlConstants } from "../../apis";
 import { useNavigate } from "react-router-dom";
+import useGoogleSignIn from "./hooks/use-google-signin.hook";
+import GoogleButton from "./components/google-button";
 
 const theme = createTheme({
   palette: {
@@ -29,7 +32,6 @@ const theme = createTheme({
   },
   shape: { borderRadius: 8 },
   typography: {
-    fontFamily: '"Roboto Mono", monospace',
     h5: { fontWeight: 600 },
   },
 });
@@ -39,6 +41,8 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
   const navigate = useNavigate();
+
+  const { handleGoogleSignIn } = useGoogleSignIn();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -118,30 +122,32 @@ export default function SignUp() {
             onSubmit={handleSubmit}
             noValidate
           >
-            <TextField
-              label="First Name"
-              name="firstname"
-              fullWidth
-              required
-              margin="normal"
-              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
-            />
-            <TextField
-              label="Last Name"
-              name="lastname"
-              fullWidth
-              required
-              margin="normal"
-              InputLabelProps={{ style: { fontSize: "1.5rem" } }}
-            />
-            <TextField
+            <Stack direction="row" gap={2}>
+              <TextField
+                label="First Name"
+                name="firstname"
+                fullWidth
+                required
+                margin="normal"
+                InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+              />
+              <TextField
+                label="Last Name"
+                name="lastname"
+                fullWidth
+                required
+                margin="normal"
+                InputLabelProps={{ style: { fontSize: "1.5rem" } }}
+              />
+            </Stack>
+            {/* <TextField
               label="Username"
               name="username"
               fullWidth
               required
               margin="normal"
               InputLabelProps={{ style: { fontSize: "1.5rem" } }}
-            />
+            /> */}
             <TextField
               label="Email Address"
               name="email"
@@ -184,6 +190,22 @@ export default function SignUp() {
                 <Typography variant="h6">Sign Up</Typography>
               )}
             </Button>
+            <Box
+              sx={{
+                mt: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+                flexDirection: "column",
+              }}
+            >
+              <Typography variant="h6" color="text.secondary">
+                or
+              </Typography>
+
+              <GoogleButton handleGoogleSignIn={handleGoogleSignIn} />
+            </Box>
 
             <Box
               sx={{
