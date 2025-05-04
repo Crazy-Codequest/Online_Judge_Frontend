@@ -112,7 +112,7 @@ const Competitions = () => {
   return (
     <Box
       sx={{
-        width: { xs: "100%", lg: "60%" },
+        width: { xs: "100%", lg: "80%" },
         mx: "auto",
         display: "grid",
         gridTemplateColumns: {
@@ -120,51 +120,62 @@ const Competitions = () => {
           sm: "repeat(2, 1fr)",
           md: "repeat(3, 1fr)",
         },
-        gap: 2,
-        px: 4,
-        mt: 4
+        gap: 3,
+        py: 4,
+        overflowY: "hidden"
       }}
     >
       {competitions.map((competition, index) => (
-        <Card key={competition._id} className="mb-2">
-          <CardContent>
-            <CardMedia
-              component="img"
-              sx={{
-                maxHeight: "200px",
-                width: "100%",
-              }}
-              src={images[index % 5]}
-              alt="Competition Logo"
-            />
+        <Card
+          key={competition._id}
+          sx={{
+            borderRadius: 3,
+            boxShadow: 3,
+            transition: "transform 0.2s",
+            "&:hover": {
+              transform: "scale(1.02)",
+            },
+          }}
+        >
+          <CardMedia
+            component="img"
+            sx={{
+              height: 180,
+              objectFit: "cover",
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+            }}
+            src={images[index % images.length]}
+            alt="Competition Banner"
+          />
+          <CardContent sx={{ p: 2 }}>
             <Typography
-              sx={{ mt: 1, cursor: "pointer" }}
-              variant="h5"
-              component="div"
-              className="pointer"
+              variant="h6"
+              fontWeight="bold"
+              sx={{ cursor: "pointer", mb: 1 }}
               onClick={() => handleCompetitionRedirect(competition)}
             >
               {competition.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Start - {getFormattedDateTime(competition.start_date)}
+            <Typography variant="body2" color="text.secondary">
+              📅 Start:{" "}
+              <strong>{getFormattedDateTime(competition.start_date)}</strong>
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              End - {getFormattedDateTime(competition.end_date)}
+            <Typography variant="body2" color="text.secondary" mb={1}>
+              🏁 End:{" "}
+              <strong>{getFormattedDateTime(competition.end_date)}</strong>
             </Typography>
-            <CardActions className="mt-1">
-              <Button
-                onClick={() => addUserToCompetition(competition._id)}
-                variant="contained"
-                style={{ width: "100%" }}
-                className={`btn-col primary ${
-                  foundUser(competition) ? "register" : ""
-                }`}
-              >
-                {foundUser(competition) ? "Registered" : "Register"}
-              </Button>
-            </CardActions>
           </CardContent>
+          <CardActions sx={{ px: 2, pb: 2 }}>
+            <Button
+              fullWidth
+              variant={foundUser(competition) ? "contained" : "outlined"}
+              color={foundUser(competition) ? "success" : "primary"}
+              onClick={() => addUserToCompetition(competition._id)}
+            >
+              {foundUser(competition) ? "✅ Registered" : "Register"}
+            </Button>
+          </CardActions>
         </Card>
       ))}
     </Box>

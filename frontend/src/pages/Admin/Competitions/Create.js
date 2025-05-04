@@ -113,7 +113,8 @@ const Create = ({
   const getProblemIds = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.getProblemIds}/${user._id}`
+        `${adminRoutes.getProblemIds}/${user._id}`,
+        getConfig()
       );
       setProblems(data.problems);
     } catch (e) {
@@ -124,7 +125,8 @@ const Create = ({
   const getUserIds = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.adminUserId}/${user._id}`
+        `${adminRoutes.adminUserId}/${user._id}`,
+        getConfig()
       );
       setUsers(data.users);
     } catch (e) {

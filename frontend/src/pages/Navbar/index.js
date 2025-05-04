@@ -115,7 +115,6 @@ export default function Navbar() {
     try {
       const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user._id}`, getConfig());
       setNotifications(res.data);
-      console.log(res);
     }catch(e){
       console.log(e);
     }
@@ -162,8 +161,6 @@ export default function Navbar() {
         })
           .then((currentToken) => {
              if (currentToken) {
-               console.log("FCM Token:", currentToken);
-               // Use or store the token as needed.
              } else {
                console.log(
                  "No registration token available. Request permission to generate one."

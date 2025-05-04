@@ -24,7 +24,7 @@ const Submissions = ({ leaderboard }) => {
       </TableHead>
       <TableBody>
         {leaderboard.map((submission) => (
-          <TableRow key={submission._id}>
+          <TableRow key={submission.user.id}>
             <TableCell>{submission.user.username}</TableCell>
             <TableCell>{submission.user.email}</TableCell>
             <TableCell className="grey">{submission.totalScore}</TableCell>

@@ -12,6 +12,7 @@ import getFormattedDateTime from "../../../../utils/time";
 
 const Submissions = ({ allSubmissions }) => {
   if(!allSubmissions) return null;
+
   return (
     <Table>
       <TableHead>
@@ -24,7 +25,12 @@ const Submissions = ({ allSubmissions }) => {
       </TableHead>
       <TableBody>
         {allSubmissions.map((submission) => (
-          <TableRow key={submission._id}>
+          <TableRow
+            sx={{
+              ...(submission.verdict === "passed" && {backgroundColor: "rgba(0, 255, 0, 0.2)"}),
+            }}
+            key={submission._id}
+          >
             <TableCell>{submission.user?.username}</TableCell>
             <TableCell className="grey">{submission.verdict}</TableCell>
             <TableCell className="grey">
