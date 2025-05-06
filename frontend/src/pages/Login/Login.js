@@ -43,7 +43,7 @@ export default function SignIn() {
   const formRef = useRef(null);
   const navigate = useNavigate();
 
-  const { handleGoogleSignIn } = useGoogleSignIn();
+  const { handleGoogleSignIn } = useGoogleSignIn(setLoading);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
