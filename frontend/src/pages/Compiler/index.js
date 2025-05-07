@@ -13,12 +13,14 @@ import {
 } from "@mui/material";
 import LanguageSelect from "../../components/LanguageSelect";
 import { CODE_SNIPPETS } from "../../data/snippets";
+import { PlayArrow, RestartAlt, ContentCopy, Code } from "@mui/icons-material";
 
 const Compiler = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
   const [lang, setLang] = useState("cpp");
+  const [loading, setLoading] = useState(false);
 
   const theme = useTheme();
   const isLightMode = theme.palette.mode === "light";
@@ -28,6 +30,7 @@ const Compiler = () => {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const payload = { lang, code, input };
       const { data } = await axios.post(
         urlConstants.runCode,
@@ -37,7 +40,19 @@ const Compiler = () => {
       setOutput(data.output);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setCode(CODE_SNIPPETS[lang]);
+    setInput("");
+    setOutput("");
+  };
+
+  const handleCopyOutput = () => {
+    navigator.clipboard.writeText(output);
   };
 
   useEffect(() => {
@@ -56,15 +71,19 @@ const Compiler = () => {
       maxWidth="xl"
       sx={{
         py: 4,
-        overflowX: "hidden",
         minHeight: "100vh",
-        backgroundImage: `radial-gradient(
-            closest-side at 50% 135%,
-          #ffffff 50%,
-          #eceff1 100%
-        )`,
+        bgcolor: "#f7f8fa",
       }}
     >
+      <Box sx={{ mb: 4, textAlign: "center" }}>
+        <Code sx={{ fontSize: 36, color: "#1976d2", mb: -1, mr: 1 }} />
+        <Typography variant="h4" fontWeight={800} color="#2d3a4a" display="inline">
+          Online Compiler
+        </Typography>
+        <Typography variant="subtitle1" color="#7b8ba3" mt={1}>
+          Write, run, and debug code in your favorite language!
+        </Typography>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -72,17 +91,20 @@ const Compiler = () => {
           gap: 4,
           justifyContent: "center",
           width: "100%",
-          height: "85vh",
+          height: { xs: "auto", md: "85vh" },
         }}
       >
         <Box
           sx={{
             width: { xs: "100%", md: "60%" },
-            height: "100%",
+            height: { xs: 500, md: "100%" },
             border: `1px solid ${borderColor}`,
-            bgcolor: backgroundColor,
-            borderRadius: 2,
+            bgcolor: "#fff",
+            borderRadius: 3,
             overflow: "hidden",
+            boxShadow: 2,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Box
@@ -92,42 +114,52 @@ const Compiler = () => {
               alignItems: "center",
               borderBottom: `1px solid ${borderColor}`,
               px: 2,
+              bgcolor: "#f5f7fa",
             }}
           >
             <Typography
               sx={{
-                fontWeight: 500,
+                fontWeight: 700,
                 fontSize: "16px",
                 color: textColor,
                 flexGrow: 1,
+                letterSpacing: 0.5,
               }}
             >
-              Main.cpp
+              Main.{lang}
             </Typography>
             <Box sx={{ ml: 2 }}>
               <LanguageSelect
                 sx={{
                   height: "100%",
                   border: "none",
-                  "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
                   backgroundColor: "transparent",
                 }}
                 lang={lang}
                 setLang={setLanguage}
               />
             </Box>
-            <Button sx={{ mr: 2 }} variant="contained" onClick={handleSubmit}>
-              Run
+            <Button
+              sx={{ ml: 2, fontWeight: 700, borderRadius: 2 }}
+              variant="contained"
+              startIcon={<PlayArrow />}
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? "Running..." : "Run"}
+            </Button>
+            <Button
+              sx={{ ml: 2, fontWeight: 700, borderRadius: 2 }}
+              variant="outlined"
+              startIcon={<RestartAlt />}
+              onClick={handleReset}
+              disabled={loading}
+            >
+              Reset
             </Button>
           </Box>
 
-          <Box sx={{ height: "70%", p: 1 }}>
+          <Box sx={{ flex: 1, p: 1, minHeight: 0 }}>
             <Editor
               value={code}
               height="100%"
@@ -143,28 +175,34 @@ const Compiler = () => {
           </Box>
 
           <Box
-            sx={{ height: "20%", p: 2, borderTop: `1px solid ${borderColor}` }}
+            sx={{ height: 120, p: 2, borderTop: `1px solid ${borderColor}`, bgcolor: "#f5f7fa" }}
           >
-            <Typography sx={{ color: textColor, mb: 1 }}>Input:</Typography>
+            <Typography sx={{ color: textColor, mb: 1, fontWeight: 600 }}>Input</Typography>
             <TextField
               fullWidth
               placeholder="Enter input here..."
               multiline
-              rows={3}
+              rows={2}
               variant="outlined"
               onChange={(e) => setInput(e.target.value)}
+              value={input}
+              sx={{ bgcolor: "#fff", borderRadius: 2 }}
+              disabled={loading}
             />
           </Box>
         </Box>
 
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" }, // Increased width for better proportion
-            height: "100%",
+            width: { xs: "100%", md: "40%" },
+            height: { xs: 300, md: "100%" },
             border: `1px solid ${borderColor}`,
-            bgcolor: backgroundColor,
-            borderRadius: 2,
+            bgcolor: "#fff",
+            borderRadius: 3,
             overflow: "hidden",
+            boxShadow: 2,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Box
@@ -175,14 +213,31 @@ const Compiler = () => {
               alignItems: "center",
               borderBottom: `1px solid ${borderColor}`,
               px: 2,
+              bgcolor: "#f5f7fa",
             }}
           >
-            <Typography sx={{ fontWeight: 500, color: textColor }}>
+            <Typography sx={{ fontWeight: 700, color: textColor, letterSpacing: 0.5 }}>
               Output
             </Typography>
-            <Button variant="outlined" onClick={() => setOutput("")}>
-              Clear
-            </Button>
+            <Box>
+              <Button
+                variant="outlined"
+                startIcon={<ContentCopy />}
+                onClick={handleCopyOutput}
+                sx={{ mr: 1, borderRadius: 2 }}
+                disabled={!output}
+              >
+                Copy Output
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setOutput("")}
+                sx={{ borderRadius: 2 }}
+                disabled={!output}
+              >
+                Clear
+              </Button>
+            </Box>
           </Box>
 
           <Box
@@ -190,16 +245,17 @@ const Compiler = () => {
             value={output}
             readOnly
             sx={{
-              height: "calc(100% - 4rem)",
+              flex: 1,
               p: 2,
               width: "100%",
-              bgcolor: "transparent",
+              bgcolor: "#fff",
               color: textColor,
               border: "none",
               overflow: "auto",
               outline: "none",
+              fontFamily: "monospace",
+              fontSize: 16,
               resize: "none",
-              fontSize: "16px",
             }}
           />
         </Box>

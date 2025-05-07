@@ -25,6 +25,10 @@ import {
   List,
   ListItem,
   ListItemText,
+  Divider,
+  Avatar,
+  Drawer,
+  Stack,
 } from "@mui/material";
 import logo from "../../images/logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,21 +36,31 @@ import { useIsTab } from "../../hooks/use-is-tab";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useContext, useEffect, useState } from "react";
 import { setSearch } from "../../features/auth/dataSlice";
-import {ThemeContext} from "../../ThemeContext";
+import { ThemeContext } from "../../ThemeContext";
 import app from "../../config/firebase";
-import {getMessaging, onMessage, getToken} from "firebase/messaging";
+import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import axios from "axios";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
+import { Notifications as NotificationsFilled, NotificationsNoneOutlined } from "@mui/icons-material";
+import { ListItemAvatar, Avatar as MuiAvatar } from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import CodeIcon from '@mui/icons-material/Code';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export default function Navbar() {
   const { palette } = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isTab  = useIsTab();
+  const isTab = useIsTab();
   const isMobile = useIsMobile();
-  const {user} = useSelector((state) => state.auth);  
-  const {search} = useSelector((state) => state.data);
+  const { user } = useSelector((state) => state.auth);
+  const { search } = useSelector((state) => state.data);
 
   const [anchorElLeft, setAnchorelLeft] = useState(null);
   const [anchorElRight, setAnchorelRight] = useState(null);
@@ -55,6 +69,7 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState([]);
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
   const [badgeCount, setbadgeCount] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { themePref, toggleTheme } = useContext(ThemeContext);
 
@@ -107,6 +122,12 @@ export default function Navbar() {
     setNotificationsAnchor(null);
     setbadgeCount(0);
   }
+
+  const handleMarkAllRead = () => {
+    setNotifications([]);
+    setbadgeCount(0);
+    handleCloseNotifications();
+  };
 
   const settingsId = "primary-theme-menu";
   const isSettingsOpen = Boolean(anchorSettingsEl);
@@ -192,101 +213,132 @@ export default function Navbar() {
   }, [])
 
   return (
-    <Box
-      position="relative"
+    <AppBar
+      position="sticky"
+      elevation={1}
       sx={{
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        px: 0,
-        py: 0.5,
-        borderBottom: `1px solid ${palette.border.primary}`,
+        bgcolor: "#fff",
+        color: "#2d3a4a",
+        boxShadow: "0 2px 8px 0 rgba(60,72,88,0.07)",
+        borderRadius: 0,
+        zIndex: 1201,
       }}
     >
-      <Toolbar sx={{ minHeight: "0 !important", padding: 0, width: "100%" }}>
-        {isTab && (
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ ml: 2 }}
-            onClick={handleLeftMenuClick}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-        {!isTab && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-            }}
-          >
-            <Button
-              sx={{ textTransform: "none" }}
-              onClick={() => navigate("/")}
-              color="inherit"
-              variant="text"
-            >
-              Home
-            </Button>
-            <Button
-              sx={{ textTransform: "none" }}
-              onClick={() => navigate("/problems")}
-              color="inherit"
-              variant="text"
-            >
-              Problems
-            </Button>
-            <Button
-              sx={{ textTransform: "none" }}
-              onClick={() => navigate("/competitions")}
-              color="inherit"
-              variant="text"
-            >
-              Contest
-            </Button>
-            <Button
-              sx={{ textTransform: "none" }}
-              onClick={() => navigate("/compiler")}
-              color="inherit"
-              variant="text"
-            >
-              Playground
-            </Button>
-          </Box>
-        )}
+      <Toolbar
+        sx={{
+          minHeight: 64,
+          px: { xs: 1, md: 4 },
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: { xs: "flex-end", sm: "center" },
-            alignItems: "center",
-            flexGrow: 1,
-            mr: { xs: 2, sm: 0 },
-          }}
+          sx={{ display: "flex", alignItems: "center", gap: 2, flexShrink: 0 }}
         >
-          <CardMedia
-            sx={{ width: 35, height: 35, mr: 1 }}
-            component="img"
-            src={logo}
-          />
-          <Typography
-            className="nav-title"
-            variant="h6"
-            component="div"
-            onClick={() => navigate("/")}
+          <Box
+            sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}
           >
-            CodeQuest
-          </Typography>
+            <IconButton onClick={() => setMobileMenuOpen(true)}>
+              <MenuIcon sx={{ color: "#1976d2" }} />
+            </IconButton>
+          </Box>
+          <Stack direction="row" gap={0} alignItems="center">
+            <CardMedia
+              sx={{
+                width: 36,
+                height: 36,
+                borderRadius: "50%",
+                boxShadow: 1,
+                mr: 1,
+              }}
+              component="img"
+              src={logo}
+              alt="CodeQuest Logo"
+              onClick={() => navigate("/")}
+              style={{ cursor: "pointer" }}
+            />
+            <Typography
+              variant="h6"
+              fontWeight={800}
+              sx={{ letterSpacing: 1, color: "#1976d2", cursor: "pointer" }}
+              onClick={() => navigate("/")}
+            >
+              CodeQuest
+            </Typography>
+          </Stack>
         </Box>
+
         <Box
           sx={{
-            display: { xs: "none", sm: "flex" },
-            justifyContent: "flex-end",
+            display: { xs: "none", md: "flex" },
             alignItems: "center",
             gap: 2,
+            ml: 4,
           }}
         >
+          <Button
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: 16,
+              color: "#2d3a4a",
+              px: 2,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f5f7fa" },
+            }}
+            onClick={() => navigate("/")}
+            color="inherit"
+          >
+            Home
+          </Button>
+          <Button
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: 16,
+              color: "#2d3a4a",
+              px: 2,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f5f7fa" },
+            }}
+            onClick={() => navigate("/problems")}
+            color="inherit"
+          >
+            Problems
+          </Button>
+          <Button
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: 16,
+              color: "#2d3a4a",
+              px: 2,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f5f7fa" },
+            }}
+            onClick={() => navigate("/competitions")}
+            color="inherit"
+          >
+            Contests
+          </Button>
+          <Button
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: 16,
+              color: "#2d3a4a",
+              px: 2,
+              borderRadius: 2,
+              "&:hover": { bgcolor: "#f5f7fa" },
+            }}
+            onClick={() => navigate("/compiler")}
+            color="inherit"
+          >
+            Playground
+          </Button>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {showSearch ? (
             <TextField
               onKeyDown={(e) => {
@@ -298,40 +350,63 @@ export default function Navbar() {
               onBlur={() => setShowSearch(false)}
               size="small"
               value={search}
+              sx={{ bgcolor: "#f5f7fa", borderRadius: 2, minWidth: 180 }}
+              autoFocus
             />
           ) : (
-            <SearchOutlinedIcon
-              sx={{ cursor: "pointer" }}
+            <IconButton
               onClick={() => setShowSearch(true)}
-            />
+              sx={{ color: "#1976d2" }}
+            >
+              <SearchOutlinedIcon />
+            </IconButton>
           )}
-          <GreyCircle sx={{ ml: { xs: 0, md: 2 } }}>
-            <DarkModeOutlinedIcon
-              size="large"
-              aria-controls={settingsId}
-              onClick={handleSettingsMenuOpen}
-              sx={{ width: 18 }}
-            />
-          </GreyCircle>
-
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ mx: 1, display: { xs: "none", md: "block" } }}
+          />
+          <IconButton
+            onClick={handleSettingsMenuOpen}
+            sx={{ color: "#1976d2" }}
+          >
+            <DarkModeOutlinedIcon />
+          </IconButton>
           <Badge
             badgeContent={notifications.length}
             color="error"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           >
-            <NotificationsNoneOutlinedIcon
+            <IconButton
               onClick={handleOpenNotifications}
-              sx={{ cursor: "pointer" }}
-              anchorEl={notificationsAnchor}
-            />
+              sx={{ color: notifications.length ? "#1976d2" : "#b0b0b0" }}
+            >
+              {notifications.length ? (
+                <NotificationsFilled />
+              ) : (
+                <NotificationsNoneOutlined />
+              )}
+            </IconButton>
           </Badge>
-
-          <GreyCircle
-            sx={{ ml: { xs: 0, md: 5 } }}
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ mx: 1, display: { xs: "none", md: "block" } }}
+          />
+          <Avatar
+            sx={{
+              bgcolor: "#1976d2",
+              width: 36,
+              height: 36,
+              border: "2px solid #e3f2fd",
+              fontWeight: 700,
+              cursor: "pointer",
+              ml: 1,
+            }}
             onClick={handleRightMenuClick}
           >
-            <Typography>C</Typography>
-          </GreyCircle>
+            {user?.name ? user.name[0].toUpperCase() : "C"}
+          </Avatar>
         </Box>
 
         <Menu
@@ -349,37 +424,135 @@ export default function Navbar() {
           }}
           open={Boolean(anchorElLeft)}
           onClose={handleLeftMenuClose}
+          PaperProps={{
+            sx: {
+              bgcolor: "#f7f8fa",
+              boxShadow: 3,
+              borderRadius: 2,
+              p: 1,
+              minWidth: 180,
+            },
+          }}
         >
-          <MenuItem onClick={() => handleMenuLeftItemClick("/")}>Home</MenuItem>
-          <MenuItem onClick={() => handleMenuLeftItemClick("/problems")}>
+          <MenuItem
+            onClick={() => handleMenuLeftItemClick("/")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <HomeIcon fontSize="small" sx={{ color: "#1976d2" }} /> Home
+          </MenuItem>
+          <MenuItem
+            onClick={() => handleMenuLeftItemClick("/problems")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <AssignmentIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
             Problems
           </MenuItem>
-          <MenuItem onClick={() => handleMenuLeftItemClick("/competitions")}>
-            Contest
+          <MenuItem
+            onClick={() => handleMenuLeftItemClick("/competitions")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <EmojiEventsIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
+            Contests
           </MenuItem>
-          <MenuItem onClick={() => handleMenuLeftItemClick("/compiler")}>
-            Playground
+          <MenuItem
+            onClick={() => handleMenuLeftItemClick("/compiler")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <CodeIcon fontSize="small" sx={{ color: "#1976d2" }} /> Playground
           </MenuItem>
           {isMobile && (
             <>
               {user.role === "admin" && (
-                <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
+                <MenuItem
+                  onClick={() => handleMenuRightItemClick("/admin")}
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: 16,
+                    borderRadius: 2,
+                    mb: 0.5,
+                    "&:hover": { bgcolor: "#e3f2fd" },
+                    gap: 1.5,
+                  }}
+                >
+                  <AdminPanelSettingsIcon
+                    fontSize="small"
+                    sx={{ color: "#1976d2" }}
+                  />{" "}
                   Admin
                 </MenuItem>
               )}
-              <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
+              <MenuItem
+                onClick={() => handleMenuRightItemClick("/compiler")}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: 16,
+                  borderRadius: 2,
+                  mb: 0.5,
+                  "&:hover": { bgcolor: "#e3f2fd" },
+                  gap: 1.5,
+                }}
+              >
+                <DashboardIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
                 Dashboard
               </MenuItem>
-              <MenuItem onClick={() => handleMenuRightItemClick("/profile")}>
+              <MenuItem
+                onClick={() => handleMenuRightItemClick("/profile")}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: 16,
+                  borderRadius: 2,
+                  mb: 0.5,
+                  "&:hover": { bgcolor: "#e3f2fd" },
+                  gap: 1.5,
+                }}
+              >
+                <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
                 Profile
               </MenuItem>
+              <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
               <MenuItem
                 onClick={() => {
                   localStorage.removeItem("user");
                   dispatch(logout());
                 }}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: 16,
+                  borderRadius: 2,
+                  color: "#d32f2f",
+                  "&:hover": { bgcolor: "#ffebee" },
+                  gap: 1.5,
+                }}
               >
-                Logout
+                <LogoutIcon fontSize="small" sx={{ color: "#d32f2f" }} /> Logout
               </MenuItem>
             </>
           )}
@@ -399,25 +572,78 @@ export default function Navbar() {
           }}
           open={Boolean(anchorElRight)}
           onClose={handleRightMenuClose}
+          PaperProps={{
+            sx: {
+              bgcolor: "#f7f8fa",
+              boxShadow: 3,
+              borderRadius: 2,
+              p: 1,
+              minWidth: 180,
+            },
+          }}
         >
           {user.role === "admin" && (
-            <MenuItem onClick={() => handleMenuRightItemClick("/admin")}>
+            <MenuItem
+              onClick={() => handleMenuRightItemClick("/admin")}
+              sx={{
+                fontWeight: 600,
+                fontSize: 16,
+                borderRadius: 2,
+                mb: 0.5,
+                "&:hover": { bgcolor: "#e3f2fd" },
+                gap: 1.5,
+              }}
+            >
+              <AdminPanelSettingsIcon
+                fontSize="small"
+                sx={{ color: "#1976d2" }}
+              />{" "}
               Admin
             </MenuItem>
           )}
-          <MenuItem onClick={() => handleMenuRightItemClick("/compiler")}>
+          <MenuItem
+            onClick={() => handleMenuRightItemClick("/compiler")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <DashboardIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
             Dashboard
           </MenuItem>
-          <MenuItem onClick={() => handleMenuRightItemClick("/profile")}>
-            Profile
+          <MenuItem
+            onClick={() => handleMenuRightItemClick("/profile")}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} /> Profile
           </MenuItem>
+          <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
           <MenuItem
             onClick={() => {
               localStorage.removeItem("user");
               dispatch(logout());
             }}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              color: "#d32f2f",
+              "&:hover": { bgcolor: "#ffebee" },
+              gap: 1.5,
+            }}
           >
-            Logout
+            <LogoutIcon fontSize="small" sx={{ color: "#d32f2f" }} /> Logout
           </MenuItem>
         </Menu>
       </Toolbar>
@@ -430,21 +656,273 @@ export default function Navbar() {
         onClose={handleCloseNotifications}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
+        PaperProps={{
+          sx: {
+            p: 0,
+            bgcolor: "#f7f8fa",
+            minWidth: 320,
+            maxWidth: 400,
+            boxShadow: 3,
+            borderRadius: 2,
+          },
+        }}
       >
-        <Box sx={{ p: 2, maxHeight: "50vh", overflowY: "auto" }}>
-          <Typography variant="h6">Notifications</Typography>
-          <List>
-            {notifications.map((notification, index) => (
-              <ListItem key={index}>
+        <Box
+          sx={{
+            p: 2,
+            borderBottom: "1px solid #ececec",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h6" fontWeight={700} color="#2d3a4a">
+            Notifications
+          </Typography>
+          {notifications.length > 0 && (
+            <Button
+              size="small"
+              onClick={handleMarkAllRead}
+              sx={{ color: "#1976d2", fontWeight: 600 }}
+            >
+              Mark all as read
+            </Button>
+          )}
+        </Box>
+        <List sx={{ maxHeight: 320, overflowY: "auto", p: 0 }}>
+          {notifications.length === 0 ? (
+            <ListItem sx={{ justifyContent: "center", py: 4 }}>
+              <Typography color="#7b8ba3">No notifications</Typography>
+            </ListItem>
+          ) : (
+            notifications.map((notification, index) => (
+              <ListItem
+                alignItems="flex-start"
+                key={index}
+                sx={{ px: 2, py: 1.5, borderBottom: "1px solid #ececec" }}
+              >
+                <ListItemAvatar>
+                  <MuiAvatar
+                    sx={{
+                      bgcolor: "#e3f2fd",
+                      color: "#1976d2",
+                      width: 32,
+                      height: 32,
+                    }}
+                  >
+                    <NotificationsFilled fontSize="small" />
+                  </MuiAvatar>
+                </ListItemAvatar>
                 <ListItemText
-                  primary={notification.title}
-                  secondary={notification.body}
+                  primary={
+                    <Typography fontWeight={600} color="#2d3a4a">
+                      {notification.title}
+                    </Typography>
+                  }
+                  secondary={
+                    <>
+                      <Typography variant="body2" color="#7b8ba3">
+                        {notification.body}
+                      </Typography>
+                      {notification.timestamp && (
+                        <Typography
+                          variant="caption"
+                          color="#b0b0b0"
+                          sx={{ display: "block", mt: 0.5 }}
+                        >
+                          {new Date(notification.timestamp).toLocaleString()}
+                        </Typography>
+                      )}
+                    </>
+                  }
                 />
               </ListItem>
-            ))}
-          </List>
-        </Box>
+            ))
+          )}
+        </List>
       </Popover>
-    </Box>
+
+      <Drawer
+        anchor="left"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            bgcolor: "#f7f8fa",
+            width: 260,
+            p: 2,
+            boxShadow: 3,
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <CardMedia
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              boxShadow: 1,
+              mr: 1,
+            }}
+            component="img"
+            src={logo}
+            alt="CodeQuest Logo"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate("/");
+            }}
+            style={{ cursor: "pointer" }}
+          />
+          <Typography
+            variant="h6"
+            fontWeight={800}
+            sx={{ letterSpacing: 1, color: "#1976d2", cursor: "pointer" }}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate("/");
+            }}
+          >
+            CodeQuest
+          </Typography>
+        </Box>
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuLeftItemClick("/");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <HomeIcon fontSize="small" sx={{ color: "#1976d2" }} /> Home
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuLeftItemClick("/problems");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <AssignmentIcon fontSize="small" sx={{ color: "#1976d2" }} /> Problems
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuLeftItemClick("/competitions");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <EmojiEventsIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
+          Contests
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuLeftItemClick("/compiler");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <CodeIcon fontSize="small" sx={{ color: "#1976d2" }} /> Playground
+        </MenuItem>
+        {user.role === "admin" && (
+          <MenuItem
+            onClick={() => {
+              setMobileMenuOpen(false);
+              handleMenuRightItemClick("/admin");
+            }}
+            sx={{
+              fontWeight: 600,
+              fontSize: 16,
+              borderRadius: 2,
+              mb: 0.5,
+              "&:hover": { bgcolor: "#e3f2fd" },
+              gap: 1.5,
+            }}
+          >
+            <AdminPanelSettingsIcon
+              fontSize="small"
+              sx={{ color: "#1976d2" }}
+            />{" "}
+            Admin
+          </MenuItem>
+        )}
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuRightItemClick("/compiler");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <DashboardIcon fontSize="small" sx={{ color: "#1976d2" }} /> Dashboard
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleMenuRightItemClick("/profile");
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            mb: 0.5,
+            "&:hover": { bgcolor: "#e3f2fd" },
+            gap: 1.5,
+          }}
+        >
+          <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} /> Profile
+        </MenuItem>
+        <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
+        <MenuItem
+          onClick={() => {
+            setMobileMenuOpen(false);
+            localStorage.removeItem("user");
+            dispatch(logout());
+          }}
+          sx={{
+            fontWeight: 600,
+            fontSize: 16,
+            borderRadius: 2,
+            color: "#d32f2f",
+            "&:hover": { bgcolor: "#ffebee" },
+            gap: 1.5,
+          }}
+        >
+          <LogoutIcon fontSize="small" sx={{ color: "#d32f2f" }} /> Logout
+        </MenuItem>
+      </Drawer>
+    </AppBar>
   );
 }
