@@ -17,8 +17,9 @@ import Editor from "@monaco-editor/react";
 import LanguageSelect from "../../components/LanguageSelect";
 import { toast } from "react-toastify";
 import { CODE_SNIPPETS } from "../../data/snippets";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography, Paper } from "@mui/material";
 
+const blockBg = "#f7f7fa";
 
 const Compiler = ({
   setOutput,
@@ -35,25 +36,16 @@ const Compiler = ({
   const { user } = useSelector((state) => state.auth);
 
   const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(grey[500]),
-    backgroundColor: grey[500],
-    "&:hover": {
-      backgroundColor: grey[700],
+    color: "#fff",
+    backgroundColor: "#1976d2",
+    fontWeight: 600,
+    borderRadius: 2,
+    textTransform: 'none',
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: "#115293",
     },
   }));
-
-  const Buttons = () => {
-    return (
-      <Stack spacing={2} direction="row">
-        <ColorButton onClick={handleRun} variant="contained" size="small">
-          Run
-        </ColorButton>
-        <ColorButton onClick={handleSubmit} variant="contained" size="small">
-          Submit
-        </ColorButton>
-      </Stack>
-    );
-  };
 
   const handleRun = async () => {
     if(!code.length){
@@ -131,27 +123,76 @@ const Compiler = ({
   }, [lang]);
 
   return (
-    <Box
+    <Paper
       sx={{
         height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        backgroundColor: "#fff",
+        borderRadius: 2,
+        boxShadow: '0 2px 12px #0001',
+        border: '1px solid #ececec',
+        p: 0,
       }}
     >
       <Box
         sx={{
-          borderRadius: 2,
-          backgroundColor: "#fff",
-          height: "80%",
+          display: "flex",
+          alignItems: "center",
+          borderBottom: '1px solid #ececec',
+          px: 2,
         }}
       >
-        <LanguageSelect lang={lang} setLang={setLanguage} />
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: "16px",
+            color: "#222",
+            flexGrow: 1,
+            letterSpacing: 0.5,
+          }}
+        >
+          Main.{lang}
+        </Typography>
+        <Box sx={{ ml: 2 }}>
+          <LanguageSelect
+            sx={{ height: "100%", border: "none", backgroundColor: "transparent" }}
+            lang={lang}
+            setLang={setLanguage}
+          />
+        </Box>
+        <ColorButton
+          sx={{ ml: 2, fontWeight: 700, borderRadius: 2 }}
+          variant="contained"
+          onClick={handleRun}
+        >
+          Run
+        </ColorButton>
+        <ColorButton
+          sx={{ ml: 2, fontWeight: 700, borderRadius: 2, backgroundColor: '#43a047', '&:hover': { backgroundColor: '#357a38' } }}
+          variant="contained"
+          onClick={handleSubmit}
+        >
+          Submit
+        </ColorButton>
+      </Box>
+      <Box
+        sx={{
+          borderRadius: 2,
+          flex: 1,
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            height: compiler ? "60%" : "100%",
+            height: "100%",
+            border: '1px solid #ececec',
+            borderRadius: 2,
           }}
         >
           <Editor
@@ -160,63 +201,25 @@ const Compiler = ({
             language={lang}
             onChange={handleEditorChange}
             defaultValue={CODE_SNIPPETS[lang]}
-            options={{ automaticLayout: true }}
+            options={{
+              automaticLayout: true,
+              minimap: { enabled: false },
+              fontSize: 15,
+            }}
+            theme="vs-light"
           />
         </Box>
-        {compiler && (
-          <Box
-            sx={{
-              height: "40%",
-              backgroundColor: "#fff",
-              fontSize: "10px",
-              borderRadius: "5px",
-            }}
-          >
-            <Box
-              sx={{
-                p: "0.2rem 1rem",
-                backgroundImage:
-                  "radial-gradient(closest-side at 50% 135%, #ffffff 50%, #eceff1 100%)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box sx={{ cursor: "pointer", display: "flex", gap: 2 }}>
-                <Typography>TestCase</Typography>
-                <Typography>Code Result</Typography>
-              </Box>
-              <Box
-                onClick={() => setCompiler((prev) => !prev)}
-                sx={{ cursor: "pointer" }}
-              >
-                <ArrowDropUpIcon />
-              </Box>
-            </Box>
-            <TextField
-              value={testCase}
-              onChange={(e) => setTestCase(e.target.value)}
-              variant="outlined"
-              multiline
-              rows={5}
-              sx={{
-                m: 1,
-                width: "90%"
-              }}
-            />
-          </Box>
-        )}
       </Box>
+      {/* Console/Testcase area */}
       <Box
         sx={{
-          height: "8%",
+          minHeight: 80,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          p: "0 1rem",
-          borderRadius: "5px",
-          backgroundColor: "#fff",
-          borderRadius: 2
+          px: 2,
+          borderRadius: 2,
+          borderTop: '1px solid #ececec',
         }}
       >
         <Stack
@@ -226,12 +229,24 @@ const Compiler = ({
           alignItems="center"
           gap={0}
         >
-          <Typography>Console</Typography>
+          <Typography fontWeight={600}>Console</Typography>
           <ArrowDropUpIcon />
         </Stack>
-        <Buttons />
+        <TextField
+          value={testCase}
+          onChange={(e) => setTestCase(e.target.value)}
+          variant="outlined"
+          multiline
+          rows={4}
+          sx={{
+            width: 500,
+            mt: 2,
+            fontSize: 14,
+            borderRadius: 1,
+          }}
+        />
       </Box>
-    </Box>
+    </Paper>
   );
 };
 

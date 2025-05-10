@@ -36,7 +36,7 @@ const darkPalette = {
     primary: "rgb(43, 41, 41)",
   },
   background: {
-    main: "rgb(22, 27, 34)",
+    main: "#161B22",
   },
 };
 
@@ -63,10 +63,10 @@ export function setUpTheme(mode) {
           fontSize: "1.4rem",
         },
         body2: {
-          fontSize: "1.4rem",
+          fontSize: "1.25rem",
         },
         body3: {
-          fontSize: "1.25rem",
+          fontSize: "1.2rem",
         },
         body4: {
           fontSize: "1.6rem",

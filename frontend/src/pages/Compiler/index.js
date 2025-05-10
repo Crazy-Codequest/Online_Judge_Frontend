@@ -3,6 +3,7 @@ import axios from "axios";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
 import { Editor } from "@monaco-editor/react";
+import { editor } from "monaco-editor";
 import {
   Button,
   TextField,
@@ -27,6 +28,19 @@ const Compiler = () => {
   const borderColor = theme.palette.divider;
   const backgroundColor = theme.palette.background.default;
   const textColor = theme.palette.text.primary;
+
+  editor.defineTheme("customTheme", {
+    base: isLightMode ? "vs" : "vs-dark",
+    inherit: true,
+    rules: [],
+    colors: {
+      "editor.background": backgroundColor.length === 4 ? `#${backgroundColor[1]}${backgroundColor[1]}${backgroundColor[2]}${backgroundColor[2]}${backgroundColor[3]}${backgroundColor[3]}` : backgroundColor, // Ensure valid color format
+    },
+  });
+
+  useEffect(() => {
+    editor.setTheme("customTheme");
+  }, [isLightMode, backgroundColor]);
 
   const handleSubmit = async () => {
     try {
@@ -72,12 +86,17 @@ const Compiler = () => {
       sx={{
         py: 4,
         minHeight: "100vh",
-        bgcolor: "#f7f8fa",
+        bgcolor: theme.palette.background.main,
       }}
     >
       <Box sx={{ mb: 4, textAlign: "center" }}>
         <Code sx={{ fontSize: 36, color: "#1976d2", mb: -1, mr: 1 }} />
-        <Typography variant="h4" fontWeight={800} color="#2d3a4a" display="inline">
+        <Typography
+          variant="h4"
+          fontWeight={800}
+          color="#2d3a4a"
+          display="inline"
+        >
           Online Compiler
         </Typography>
         <Typography variant="subtitle1" color="#7b8ba3" mt={1}>
@@ -99,7 +118,7 @@ const Compiler = () => {
             width: { xs: "100%", md: "60%" },
             height: { xs: 500, md: "100%" },
             border: `1px solid ${borderColor}`,
-            bgcolor: "#fff",
+            bgcolor: theme.palette.background.main,
             borderRadius: 3,
             overflow: "hidden",
             boxShadow: 2,
@@ -114,7 +133,7 @@ const Compiler = () => {
               alignItems: "center",
               borderBottom: `1px solid ${borderColor}`,
               px: 2,
-              bgcolor: "#f5f7fa",
+              bgcolor: theme.palette.background.main,
             }}
           >
             <Typography
@@ -170,14 +189,23 @@ const Compiler = () => {
               options={{
                 minimap: { enabled: false },
                 fontSize: 16,
+                theme: isLightMode ? "vs-light" : "vs-dark",
+                backgroundColor: theme.palette.background.main, // Use our background color
               }}
             />
           </Box>
 
           <Box
-            sx={{ height: 120, p: 2, borderTop: `1px solid ${borderColor}`, bgcolor: "#f5f7fa" }}
+            sx={{
+              height: 120,
+              p: 2,
+              borderTop: `1px solid ${borderColor}`,
+              bgcolor: theme.palette.background.main,
+            }}
           >
-            <Typography sx={{ color: textColor, mb: 1, fontWeight: 600 }}>Input</Typography>
+            <Typography sx={{ color: textColor, mb: 1, fontWeight: 600 }}>
+              Input
+            </Typography>
             <TextField
               fullWidth
               placeholder="Enter input here..."
@@ -186,7 +214,7 @@ const Compiler = () => {
               variant="outlined"
               onChange={(e) => setInput(e.target.value)}
               value={input}
-              sx={{ bgcolor: "#fff", borderRadius: 2 }}
+              sx={{ bgcolor: theme.palette.background.main, borderRadius: 2 }}
               disabled={loading}
             />
           </Box>
@@ -197,7 +225,7 @@ const Compiler = () => {
             width: { xs: "100%", md: "40%" },
             height: { xs: 300, md: "100%" },
             border: `1px solid ${borderColor}`,
-            bgcolor: "#fff",
+            bgcolor: theme.palette.background.main,
             borderRadius: 3,
             overflow: "hidden",
             boxShadow: 2,
@@ -213,10 +241,12 @@ const Compiler = () => {
               alignItems: "center",
               borderBottom: `1px solid ${borderColor}`,
               px: 2,
-              bgcolor: "#f5f7fa",
+              bgcolor: theme.palette.background.main,
             }}
           >
-            <Typography sx={{ fontWeight: 700, color: textColor, letterSpacing: 0.5 }}>
+            <Typography
+              sx={{ fontWeight: 700, color: textColor, letterSpacing: 0.5 }}
+            >
               Output
             </Typography>
             <Box>
@@ -248,7 +278,7 @@ const Compiler = () => {
               flex: 1,
               p: 2,
               width: "100%",
-              bgcolor: "#fff",
+              bgcolor: theme.palette.background.main,
               color: textColor,
               border: "none",
               overflow: "auto",

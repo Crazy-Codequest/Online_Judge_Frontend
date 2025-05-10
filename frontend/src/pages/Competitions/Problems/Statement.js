@@ -11,6 +11,8 @@ import { setTimestamp } from "../../../features/auth/dataSlice";
 import CompetitionTimer from "../timer";
 import { Box, Divider, Skeleton, Typography } from "@mui/material";
 
+const darkBg = "#181c24";
+
 const CompetitionProblem = () => {
   const params = useParams();
   const [problem, setProblem] = useState({});
@@ -60,20 +62,15 @@ const CompetitionProblem = () => {
     if (!timestamp) getTimestamp();
   }, []);
 
-
   return (
     <Box
       sx={{
         width: "100vw",
-        position: "absolute",
-        minHeight: "105vh",
-        padding: "4rem",
+        minHeight: "100vh",
+        p: { xs: 1, md: 4 },
         pt: 0,
-        backgroundImage: `radial-gradient(
-            closest-side at 50% 135%,
-          #ffffff 50%,
-          #eceff1 100%
-        )`,
+        pb: 10,
+        backgroundColor: "#f7f7fa",
       }}
     >
       <Box sx={{ mr: 2, my: 2 }}>
@@ -83,64 +80,20 @@ const CompetitionProblem = () => {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-          gap: 2,
+          gap: 3,
         }}
       >
-        {!desc ? (
-          loading ? <Skeleton variant="rectangular" width="100%" height="90vh" /> :
-          <Box
-            sx={{
-              width: { xs: "100%", md: "50%" },
-              backgroundColor: "#fff",
-              borderRadius: 2,
-              p: 2,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-              }}
-            >
-              <Typography
-                variant="h2"
-                sx={{ cursor: "pointer" }}
-                onClick={() => setDesc(true)}
-              >
-                Description
-              </Typography>
-              <Typography
-                variant="h2"
-                sx={{ cursor: "pointer" }}
-                onClick={() => setDesc(false)}
-              >
-                Submissions
-              </Typography>
-            </Box>
-            <Divider sx={{mt: 1}} />
-            <Box sx={{ pt: 2 }}>
-              <Typography
-                variant="h6"
-                sx={{ cursor: "pointer", mb: 2 }}
-                onClick={() => setDesc(false)}
-              >
-                Output
-              </Typography>
-              <Typography>{output}</Typography>
-            </Box>
-          </Box>
-        ) : (
-          <Box sx={{ width: { xs: "100%", md: "50%" } }}>
-            <StatementPage
-              description={problem.description}
-              examples={problem.examples}
-              statement={problem.statement}
-              setDesc={setDesc}
-              constraints={problem.constraints}
-              loading={loading}
-            />
-          </Box>
-        )}
+        <Box sx={{ width: { xs: "100%", md: "50%" }, height: '90vh', display: 'flex', flexDirection: 'column' }}>
+          <StatementPage
+            description={problem.description}
+            examples={problem.examples}
+            statement={problem.statement}
+            setDesc={setDesc}
+            constraints={problem.constraints}
+            loading={loading}
+            darkMode
+          />
+        </Box>
         <Box sx={{ height: "90vh", width: { xs: "100%", md: "50%" } }}>
           <Compiler
             output={output}
@@ -151,6 +104,7 @@ const CompetitionProblem = () => {
             setDesc={setDesc}
             id={problem._id}
             c_id={params.c_id}
+            darkMode
           />
         </Box>
       </Box>

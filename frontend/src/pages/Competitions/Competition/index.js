@@ -8,7 +8,18 @@ import { urlConstants } from "../../../apis";
 import { getConfig } from "../../../utils/getConfig";
 import CompetitionTimer from "../timer";
 import { setTimestamp } from "../../../features/auth/dataSlice";
-import { TableContainer, Paper, Button, Box } from "@mui/material";
+import { 
+  TableContainer, 
+  Paper, 
+  Box, 
+  Container,
+  Typography,
+  Tabs,
+  Tab,
+  useTheme,
+  useMediaQuery,
+  Divider
+} from "@mui/material";
 import Problems from "./Table/Problems";
 import Submissions from "./Table/Submissions";
 import Leaderboard from "./Table/Leaderboard";
@@ -17,6 +28,8 @@ import CompetitionTerms from "../Terms";
 const Competition = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [problems, setProblems] = useState({});
   const [submissions, setSubmissions] = useState({});
   const [allSubmissions, setAllSubmissions] = useState({});
@@ -27,6 +40,9 @@ const Competition = () => {
 
   const { user } = useSelector((state) => state.auth);
   const { timestamp } = useSelector((state) => state.data);
+
+  const isLightMode = theme.palette.mode === "light";
+  const borderColor = isLightMode ? "#e0e0e0" : "#444";
 
   const dispatch = useDispatch();
 
@@ -122,6 +138,7 @@ const Competition = () => {
         },
         getConfig()
       );
+
       setAllSubmissions(data.submissions);
     } catch (e) {
       console.log(e);
@@ -129,10 +146,10 @@ const Competition = () => {
   };
 
   const verifySubmissions = (problemId) => {
-    const numberOfPassedSubmissions = submissions?.filter(
+    const numberOfPassedSubmissions = submissions.length ? submissions?.filter(
       (submission) =>
         String(submission.p_id) === problemId && submission.verdict === "passed"
-    ).length;
+    ).length: 0;
     return numberOfPassedSubmissions;
   };
 
@@ -174,88 +191,156 @@ const Competition = () => {
   }
 
   return (
-    <Box sx={{ height: "90vh", p: 2 }}>
-      <CompetitionTimer competitionTimestamp={timestamp} />
-      <Box
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: theme.palette.background.main,
+        py: 4,
+      }}
+    >
+      <Container
+        maxWidth="xl"
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 2,
-          mt: 4,
-          width: { xs: "90%", sm: "70%", md: "60%" },
-          mx: "auto",
+          width: { xs: "100%", lg: "70%" },
         }}
       >
-        <Button
+        <Box
           sx={{
-            width: "30%",
-            p: 1,
-            ...(menuOption === "problems" && {
-              bgcolor: "#dc3545",
-              color: "text.primary",
-              "&:hover": {
-                bgcolor: "#b02a37",
-              },
-            }),
+            mb: 4,
+            p: 3,
           }}
-          variant="outlined"
-          onClick={() => setMenuOption("problems")}
         >
-          Problems
-        </Button>
-        <Button
+          <CompetitionTimer competitionTimestamp={timestamp} />
+        </Box>
+
+        <Box
           sx={{
-            width: "30%",
-            p: 1,
-            ...(menuOption === "submissions" && {
-              bgcolor: "#dc3545",
-              color: "text.primary",
-              "&:hover": {
-                bgcolor: "#b02a37",
-              },
-            }),
+            mb: 3,
+            borderRadius: 2,
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
           }}
-          variant="outlined"
-          onClick={() => setMenuOption("submissions")}
         >
-          Submissions
-        </Button>
-        <Button
+          <Tabs
+            value={menuOption}
+            onChange={(e, newValue) => setMenuOption(newValue)}
+            variant={isMobile ? "fullWidth" : "standard"}
+            centered={!isMobile}
+            sx={{
+              "& .MuiTab-root": {
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1.1rem",
+                py: 2.5,
+                minWidth: 160,
+                color: "text.secondary",
+                "&:hover": {
+                  bgcolor: isLightMode ? "grey.300" : "grey.700",
+                  color: isLightMode ? "text.primary" : "text.secondary",
+                },
+              },
+              "& .Mui-selected": {
+                color: "primary.main",
+              },
+              "& .MuiTabs-indicator": {
+                height: 3,
+                backgroundColor: "primary.main",
+              },
+            }}
+          >
+            <Tab
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Typography variant="h6">Problems</Typography>
+                  {problems.length > 0 && (
+                    <Box
+                      sx={{
+                        bgcolor: "primary.main",
+                        borderRadius: "12px",
+                        px: 1.5,
+                        py: 0.5,
+                        fontSize: "1rem",
+                        fontWeight: 600,
+                        color: isLightMode ? "#fff" : "#000",
+                      }}
+                    >
+                      {problems.length}
+                    </Box>
+                  )}
+                </Box>
+              }
+              value="problems"
+            />
+            <Tab
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Typography variant="h6">Submissions</Typography>
+                  {submissions.length > 0 && (
+                    <Box
+                      sx={{
+                        bgcolor: "primary.main",
+                        borderRadius: "12px",
+                        px: 1.5,
+                        py: 0.5,
+                        fontSize: "1rem",
+                        fontWeight: 600,
+                        color: isLightMode ? "#fff" : "#000",
+                      }}
+                    >
+                      {submissions.length}
+                    </Box>
+                  )}
+                </Box>
+              }
+              value="submissions"
+            />
+            <Tab
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Typography variant="h6">Leaderboard</Typography>
+                  {leaderboard.length > 0 && (
+                    <Box
+                      sx={{
+                        bgcolor: "primary.main",
+                        borderRadius: "12px",
+                        px: 1.5,
+                        py: 0.5,
+                        fontSize: "1rem",
+                        fontWeight: 600,
+                        color: isLightMode ? "#fff" : "#000",
+                      }}
+                    >
+                      {leaderboard.length}
+                    </Box>
+                  )}
+                </Box>
+              }
+              value="leaderboard"
+            />
+          </Tabs>
+        </Box>
+
+        <TableContainer
+          component={Paper}
           sx={{
-            width: "30%",
-            p: 1,
-            ...(menuOption === "leaderboard" && {
-              bgcolor: "#dc3545",
-              color: "text.primary",
-              "&:hover": {
-                bgcolor: "#b02a37",
-              },
-            }),
+            borderRadius: 2,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+            overflow: "hidden",
           }}
-          variant="outlined"
-          onClick={() => setMenuOption("leaderboard")}
         >
-          Leaderboard
-        </Button>
-      </Box>
-      <TableContainer
-        sx={{
-          width: { xs: "90%", sm: "70%", md: "60%" },
-          borderRadius: 2,
-          mx: "auto",
-        }}
-        component={Paper}
-      >
-        {menuOption === "problems" && (
-          <Problems problems={problems} verifySubmissions={verifySubmissions} />
-        )}
-        {menuOption === "submissions" && (
-          <Submissions allSubmissions={allSubmissions} />
-        )}
-        {menuOption === "leaderboard" && (
-          <Leaderboard leaderboard={leaderboard} />
-        )}
-      </TableContainer>
+          {menuOption === "problems" && (
+            <Problems
+              problems={problems}
+              verifySubmissions={verifySubmissions}
+            />
+          )}
+          {menuOption === "submissions" && (
+            <Submissions allSubmissions={allSubmissions} />
+          )}
+          {menuOption === "leaderboard" && (
+            <Leaderboard leaderboard={leaderboard} />
+          )}
+        </TableContainer>
+      </Container>
     </Box>
   );
 };

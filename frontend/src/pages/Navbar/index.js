@@ -70,8 +70,16 @@ export default function Navbar() {
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
   const [badgeCount, setbadgeCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const theme = useTheme();
 
   const { themePref, toggleTheme } = useContext(ThemeContext);
+
+  const darkThemeStyles = {
+    background: theme.palette.mode === "dark" ? "#121212" : "#f7f8fa",
+    color: theme.palette.mode === "dark" ? "#ffffff" : "#2d3a4a",
+    hoverBackground: theme.palette.mode === "dark" ? "#1e1e1e" : "#e3f2fd",
+    borderColor: theme.palette.mode === "dark" ? "#333333" : "#ececec",
+  };
 
   const handleLeftMenuClick = (event) => {
     setAnchorelLeft(event.currentTarget);
@@ -217,8 +225,8 @@ export default function Navbar() {
       position="sticky"
       elevation={1}
       sx={{
-        bgcolor: "#fff",
-        color: "#2d3a4a",
+        bgcolor: darkThemeStyles.background,
+        color: darkThemeStyles.color,
         boxShadow: "0 2px 8px 0 rgba(60,72,88,0.07)",
         borderRadius: 0,
         zIndex: 1201,
@@ -281,10 +289,10 @@ export default function Navbar() {
               textTransform: "none",
               fontWeight: 600,
               fontSize: 16,
-              color: "#2d3a4a",
+              color: darkThemeStyles.color,
               px: 2,
               borderRadius: 2,
-              "&:hover": { bgcolor: "#f5f7fa" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             }}
             onClick={() => navigate("/")}
             color="inherit"
@@ -296,10 +304,10 @@ export default function Navbar() {
               textTransform: "none",
               fontWeight: 600,
               fontSize: 16,
-              color: "#2d3a4a",
+              color: darkThemeStyles.color,
               px: 2,
               borderRadius: 2,
-              "&:hover": { bgcolor: "#f5f7fa" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             }}
             onClick={() => navigate("/problems")}
             color="inherit"
@@ -311,10 +319,10 @@ export default function Navbar() {
               textTransform: "none",
               fontWeight: 600,
               fontSize: 16,
-              color: "#2d3a4a",
+              color: darkThemeStyles.color,
               px: 2,
               borderRadius: 2,
-              "&:hover": { bgcolor: "#f5f7fa" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             }}
             onClick={() => navigate("/competitions")}
             color="inherit"
@@ -326,10 +334,10 @@ export default function Navbar() {
               textTransform: "none",
               fontWeight: 600,
               fontSize: 16,
-              color: "#2d3a4a",
+              color: darkThemeStyles.color,
               px: 2,
               borderRadius: 2,
-              "&:hover": { bgcolor: "#f5f7fa" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             }}
             onClick={() => navigate("/compiler")}
             color="inherit"
@@ -364,7 +372,7 @@ export default function Navbar() {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ mx: 1, display: { xs: "none", md: "block" } }}
+            sx={{ mx: 1, display: { xs: "none", md: "block" }, bgcolor: darkThemeStyles.borderColor }}
           />
           <IconButton
             onClick={handleSettingsMenuOpen}
@@ -391,7 +399,7 @@ export default function Navbar() {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ mx: 1, display: { xs: "none", md: "block" } }}
+            sx={{ mx: 1, display: { xs: "none", md: "block" }, bgcolor: darkThemeStyles.borderColor }}
           />
           <Avatar
             sx={{
@@ -426,7 +434,7 @@ export default function Navbar() {
           onClose={handleLeftMenuClose}
           PaperProps={{
             sx: {
-              bgcolor: "#f7f8fa",
+              bgcolor: darkThemeStyles.background,
               boxShadow: 3,
               borderRadius: 2,
               p: 1,
@@ -441,7 +449,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -454,7 +462,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -468,7 +476,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -482,7 +490,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -498,7 +506,7 @@ export default function Navbar() {
                     fontSize: 16,
                     borderRadius: 2,
                     mb: 0.5,
-                    "&:hover": { bgcolor: "#e3f2fd" },
+                    "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
                     gap: 1.5,
                   }}
                 >
@@ -516,7 +524,7 @@ export default function Navbar() {
                   fontSize: 16,
                   borderRadius: 2,
                   mb: 0.5,
-                  "&:hover": { bgcolor: "#e3f2fd" },
+                  "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
                   gap: 1.5,
                 }}
               >
@@ -530,14 +538,14 @@ export default function Navbar() {
                   fontSize: 16,
                   borderRadius: 2,
                   mb: 0.5,
-                  "&:hover": { bgcolor: "#e3f2fd" },
+                  "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
                   gap: 1.5,
                 }}
               >
                 <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
                 Profile
               </MenuItem>
-              <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
+              <Divider sx={{ my: 1, bgcolor: darkThemeStyles.borderColor }} />
               <MenuItem
                 onClick={() => {
                   localStorage.removeItem("user");
@@ -574,7 +582,7 @@ export default function Navbar() {
           onClose={handleRightMenuClose}
           PaperProps={{
             sx: {
-              bgcolor: "#f7f8fa",
+              bgcolor: darkThemeStyles.background,
               boxShadow: 3,
               borderRadius: 2,
               p: 1,
@@ -590,7 +598,7 @@ export default function Navbar() {
                 fontSize: 16,
                 borderRadius: 2,
                 mb: 0.5,
-                "&:hover": { bgcolor: "#e3f2fd" },
+                "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
                 gap: 1.5,
               }}
             >
@@ -608,7 +616,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -622,13 +630,13 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
             <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} /> Profile
           </MenuItem>
-          <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
+          <Divider sx={{ my: 1, bgcolor: darkThemeStyles.borderColor }} />
           <MenuItem
             onClick={() => {
               localStorage.removeItem("user");
@@ -659,7 +667,7 @@ export default function Navbar() {
         PaperProps={{
           sx: {
             p: 0,
-            bgcolor: "#f7f8fa",
+            bgcolor: darkThemeStyles.background,
             minWidth: 320,
             maxWidth: 400,
             boxShadow: 3,
@@ -670,13 +678,13 @@ export default function Navbar() {
         <Box
           sx={{
             p: 2,
-            borderBottom: "1px solid #ececec",
+            borderBottom: `1px solid ${darkThemeStyles.borderColor}`,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6" fontWeight={700} color="#2d3a4a">
+          <Typography variant="h6" fontWeight={700} color={darkThemeStyles.color}>
             Notifications
           </Typography>
           {notifications.length > 0 && (
@@ -699,7 +707,7 @@ export default function Navbar() {
               <ListItem
                 alignItems="flex-start"
                 key={index}
-                sx={{ px: 2, py: 1.5, borderBottom: "1px solid #ececec" }}
+                sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${darkThemeStyles.borderColor}` }}
               >
                 <ListItemAvatar>
                   <MuiAvatar
@@ -715,7 +723,7 @@ export default function Navbar() {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography fontWeight={600} color="#2d3a4a">
+                    <Typography fontWeight={600} color={darkThemeStyles.color}>
                       {notification.title}
                     </Typography>
                   }
@@ -748,7 +756,7 @@ export default function Navbar() {
         onClose={() => setMobileMenuOpen(false)}
         PaperProps={{
           sx: {
-            bgcolor: "#f7f8fa",
+            bgcolor: darkThemeStyles.background,
             width: 260,
             p: 2,
             boxShadow: 3,
@@ -795,7 +803,7 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
@@ -811,7 +819,7 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
@@ -827,7 +835,7 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
@@ -844,7 +852,7 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
@@ -861,7 +869,7 @@ export default function Navbar() {
               fontSize: 16,
               borderRadius: 2,
               mb: 0.5,
-              "&:hover": { bgcolor: "#e3f2fd" },
+              "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
               gap: 1.5,
             }}
           >
@@ -882,7 +890,7 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
@@ -898,13 +906,13 @@ export default function Navbar() {
             fontSize: 16,
             borderRadius: 2,
             mb: 0.5,
-            "&:hover": { bgcolor: "#e3f2fd" },
+            "&:hover": { bgcolor: darkThemeStyles.hoverBackground },
             gap: 1.5,
           }}
         >
           <PersonIcon fontSize="small" sx={{ color: "#1976d2" }} /> Profile
         </MenuItem>
-        <Divider sx={{ my: 1, bgcolor: "#ececec" }} />
+        <Divider sx={{ my: 1, bgcolor: darkThemeStyles.borderColor }} />
         <MenuItem
           onClick={() => {
             setMobileMenuOpen(false);

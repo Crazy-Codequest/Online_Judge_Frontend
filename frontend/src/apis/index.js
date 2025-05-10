@@ -39,6 +39,7 @@ export const urlConstants = {
   markNotificationAsRead: baseUrl + "api/notifications/mark-as-read",
   googleLogin: baseUrl + "api/auth/google-login",
   verifyOtp: baseUrl + "api/auth/verify-otp",
+  getDailyProblem: baseUrl + "api/problems/daily-problem",
 };
 
 export const adminRoutes = {
