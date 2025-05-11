@@ -9,7 +9,7 @@ import Compiler from "../../StatementPage/Compiler";
 import { useSelector } from "react-redux";
 import { setTimestamp } from "../../../features/auth/dataSlice";
 import CompetitionTimer from "../timer";
-import { Box, Divider, Skeleton, Typography } from "@mui/material";
+import { Box, Divider, Skeleton, Typography, useTheme } from "@mui/material";
 
 const darkBg = "#181c24";
 
@@ -20,6 +20,7 @@ const CompetitionProblem = () => {
   const [loading, setLoading] = useState(true);
   const [desc, setDesc] = useState(true);
   const [code, setCode] = useState("");
+  const theme = useTheme();
 
   const { timestamp } = useSelector((state) => state.data);
   const { user } = useSelector((state) => state.auth);
@@ -70,7 +71,7 @@ const CompetitionProblem = () => {
         p: { xs: 1, md: 4 },
         pt: 0,
         pb: 10,
-        backgroundColor: "#f7f7fa",
+        bgcolor: theme.palette.background.main,
       }}
     >
       <Box sx={{ mr: 2, my: 2 }}>
@@ -83,7 +84,14 @@ const CompetitionProblem = () => {
           gap: 3,
         }}
       >
-        <Box sx={{ width: { xs: "100%", md: "50%" }, height: '90vh', display: 'flex', flexDirection: 'column' }}>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "50%" },
+            height: "90vh",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <StatementPage
             description={problem.description}
             examples={problem.examples}

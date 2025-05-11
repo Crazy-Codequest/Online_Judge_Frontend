@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemText, Skeleton, Typography, Paper } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Skeleton, Typography, Paper, useTheme } from "@mui/material";
 import React from "react";
 
 const blockBg = "#f7f7fa";
@@ -11,9 +11,11 @@ const StatementPage = ({
   constraints,
   loading
 }) => {
+  const theme = useTheme();
+
   const descElements = () => {
     return description.map((line, index) => (
-      <Typography key={index} variant="body1" sx={{ color: "#222" }}>
+      <Typography key={index} variant="body1" sx={{ color: theme.palette.text.primary }}>
         {line}
       </Typography>
     ));
@@ -29,7 +31,6 @@ const StatementPage = ({
         p: 0,
         borderRadius: 2,
         minHeight: "90vh",
-        color: "#222",
         boxShadow: '0 2px 12px #0001',
         border: '1px solid #ececec',
         display: 'flex',
@@ -40,14 +41,14 @@ const StatementPage = ({
       <Box sx={{ display: "flex", gap: 2, borderBottom: '1px solid #ececec', px: 3, pt: 2, pb: 1 }}>
         <Typography
           variant="h5"
-          sx={{ cursor: "pointer", fontWeight: 700, color: "#222", pb: 1, borderBottom: '3px solid #1976d2' }}
+          sx={{ cursor: "pointer", fontWeight: 700, pb: 1, borderBottom: '3px solid #1976d2' }}
           onClick={() => setDesc(true)}
         >
           Description
         </Typography>
         <Typography
           variant="h5"
-          sx={{ cursor: "pointer", fontWeight: 700, color: "#888", pb: 1, borderBottom: '3px solid transparent'  }}
+          sx={{ cursor: "pointer", fontWeight: 700, pb: 1, borderBottom: '3px solid transparent'  }}
           onClick={() => setDesc(false)}
         >
           Submissions
@@ -78,16 +79,16 @@ const StatementPage = ({
                   }}
                 >
                   <Box>
-                    <Typography fontWeight="bold" sx={{ color: "#1976d2" }}>Input: </Typography>
-                    <Typography sx={{ color: "#222" }}>{` ${example.input}`}</Typography>
+                    <Typography fontWeight="bold">Input: </Typography>
+                    <Typography>{` ${example.input}`}</Typography>
                   </Box>
                   <Box>
-                    <Typography fontWeight="bold" sx={{ color: "#1976d2" }}>Output: </Typography>
-                    <Typography sx={{ color: "#222" }}>{example.output}</Typography>
+                    <Typography fontWeight="bold">Output: </Typography>
+                    <Typography>{example.output}</Typography>
                   </Box>
                   <Box>
-                    <Typography fontWeight="bold" sx={{ color: "#1976d2" }}>Explanation: </Typography>
-                    <Typography sx={{ color: "#555" }}>{example.explanation}</Typography>
+                    <Typography fontWeight="bold">Explanation: </Typography>
+                    <Typography>{example.explanation}</Typography>
                   </Box>
                 </Box>
               ))}

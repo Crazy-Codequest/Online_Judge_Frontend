@@ -34,7 +34,10 @@ const Compiler = () => {
     inherit: true,
     rules: [],
     colors: {
-      "editor.background": backgroundColor.length === 4 ? `#${backgroundColor[1]}${backgroundColor[1]}${backgroundColor[2]}${backgroundColor[2]}${backgroundColor[3]}${backgroundColor[3]}` : backgroundColor, // Ensure valid color format
+      "editor.background":
+        backgroundColor.length === 4
+          ? `#${backgroundColor[1]}${backgroundColor[1]}${backgroundColor[2]}${backgroundColor[2]}${backgroundColor[3]}${backgroundColor[3]}`
+          : backgroundColor
     },
   });
 
@@ -190,7 +193,7 @@ const Compiler = () => {
                 minimap: { enabled: false },
                 fontSize: 16,
                 theme: isLightMode ? "vs-light" : "vs-dark",
-                backgroundColor: theme.palette.background.main, // Use our background color
+                backgroundColor: theme.palette.background.main,
               }}
             />
           </Box>

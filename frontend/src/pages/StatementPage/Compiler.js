@@ -14,10 +14,12 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { urlConstants } from "../../apis";
 import { getConfig } from "../../utils/getConfig";
 import Editor from "@monaco-editor/react";
+import { editor } from "monaco-editor";
+
 import LanguageSelect from "../../components/LanguageSelect";
 import { toast } from "react-toastify";
 import { CODE_SNIPPETS } from "../../data/snippets";
-import { Box, TextField, Typography, Paper } from "@mui/material";
+import { Box, TextField, Typography, Paper, useTheme } from "@mui/material";
 
 const blockBg = "#f7f7fa";
 
@@ -32,8 +34,9 @@ const Compiler = ({
 }) => {
   const [lang, setLang] = useState("cpp");
   const [compiler, setCompiler] = useState(false);
-  const [testCase, setTestCase] = useState("1.1.1.1");
+  const [testCase, setTestCase] = useState("");
   const { user } = useSelector((state) => state.auth);
+  const theme = useTheme();
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: "#fff",
@@ -46,6 +49,28 @@ const Compiler = ({
       backgroundColor: "#115293",
     },
   }));
+
+  const isLightMode = theme.palette.mode === "light";
+  const borderColor = theme.palette.divider;
+  const backgroundColor = theme.palette.background.default;
+  const textColor = theme.palette.text.primary;
+
+  editor.defineTheme("customTheme", {
+    base: isLightMode ? "vs" : "vs-dark",
+    inherit: true,
+    rules: [],
+    colors: {
+      "editor.background":
+        backgroundColor.length === 4
+          ? `#${backgroundColor[1]}${backgroundColor[1]}${backgroundColor[2]}${backgroundColor[2]}${backgroundColor[3]}${backgroundColor[3]}`
+          : backgroundColor
+    },
+  });
+  
+  useEffect(() => {
+    editor.setTheme("customTheme");
+  }, [isLightMode, backgroundColor]);
+
 
   const handleRun = async () => {
     if(!code.length){
@@ -129,7 +154,7 @@ const Compiler = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        backgroundColor: "#fff",
+        backgroundColor: backgroundColor,
         borderRadius: 2,
         boxShadow: '0 2px 12px #0001',
         border: '1px solid #ececec',
@@ -201,12 +226,13 @@ const Compiler = ({
             language={lang}
             onChange={handleEditorChange}
             defaultValue={CODE_SNIPPETS[lang]}
-            options={{
-              automaticLayout: true,
-              minimap: { enabled: false },
-              fontSize: 15,
-            }}
-            theme="vs-light"
+              theme={isLightMode ? "vs-light" : "vs-dark"}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 16,
+                theme: isLightMode ? "vs-light" : "vs-dark",
+                backgroundColor: theme.palette.background.main,
+              }}
           />
         </Box>
       </Box>
