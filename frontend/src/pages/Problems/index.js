@@ -85,7 +85,7 @@ const Problems = () => {
 
   const theme = useTheme();
   const isLightMode = theme.palette.mode === "light";
-  const borderColor = isLightMode ? "#e0e0e0" : "#444";
+  const borderColor = theme.palette.border.secondary;
   const hoverColor = isLightMode ? "#f0f7ff" : "#333";
 
   useEffect(() => {

@@ -12,6 +12,7 @@ const StatementPage = ({
   loading
 }) => {
   const theme = useTheme();
+  const borderColor = theme.palette.border.secondary;
 
   const descElements = () => {
     return description.map((line, index) => (
@@ -31,24 +32,43 @@ const StatementPage = ({
         p: 0,
         borderRadius: 2,
         minHeight: "90vh",
-        boxShadow: '0 2px 12px #0001',
-        border: '1px solid #ececec',
-        display: 'flex',
-        flexDirection: 'column',
+        boxShadow: "0 2px 12px #0001",
+        border: `1px solid ${borderColor}`,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Tabs */}
-      <Box sx={{ display: "flex", gap: 2, borderBottom: '1px solid #ececec', px: 3, pt: 2, pb: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          borderBottom: `1px solid ${borderColor}`,
+          px: 3,
+          pt: 2,
+          pb: 1,
+        }}
+      >
         <Typography
           variant="h5"
-          sx={{ cursor: "pointer", fontWeight: 700, pb: 1, borderBottom: '3px solid #1976d2' }}
+          sx={{
+            cursor: "pointer",
+            fontWeight: 700,
+            pb: 1,
+            borderBottom: "3px solid #1976d2",
+          }}
           onClick={() => setDesc(true)}
         >
           Description
         </Typography>
         <Typography
           variant="h5"
-          sx={{ cursor: "pointer", fontWeight: 700, pb: 1, borderBottom: '3px solid transparent'  }}
+          sx={{
+            cursor: "pointer",
+            fontWeight: 700,
+            pb: 1,
+            borderBottom: "3px solid transparent",
+          }}
           onClick={() => setDesc(false)}
         >
           Submissions
@@ -56,12 +76,18 @@ const StatementPage = ({
       </Box>
       {/* Content */}
       <Box sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, color: "#444" }}>{statement}</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: "#444" }}>
+          {statement}
+        </Typography>
         {descElements()}
 
         {examples && (
           <>
-            <Typography mt={2} variant="h6" sx={{ fontWeight: 700, color: "#444" }}>
+            <Typography
+              mt={2}
+              variant="h6"
+              sx={{ fontWeight: 700, color: "#444" }}
+            >
               Examples:
             </Typography>
             <ul style={{ paddingLeft: 0 }}>
@@ -73,7 +99,7 @@ const StatementPage = ({
                     display: "flex",
                     flexDirection: "column",
                     gap: 2,
-                    border: '1px solid #ececec',
+                    border: `1px solid ${borderColor}`,
                     borderRadius: 2,
                     mb: 2,
                   }}
@@ -97,10 +123,20 @@ const StatementPage = ({
         )}
         {constraints && (
           <>
-            <Typography variant="h6" sx={{ mt: 2, fontWeight: 700, color: "#444" }}>
+            <Typography
+              variant="h6"
+              sx={{ mt: 2, fontWeight: 700, color: "#444" }}
+            >
               Constraints:
             </Typography>
-            <List sx={{ listStyleType: "disc", pl: 2, fontSize: "1.1rem", color: "#555" }}>
+            <List
+              sx={{
+                listStyleType: "disc",
+                pl: 2,
+                fontSize: "1.1rem",
+                color: "#555",
+              }}
+            >
               {constraints.map((constraint, index) => (
                 <ListItem
                   key={index}
@@ -109,8 +145,8 @@ const StatementPage = ({
                     display: "list-item",
                     py: 0,
                     margin: 0,
-                    borderBottom: '1px solid #ececec',
-                    backgroundColor: '#fff',
+                    borderBottom: "1px solid #ececec",
+                    backgroundColor: "#fff",
                     borderRadius: 1,
                     mb: 1,
                   }}

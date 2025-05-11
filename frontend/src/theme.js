@@ -14,6 +14,7 @@ const lightPalette = {
   },
   border: {
     primary: "rgb(169, 161, 162)",
+    secondary: "#e0e0e0",
   },
   background: {
     main: "#fff",
@@ -34,6 +35,7 @@ const darkPalette = {
   },
   border: {
     primary: "rgb(43, 41, 41)",
+    secondary: "#444",
   },
   background: {
     main: "#161B22",

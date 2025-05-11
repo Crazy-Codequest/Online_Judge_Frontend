@@ -51,7 +51,7 @@ const Compiler = ({
   }));
 
   const isLightMode = theme.palette.mode === "light";
-  const borderColor = theme.palette.divider;
+  const borderColor = theme.palette.border.secondary;
   const backgroundColor = theme.palette.background.default;
   const textColor = theme.palette.text.primary;
 
@@ -156,8 +156,8 @@ const Compiler = ({
         justifyContent: "space-between",
         backgroundColor: backgroundColor,
         borderRadius: 2,
-        boxShadow: '0 2px 12px #0001',
-        border: '1px solid #ececec',
+        boxShadow: "0 2px 12px #0001",
+        border: `1px solid ${borderColor}`,
         p: 0,
       }}
     >
@@ -165,7 +165,7 @@ const Compiler = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          borderBottom: '1px solid #ececec',
+          border: `1px solid ${borderColor}`,
           px: 2,
         }}
       >
@@ -182,7 +182,11 @@ const Compiler = ({
         </Typography>
         <Box sx={{ ml: 2 }}>
           <LanguageSelect
-            sx={{ height: "100%", border: "none", backgroundColor: "transparent" }}
+            sx={{
+              height: "100%",
+              border: "none",
+              backgroundColor: "transparent",
+            }}
             lang={lang}
             setLang={setLanguage}
           />
@@ -195,7 +199,13 @@ const Compiler = ({
           Run
         </ColorButton>
         <ColorButton
-          sx={{ ml: 2, fontWeight: 700, borderRadius: 2, backgroundColor: '#43a047', '&:hover': { backgroundColor: '#357a38' } }}
+          sx={{
+            ml: 2,
+            fontWeight: 700,
+            borderRadius: 2,
+            backgroundColor: "#43a047",
+            "&:hover": { backgroundColor: "#357a38" },
+          }}
           variant="contained"
           onClick={handleSubmit}
         >
@@ -207,8 +217,8 @@ const Compiler = ({
           borderRadius: 2,
           flex: 1,
           p: 2,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Box
@@ -216,7 +226,7 @@ const Compiler = ({
             display: "flex",
             justifyContent: "center",
             height: "100%",
-            border: '1px solid #ececec',
+            border: `1px solid ${borderColor}`,
             borderRadius: 2,
           }}
         >
@@ -226,13 +236,13 @@ const Compiler = ({
             language={lang}
             onChange={handleEditorChange}
             defaultValue={CODE_SNIPPETS[lang]}
-              theme={isLightMode ? "vs-light" : "vs-dark"}
-              options={{
-                minimap: { enabled: false },
-                fontSize: 16,
-                theme: isLightMode ? "vs-light" : "vs-dark",
-                backgroundColor: theme.palette.background.main,
-              }}
+            theme={isLightMode ? "vs-light" : "vs-dark"}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 16,
+              theme: isLightMode ? "vs-light" : "vs-dark",
+              backgroundColor: theme.palette.background.main,
+            }}
           />
         </Box>
       </Box>
@@ -245,7 +255,7 @@ const Compiler = ({
           justifyContent: "space-between",
           px: 2,
           borderRadius: 2,
-          borderTop: '1px solid #ececec',
+          borderTop: `1px solid ${borderColor}`,
         }}
       >
         <Stack
