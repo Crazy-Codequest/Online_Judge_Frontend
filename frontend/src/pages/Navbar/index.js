@@ -351,14 +351,14 @@ export default function Navbar() {
             <TextField
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  navigate(`/problem/search?terms=${search}`);
+                  navigate(`/problems/search?terms=${search}`);
                 }
               }}
               onChange={(e) => dispatch(setSearch(e.target.value))}
               onBlur={() => setShowSearch(false)}
               size="small"
               value={search}
-              sx={{ bgcolor: "#f5f7fa", borderRadius: 2, minWidth: 180 }}
+              sx={{  borderRadius: 2, minWidth: 180 }}
               autoFocus
             />
           ) : (

@@ -62,10 +62,8 @@ const ProfilePage = () => {
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const theme = useTheme();
 
-  // For demo, use static data. Replace with your data fetching logic.
   const user = PROFILE_DATA;
 
-  // Avatar upload handler (demo only)
   const handleAvatarChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
@@ -151,6 +149,7 @@ const ProfilePage = () => {
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
+          pb: 2
         }}
       >
         <Container maxWidth="md" sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 4 }}>
@@ -181,7 +180,7 @@ const ProfilePage = () => {
               </MuiLink>
             </Box>
             <Typography variant="subtitle1" sx={{ color: theme.palette.grey[300], fontSize: "1rem", mb: 2 }}>
-              LeetCode ID: {user.username}
+              ID: {user.username}
             </Typography>
             <Button
               variant="outlined"

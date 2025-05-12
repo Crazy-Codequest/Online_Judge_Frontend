@@ -9,7 +9,9 @@ const StatementPage = ({
   statement,
   description,
   constraints,
-  loading
+  loading,
+  output,
+  outputVisible
 }) => {
   const theme = useTheme();
   const borderColor = theme.palette.border.secondary;
@@ -74,6 +76,27 @@ const StatementPage = ({
           Submissions
         </Typography>
       </Box>
+      {/* Output Section */}
+      {outputVisible && (
+        <Box
+          sx={{
+            bgcolor: theme.palette.background.paper,
+            borderBottom: `1px solid ${borderColor}`,
+            p: 2,
+            fontFamily: "monospace",
+            color: theme.palette.text.primary,
+            fontSize: 16,
+            overflowY: "auto"
+          }}
+        >
+          <Typography variant="subtitle2" sx={{ mb: 1, color: theme.palette.text.secondary }}>
+            Output:
+          </Typography>
+          <Typography sx={{ whiteSpace: "pre-wrap" }}>
+            {output || "No output yet."}
+          </Typography>
+        </Box>
+      )}
       {/* Content */}
       <Box sx={{ p: 3 }}>
         <Typography variant="h6" sx={{ fontWeight: 700, color: "#444" }}>

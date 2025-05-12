@@ -23,10 +23,12 @@ import { Event, Group, CheckCircle } from "@mui/icons-material";
 const Competitions = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [competitions, setCompetitions] = useState({});
+  const [competitions, setCompetitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
+
+  console.log("Competitions Component - User State:", user);
 
   const addUserToCompetition = async (id) => {
     try {
@@ -62,7 +64,7 @@ const Competitions = () => {
       if (!foundUser(competition)) {
         toast.error("Please register for this competition first");
         return;
-      } navigate(`/competition/${competition._id}`);
+      } navigate(`/competitions/${competition._id}`);
     } catch (e) {
       console.log(e);
     }
@@ -70,13 +72,21 @@ const Competitions = () => {
   
   const getCompetitions = async () => {
     try {
+      console.log("Fetching competitions for user:", user?._id);
+      if (!user?._id) {
+        console.error("No user ID available");
+        setLoading(false);
+        return;
+      }
       const { data } = await axios.get(
         `${urlConstants.getCompetitions}?id=${user._id}`,
         getConfig()
       );
-      setCompetitions(data.competitions);
+      console.log("Competitions API Response:", data);
+      setCompetitions(data.competitions || []);
     } catch (e) {
-      console.log(e);
+      console.error("Error fetching competitions:", e);
+      toast.error("Failed to fetch competitions");
     } finally {
       setLoading(false);
     }
@@ -105,12 +115,16 @@ const Competitions = () => {
   };
 
   useEffect(() => {
+    console.log("Competitions useEffect triggered");
     getCompetitions();
-  }, []);
+  }, [user?._id]);
 
   if (loading) {
+    console.log("Competitions Component - Loading state");
     return <Loading />;
   }
+
+  console.log("Competitions Component - Render with competitions:", competitions);
 
   const getStatus = (competition) => {
     const now = new Date();

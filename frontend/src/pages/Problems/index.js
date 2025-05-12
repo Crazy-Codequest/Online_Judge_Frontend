@@ -219,7 +219,7 @@ const Problems = () => {
             >
               <CardContent>
                 <Typography fontWeight={700} gutterBottom fontSize={17}>
-                  LeetCode's Interview Crash Course:
+                  Codequest's Interview Crash Course:
                 </Typography>
                 <Typography variant="body2" fontSize={15}>
                   System Design for Interviews and Beyond
@@ -249,7 +249,7 @@ const Problems = () => {
             >
               <CardContent>
                 <Typography fontWeight={700} gutterBottom fontSize={17}>
-                  LeetCode's Interview Crash Course:
+                  Codequest's Interview Crash Course:
                 </Typography>
                 <Typography variant="body2" fontSize={15}>
                   Data Structures and Algorithms
@@ -417,7 +417,7 @@ const Problems = () => {
                     "&:hover": { bgcolor: hoverColor },
                   }}
                   component={Link}
-                  to={`/statement/${problem._id}`}
+                  to={`/problems/statement/${problem._id}`}
                 >
                   <Box sx={{ width: 40 }}>
                     {paginationModel.page * paginationModel.pageSize + idx + 1}

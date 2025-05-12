@@ -40,7 +40,7 @@ return (
             {dailyProblem.difficulty}
         </Typography>
         </Box>
-        <Link to={`/statement/${dailyProblem._id}`}>
+        <Link to={`/problems/statement/${dailyProblem._id}`}>
         <ProfessionalButton variant="contained">
             Solve Challenge
         </ProfessionalButton>

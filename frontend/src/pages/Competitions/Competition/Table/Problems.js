@@ -53,7 +53,7 @@ const Problems = ({ problems, verifySubmissions }) => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
           <IconButton
             size="small"
-            onClick={() => navigate(`/competition/${id}/statement/${params.row._id}`)}
+            onClick={() => navigate(`/competitions/${id}/statement/${params.row._id}`)}
             sx={{ 
               color: 'primary.main',
               backgroundColor: 'rgba(25, 118, 210, 0.08)',
@@ -74,7 +74,7 @@ const Problems = ({ problems, verifySubmissions }) => {
               '&:hover': { color: "primary.main" },
               whiteSpace: 'normal',
             }}
-            onClick={() => navigate(`/competition/${id}/statement/${params.row._id}`)}
+            onClick={() => navigate(`/competitions/${id}/statement/${params.row._id}`)}
           >
             {params.value}
           </Typography>
