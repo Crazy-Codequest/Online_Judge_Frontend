@@ -84,14 +84,17 @@ const Compiler = () => {
   }
 
   return (
-    <Container
-      maxWidth="xl"
+    <Box
       sx={{
-        py: 4,
+        width: "100vw",
         minHeight: "100vh",
+        p: { xs: 1, md: 4 },
+        pt: 0,
+        pb: 10,
         bgcolor: theme.palette.background.main,
       }}
     >
+    <Container maxWidth="xl">
       <Box sx={{ mb: 4, textAlign: "center" }}>
         <Code sx={{ fontSize: 36, color: "#1976d2", mb: -1, mr: 1 }} />
         <Typography
@@ -294,6 +297,7 @@ const Compiler = () => {
         </Box>
       </Box>
     </Container>
+    </Box>
   );
 };
 

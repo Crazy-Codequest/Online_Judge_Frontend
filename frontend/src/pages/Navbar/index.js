@@ -529,7 +529,7 @@ export default function Navbar() {
                 }}
               >
                 <DashboardIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
-                Dashboard
+                Playground
               </MenuItem>
               <MenuItem
                 onClick={() => handleMenuRightItemClick("/profile")}
@@ -621,7 +621,7 @@ export default function Navbar() {
             }}
           >
             <DashboardIcon fontSize="small" sx={{ color: "#1976d2" }} />{" "}
-            Dashboard
+            Playground
           </MenuItem>
           <MenuItem
             onClick={() => handleMenuRightItemClick("/profile")}

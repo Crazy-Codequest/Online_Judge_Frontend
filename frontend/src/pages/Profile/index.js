@@ -15,6 +15,7 @@ import {
   Divider,
   IconButton,
   Link as MuiLink,
+  useTheme,
 } from "@mui/material";
 import {
   Person as BasicInfoIcon,
@@ -59,6 +60,7 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("basic");
   const fileInputRef = useRef(null);
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
+  const theme = useTheme();
 
   // For demo, use static data. Replace with your data fetching logic.
   const user = PROFILE_DATA;
@@ -138,13 +140,13 @@ const ProfilePage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", background: "#f7f8fa", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <Box
         sx={{
           width: "100%",
           minHeight: 220,
-          background: "linear-gradient(120deg, #23272f 0%, #3a3f47 100%)",
+          background: `linear-gradient(120deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -158,33 +160,33 @@ const ProfilePage = () => {
             sx={{
               width: 110,
               height: 110,
-              border: "4px solid #fff",
-              boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
-              background: "#e0e0e0",
+              border: `4px solid ${theme.palette.background.paper}`,
+              boxShadow: theme.shadows[2],
+              background: theme.palette.background.paper,
               mb: 2,
             }}
           />
-          <Box sx={{ textAlign: "center", color: "#fff" }}>
+          <Box sx={{ textAlign: "center", color: theme.palette.common.white }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 1 }}>
-              <Typography variant="h5" sx={{ fontWeight: 700, mr: 1 }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, mr: 1, color: theme.palette.common.white }}>
                 {user.name}
               </Typography>
               <MuiLink
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{ color: "#fff", display: "flex", alignItems: "center" }}
+                sx={{ color: theme.palette.common.white, display: "flex", alignItems: "center" }}
               >
                 <OpenInNewIcon fontSize="small" />
               </MuiLink>
             </Box>
-            <Typography variant="subtitle1" sx={{ color: "#b0b3b8", fontSize: "1rem", mb: 2 }}>
+            <Typography variant="subtitle1" sx={{ color: theme.palette.grey[300], fontSize: "1rem", mb: 2 }}>
               LeetCode ID: {user.username}
             </Typography>
             <Button
               variant="outlined"
               size="small"
-              sx={{ color: "#fff", borderColor: "#fff" }}
+              sx={{ color: theme.palette.common.white, borderColor: theme.palette.common.white }}
               onClick={() => fileInputRef.current.click()}
             >
               Change Avatar
@@ -214,8 +216,8 @@ const ProfilePage = () => {
                   sx={{
                     borderRadius: "8px 0 0 8px",
                     mb: 0.5,
-                    color: activeTab === tab.key ? "#1976d2" : "#23272f",
-                    background: activeTab === tab.key ? "#eaf4ff" : "transparent",
+                    color: activeTab === tab.key ? theme.palette.primary.main : theme.palette.text.primary,
+                    background: activeTab === tab.key ? theme.palette.action.selected : "transparent",
                     fontWeight: activeTab === tab.key ? 700 : 500,
                     pl: 2.5,
                     pr: 1,
@@ -232,7 +234,7 @@ const ProfilePage = () => {
           </Grid>
           {/* Main Card */}
           <Grid item xs={12} md={9}>
-            <Card sx={{ borderRadius: 3, boxShadow: "0 2px 12px 0 rgba(0,0,0,0.04)", p: 0 }}>
+            <Card sx={{ borderRadius: 3, boxShadow: theme.shadows[2], p: 0, bgcolor: "background.paper" }}>
               <CardContent sx={{ p: 0 }}>
                 {renderTabContent()}
               </CardContent>
@@ -248,26 +250,26 @@ const ProfilePage = () => {
           py: 3,
           px: 2,
           mt: 'auto',
-          backgroundColor: '#23272f',
-          color: '#fff',
+          bgcolor: theme.palette.primary.dark,
+          color: theme.palette.common.white,
         }}
       >
         <Container maxWidth="md">
           <Grid container spacing={3} justifyContent="space-between" alignItems="center">
             <Grid item>
-              <Typography variant="body2" color="text.secondary" sx={{ color: '#b0b3b8' }}>
+              <Typography variant="body2" color={theme.palette.grey[300]}>
                 © 2024 Online Judge. All rights reserved.
               </Typography>
             </Grid>
             <Grid item>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <MuiLink href={user.github} target="_blank" rel="noopener noreferrer" sx={{ color: '#fff' }}>
+                <MuiLink href={user.github} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <GitHubIcon />
                 </MuiLink>
-                <MuiLink href={user.linkedin} target="_blank" rel="noopener noreferrer" sx={{ color: '#fff' }}>
+                <MuiLink href={user.linkedin} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <LinkedInIcon />
                 </MuiLink>
-                <MuiLink href={user.twitter} target="_blank" rel="noopener noreferrer" sx={{ color: '#fff' }}>
+                <MuiLink href={user.twitter} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <TwitterIcon />
                 </MuiLink>
               </Box>
@@ -280,10 +282,10 @@ const ProfilePage = () => {
 };
 
 const InfoRow = ({ label, value }) => (
-  <Box sx={{ display: "flex", alignItems: "center", px: 4, py: 2, borderBottom: "1px solid #f5f5f5" }}>
-    <Typography sx={{ flex: 1, color: "#888", fontWeight: 500 }}>{label}</Typography>
-    <Typography sx={{ flex: 2, color: "#23272f" }}>{value}</Typography>
-    <Button size="small" sx={{ ml: 2, color: "#1976d2", fontWeight: 500, textTransform: "none" }} startIcon={<EditIcon fontSize="small" />}>
+  <Box sx={{ display: "flex", alignItems: "center", px: 4, py: 2, borderBottom: `1px solid ${useTheme().palette.divider}` }}>
+    <Typography sx={{ flex: 1, color: useTheme().palette.text.secondary, fontWeight: 500 }}>{label}</Typography>
+    <Typography sx={{ flex: 2, color: useTheme().palette.text.primary }}>{value}</Typography>
+    <Button size="small" sx={{ ml: 2, color: useTheme().palette.primary.main, fontWeight: 500, textTransform: "none" }} startIcon={<EditIcon fontSize="small" />}>
       Edit
     </Button>
   </Box>
