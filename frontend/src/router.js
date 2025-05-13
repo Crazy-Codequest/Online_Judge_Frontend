@@ -19,33 +19,11 @@ const Compiler = lazy(() => import("./pages/Compiler"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 
-// Custom hook for user state
-const useUserState = () => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const storedUser = localStorage.getItem('user');
-      setUser(storedUser ? JSON.parse(storedUser) : null);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  return user;
-};
-
-// Helper function to check user in localStorage
 const getUserFromStorage = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 };
 
-// Layout components
 const PublicLayout = () => {
   return (
     <>
@@ -80,7 +58,6 @@ export const router = createBrowserRouter([
     path: "/",
     element: <PublicLayout />,
     children: [
-      // Public routes
       {
         path: "signin",
         element: <SignIn />,
@@ -96,9 +73,7 @@ export const router = createBrowserRouter([
           const user = getUserFromStorage();
           return user ? redirect("/") : null;
         }
-      },
-      // Redirect authenticated users to home
-      {
+      },      {
         path: "*",
         loader: () => {
           const user = getUserFromStorage();
@@ -174,7 +149,6 @@ export const router = createBrowserRouter([
         path: "analytics",
         element: <Analytics />
       },
-      // Redirect unauthenticated users to signin
       {
         path: "*",
         element: <Navigate to="/" replace />
