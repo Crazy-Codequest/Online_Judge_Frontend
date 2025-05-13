@@ -11,7 +11,9 @@ import { getConfig } from "./utils/getConfig";
 import { CheckOutlined, ErrorOutline, InfoOutlined, WarningOutlined } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
 import { useIsSystemDarkMode, useTheme as useThemeContext } from "./ThemeContext";
-import { AuthenticatedRoutes, PublicRoutes } from "./routes";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+import { Suspense } from "react";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -49,9 +51,10 @@ function App() {
   if (loading) return <Loader />;
 
   return (
-    <React.Fragment>
+    <Suspense fallback={<Loader />}>
+      <RouterProvider router={router} />
       <ToastContainer
-        position="top-right"
+        position="bottom-left"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -72,8 +75,7 @@ function App() {
         theme={themePref === "system" ? (isSystemDarkMode ? "dark" : "light") : themePref}
         toastClassName="custom-toast"
       />
-      {isAuthenticated ? <AuthenticatedRoutes /> : <PublicRoutes />}
-    </React.Fragment>
+    </Suspense>
   );
 }
 

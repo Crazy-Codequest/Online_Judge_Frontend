@@ -111,9 +111,11 @@ export default function Navbar() {
   const handleMenuLeftItemClick = (path) => {
     navigate(path);
     handleLeftMenuClose();
+    setMobileMenuOpen(false);
   };
 
   const handleMenuRightItemClick = (path) => {
+    setMobileMenuOpen(false);
     navigate(path);
     handleRightMenuClose();
   };
@@ -219,6 +221,12 @@ export default function Navbar() {
   useEffect(() => {
     getAllNotifications();
   }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    dispatch(logout());
+    navigate("/signin");
+  };
 
   return (
     <AppBar
@@ -498,7 +506,7 @@ export default function Navbar() {
           </MenuItem>
           {isMobile && (
             <>
-              {user.role === "admin" && (
+              {user && user.role === "admin" && (
                 <MenuItem
                   onClick={() => handleMenuRightItemClick("/admin")}
                   sx={{
@@ -548,8 +556,8 @@ export default function Navbar() {
               <Divider sx={{ my: 1, bgcolor: darkThemeStyles.borderColor }} />
               <MenuItem
                 onClick={() => {
-                  localStorage.removeItem("user");
-                  dispatch(logout());
+                  handleLogout();
+                  handleLeftMenuClose();
                 }}
                 sx={{
                   fontWeight: 600,
@@ -590,7 +598,7 @@ export default function Navbar() {
             },
           }}
         >
-          {user.role === "admin" && (
+          {user && user.role === "admin" && (
             <MenuItem
               onClick={() => handleMenuRightItemClick("/admin")}
               sx={{
@@ -639,8 +647,8 @@ export default function Navbar() {
           <Divider sx={{ my: 1, bgcolor: darkThemeStyles.borderColor }} />
           <MenuItem
             onClick={() => {
-              localStorage.removeItem("user");
-              dispatch(logout());
+              handleLogout();
+              handleRightMenuClose();
             }}
             sx={{
               fontWeight: 600,
@@ -858,7 +866,7 @@ export default function Navbar() {
         >
           <CodeIcon fontSize="small" sx={{ color: "#1976d2" }} /> Playground
         </MenuItem>
-        {user.role === "admin" && (
+        {user && user.role === "admin" && (
           <MenuItem
             onClick={() => {
               setMobileMenuOpen(false);
@@ -916,8 +924,7 @@ export default function Navbar() {
         <MenuItem
           onClick={() => {
             setMobileMenuOpen(false);
-            localStorage.removeItem("user");
-            dispatch(logout());
+            handleLogout();
           }}
           sx={{
             fontWeight: 600,

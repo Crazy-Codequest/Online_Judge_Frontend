@@ -65,6 +65,7 @@ export default function SignIn() {
       dispatch(loginSuccess({ user, token }));
 
       toast.success("Logged in successfully!");
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error("Incorrect email or password!");

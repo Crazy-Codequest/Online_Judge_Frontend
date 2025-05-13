@@ -4,19 +4,15 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./Redux/store";
-import { BrowserRouter } from "react-router-dom";
 import ThemeProvider from "./ThemeContext";
 import { CssBaseline } from "@mui/material";
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <ThemeProvider>
       <CssBaseline enableColorScheme />
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <App />
     </ThemeProvider>
   </Provider>
 );

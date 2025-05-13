@@ -2487,6 +2487,11 @@
     redux-thunk "^2.4.2"
     reselect "^4.1.8"
 
+"@rehooks/local-storage@^2.4.5":
+  version "2.4.5"
+  resolved "https://registry.npmjs.org/@rehooks/local-storage/-/local-storage-2.4.5.tgz"
+  integrity sha512-3Q4KtiUBaKoIDRK72BWfAy50ul6hbw29f/M7tyCzlMe2FbSsiQNok0WGeBLaYj4T2PJ7JMSJlSbUGY8RNsImmw==
+
 "@remix-run/router@1.11.0":
   version "1.11.0"
   resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.11.0.tgz"

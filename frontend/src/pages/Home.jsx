@@ -27,7 +27,7 @@ import {
   Bolt,
   CheckCircle,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { urlConstants } from "../apis";
 import axios from "axios";
 import { getConfig } from "../utils/getConfig";
@@ -49,6 +49,9 @@ const HomePage = () => {
   const [search, setSearch] = useState("");
   const [searchedProblems, setSearchedproblems] = useState([]);
   const [timeLeft, setTimeLeft] = useState("12:34:56");
+
+  // Get loader data
+  const dailyProblemLoader = useLoaderData();
 
   const leaderboardData = [
     { rank: 1, user: "CodeMaster", score: 2450 },
