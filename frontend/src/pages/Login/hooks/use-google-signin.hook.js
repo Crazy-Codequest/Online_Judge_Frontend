@@ -4,9 +4,11 @@ import { urlConstants } from '../../../apis';
 import { toast } from 'react-toastify';
 import { loginSuccess } from '../../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const useGoogleSignIn = (setLoading) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleGoogleSignIn = () => {
     const client = window.google.accounts.oauth2.initTokenClient({
@@ -38,6 +40,7 @@ const useGoogleSignIn = (setLoading) => {
           localStorage.setItem("token", token);
           dispatch(loginSuccess({ user, token }));
           toast.success("Logged in with Google!");
+          navigate("/");
         } catch (err) {
           console.error("Google login failed", err);
           toast.error("Google sign-in failed!");

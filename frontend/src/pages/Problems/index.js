@@ -20,6 +20,13 @@ import {
   Card,
   CardContent,
   CardActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Checkbox,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Star,
@@ -39,6 +46,8 @@ import {
   PlayCircleFilled,
   ArrowForwardIos,
   Add,
+  Edit,
+  Delete,
 } from "@mui/icons-material";
 import axios from "axios";
 import { getConfig } from "../../utils/getConfig";
@@ -46,6 +55,8 @@ import { PROBLEMS_PER_PAGE } from "../../utils/constants";
 import { urlConstants } from "../../apis";
 import Loading from "../Loader/Loader";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const difficultyColors = {
   easy: "#4CAF50",
@@ -59,18 +70,6 @@ const sidebarLists = [
   { icon: <Forum />, label: "Discuss" },
 ];
 
-const myLists = [
-  { icon: <Favorite />, label: "Favorite", locked: false },
-  { icon: <Assignment />, label: "solve again", locked: true },
-  { icon: <Assignment />, label: "doubts", locked: true },
-  { icon: <Assignment />, label: "try different method", locked: true },
-  { icon: <Assignment />, label: "blind_seventyfive", locked: true },
-  { icon: <Assignment />, label: "using bits", locked: true },
-  { icon: <Assignment />, label: "couldn't solve", locked: true },
-  { icon: <Assignment />, label: "upvoted", locked: true },
-  { icon: <Assignment />, label: "understanding solution", locked: true },
-  { icon: <Assignment />, label: "reverse solutions", locked: true },
-];
 
 const Problems = () => {
   const [problems, setProblems] = useState([]);
@@ -82,6 +81,19 @@ const Problems = () => {
   });
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [search, setSearch] = useState("");
+  const [myLists, setMyLists] = useState([]);
+  const { user } = useSelector((state) => state.auth);
+  const [selectedProblems, setSelectedProblems] = useState([]);
+  const [openNewListDialog, setOpenNewListDialog] = useState(false);
+  const [newListName, setNewListName] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedListForAdd, setSelectedListForAdd] = useState(null);
+  const [editingList, setEditingList] = useState(null);
+  const [listDescription, setListDescription] = useState("");
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [listToDelete, setListToDelete] = useState(null);
+  
 
   const theme = useTheme();
   const isLightMode = theme.palette.mode === "light";
@@ -112,8 +124,21 @@ const Problems = () => {
       }
     };
 
+    const getMyLists = async () => {
+      try {
+        const { data } = await axios.get(
+          `${urlConstants.getLists}?user_id=${user.id}`,
+          getConfig()
+        );
+        setMyLists(data.lists);
+      } catch(e){
+        console.log(e);
+      }
+    };
+
     getProblems();
     getTopicCounts();
+    getMyLists();
   }, []);
 
   const filteredProblems = problems.filter(
@@ -121,6 +146,151 @@ const Problems = () => {
       (!selectedTopic || p.topic === selectedTopic) &&
       (!search || p.statement.toLowerCase().includes(search.toLowerCase()))
   );
+
+  const handleSelectProblem = (problemId) => {
+    setSelectedProblems(prev => 
+      prev.includes(problemId) 
+        ? prev.filter(id => id !== problemId)
+        : [...prev, problemId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedProblems.length === filteredProblems.length) {
+      setSelectedProblems([]);
+    } else {
+      setSelectedProblems(filteredProblems.map(p => p._id));
+    }
+  };
+
+  const handleCreateList = async () => {
+    try {
+      const { data } = await axios.post(
+        urlConstants.createList,
+        { 
+          name: newListName, 
+          description: listDescription,
+          user_id: user.id,
+          problems: [] 
+        },
+        getConfig()
+      );
+      setMyLists(prev => [...prev, data.list]);
+      setOpenNewListDialog(false);
+      setNewListName("");
+      setListDescription("");
+      toast.success("List created successfully!");
+    } catch (e) {
+      toast.error("Failed to create list");
+      console.error(e);
+    }
+  };
+
+  const handleEditList = async () => {
+    if (!editingList) return;
+    
+    try {
+      const { data } = await axios.post(
+        urlConstants.updateList,
+        {
+          id: editingList._id,
+          name: newListName,
+          description: listDescription,
+          problems: editingList.problems
+        },
+        getConfig()
+      );
+      
+      setMyLists(prev => 
+        prev.map(list => 
+          list._id === editingList._id ? data.list : list
+        )
+      );
+      
+      setOpenEditDialog(false);
+      setEditingList(null);
+      setNewListName("");
+      setListDescription("");
+      toast.success("List updated successfully!");
+    } catch (e) {
+      toast.error("Failed to update list");
+      console.error(e);
+    }
+  };
+
+  const handleDeleteList = async () => {
+    if (!listToDelete || !listToDelete._id) {
+        toast.error("No list selected for deletion.");
+        return;
+    }
+
+    try {
+        await axios.post(
+            urlConstants.deleteList,
+            { id: listToDelete._id },
+            getConfig()
+        );
+
+        setMyLists(prev => prev.filter(list => list._id !== listToDelete._id));
+        setOpenDeleteDialog(false);
+        setListToDelete(null);
+        toast.success("List deleted successfully!");
+    } catch (e) {
+        toast.error("Failed to delete list");
+        console.error(e);
+    }
+  };
+
+  const openEditListDialog = (list) => {
+    setEditingList(list);
+    setNewListName(list.name);
+    setListDescription(list.description || "");
+    setOpenEditDialog(true);
+  };
+
+  const openDeleteListDialog = (list) => {
+    setListToDelete(list);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleAddToList = async (listId) => {
+    try {
+      // Get the current list to update
+      const currentList = myLists.find(list => list._id === listId);
+      if (!currentList) {
+        throw new Error("List not found");
+      }
+
+      // Create new problems array by combining existing and new problems
+      const updatedProblems = [...new Set([...currentList.problems, ...selectedProblems])];
+
+      // Update the list with new problems
+      const { data } = await axios.post(
+        urlConstants.updateList,
+        {
+          id: listId,
+          name: currentList.name,
+          description: currentList.description,
+          problems: updatedProblems
+        },
+        getConfig()
+      );
+
+      // Update the lists in state
+      setMyLists(prev => 
+        prev.map(list => 
+          list._id === listId ? data.list : list
+        )
+      );
+
+      toast.success(`Added ${selectedProblems.length} problem(s) to ${currentList.name}`);
+      setAnchorEl(null);
+      setSelectedProblems([]);
+    } catch (e) {
+      toast.error("Failed to add problems to list");
+      console.error(e);
+    }
+  };
 
   // --- UI ---
   if (loading) return <Loading />;
@@ -133,7 +303,7 @@ const Problems = () => {
         display: "flex",
         bgcolor: theme.palette.background.main,
         minHeight: "100vh",
-        p: {xs: 2, lg: 0}
+        p: { xs: 2, lg: 0 },
       }}
     >
       <Box
@@ -155,22 +325,57 @@ const Problems = () => {
         </Typography>
         <List>
           {myLists.map((item) => (
-            <ListItem button key={item.label} sx={{ borderRadius: 2 }}>
-              <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{ fontSize: 16 }}
-              />
-              {item.locked && (
-                <Tooltip title="Private List">
-                  <Lock fontSize="small" color="disabled" />
+            <ListItem
+              button
+              key={item._id}
+              sx={{
+                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 1,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                <ListItemIcon sx={{ minWidth: 36 }}>
+                  <Assignment />
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.name}
+                  secondary={item.description}
+                  primaryTypographyProps={{ fontSize: 16 }}
+                  secondaryTypographyProps={{ fontSize: 13 }}
+                />
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0 }}>
+                <Tooltip title="Edit">
+                  <IconButton onClick={(e) => {
+                    e.stopPropagation();
+                    openEditListDialog(item);
+                  }}>
+                    <Edit color="primary" />
+                  </IconButton>
                 </Tooltip>
-              )}
+                <Tooltip title="Delete">
+                  <IconButton onClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteListDialog(item);
+                  }}>
+                    <Delete color="error" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
             </ListItem>
           ))}
         </List>
         <Button
           startIcon={<Add />}
+          onClick={() => {
+            setEditingList(null);
+            setNewListName("");
+            setListDescription("");
+            setOpenNewListDialog(true);
+          }}
           sx={{
             mt: 1,
             ml: 1,
@@ -364,6 +569,56 @@ const Problems = () => {
             inputProps={{ style: { fontSize: 16, height: 44 } }}
           />
 
+          {selectedProblems.length > 0 && (
+            <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+              <Typography>{selectedProblems.length} problem(s) selected</Typography>
+              <Button
+                variant="contained"
+                onClick={(e) => setAnchorEl(e.currentTarget)}
+                startIcon={<Add />}
+                disabled={myLists.length === 0}
+              >
+                Add to List
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+                PaperProps={{
+                  sx: { maxHeight: 300 }
+                }}
+              >
+                {myLists.length === 0 ? (
+                  <MenuItem disabled>
+                    <Typography variant="body2" color="text.secondary">
+                      No lists available. Create a list first.
+                    </Typography>
+                  </MenuItem>
+                ) : (
+                  myLists.map((list) => (
+                    <MenuItem 
+                      key={list._id} 
+                      onClick={() => handleAddToList(list._id)}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        py: 1
+                      }}
+                    >
+                      <Typography variant="body1">{list.name}</Typography>
+                      {list.description && (
+                        <Typography variant="caption" color="text.secondary">
+                          {list.description}
+                        </Typography>
+                      )}
+                    </MenuItem>
+                  ))
+                )}
+              </Menu>
+            </Box>
+          )}
+
           <Paper
             sx={{
               p: 0,
@@ -383,9 +638,16 @@ const Problems = () => {
                 py: 1,
                 fontWeight: 700,
                 fontSize: 16,
+                alignItems: "center",
               }}
             >
-              <Box sx={{ width: 40 }}>#</Box>
+              <Box sx={{ width: 40 }}>
+                <Checkbox
+                  checked={selectedProblems.length === filteredProblems.length}
+                  indeterminate={selectedProblems.length > 0 && selectedProblems.length < filteredProblems.length}
+                  onChange={handleSelectAll}
+                />
+              </Box>
               <Box sx={{ flex: 2 }}>Title</Box>
               <Box sx={{ width: 120, textAlign: "center" }}>Acceptance</Box>
               <Box sx={{ width: 100, textAlign: "center" }}>Difficulty</Box>
@@ -420,7 +682,11 @@ const Problems = () => {
                   to={`/problems/statement/${problem._id}`}
                 >
                   <Box sx={{ width: 40 }}>
-                    {paginationModel.page * paginationModel.pageSize + idx + 1}
+                    <Checkbox
+                      checked={selectedProblems.includes(problem._id)}
+                      onChange={() => handleSelectProblem(problem._id)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -581,6 +847,86 @@ const Problems = () => {
           </Box>
         </Paper>
       </Box>
+
+      {/* New/Edit List Dialog */}
+      <Dialog 
+        open={openNewListDialog || openEditDialog} 
+        onClose={() => {
+          setOpenNewListDialog(false);
+          setOpenEditDialog(false);
+          setEditingList(null);
+          setNewListName("");
+          setListDescription("");
+        }}
+      >
+        <DialogTitle>
+          {editingList ? "Edit List" : "Create New List"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="List Name"
+            fullWidth
+            value={newListName}
+            onChange={(e) => setNewListName(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            fullWidth
+            multiline
+            rows={3}
+            value={listDescription}
+            onChange={(e) => setListDescription(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {
+            setOpenNewListDialog(false);
+            setOpenEditDialog(false);
+            setEditingList(null);
+            setNewListName("");
+            setListDescription("");
+          }}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={editingList ? handleEditList : handleCreateList} 
+            variant="contained"
+          >
+            {editingList ? "Save Changes" : "Create"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => {
+          setOpenDeleteDialog(false);
+          setListToDelete(null);
+        }}
+      >
+        <DialogTitle>Delete List</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete the list "{listToDelete?.name}"? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {
+            setOpenDeleteDialog(false);
+            setListToDelete(null);
+          }}>
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteList} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
