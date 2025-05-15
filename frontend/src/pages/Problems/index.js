@@ -57,9 +57,9 @@ import Loading from "../Loader/Loader";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import LeftSidebar from "./LeftSidebar";
-import ProblemsTable from "./ProblemsTable";
-import { EditListDialog, DeleteListDialog } from "./ListPopups";
+import LeftSidebar from "./components/LeftSidebar";
+import ProblemsTable from "./components/ProblemsTable";
+import { EditListDialog, DeleteListDialog } from "./components/ListPopups";
 import useProblemsApi from "./hooks/use-problems-api";
 
 const difficultyColors = {

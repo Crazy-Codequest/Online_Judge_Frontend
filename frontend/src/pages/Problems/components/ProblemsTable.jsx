@@ -25,12 +25,31 @@ const ProblemsTable = ({
 }) => (
   <Box sx={{ width: "100%", maxWidth: 950, mx: "auto" }}>
     {/* Topic Chips */}
-    <Box sx={{ display: "flex", gap: 1, mb: 2, overflowX: "auto", pb: 1, width: "100%" }}>
+    {console.log("selectedTopic", selectedTopic, topicCounts)}
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        mb: 2,
+        overflowX: "auto",
+        pb: 1,
+        width: "100%",
+      }}
+    >
       <Chip
         label="All Topics"
         color={!selectedTopic ? "primary" : "default"}
-        onClick={() => setSelectedTopic(null)}
-        sx={{ fontWeight: 700, fontSize: 15, px: 2, height: 36, bgcolor: !selectedTopic ? "#e0e0e0" : "#fff", border: "none", boxShadow: "none" }}
+        onClick={() => setSelectedTopic("All Topics")}
+        sx={{
+          fontWeight: 700,
+          fontSize: 15,
+          px: 2,
+          height: 36,
+          bgcolor:
+            selectedTopic === "All Topics" ? "border.secondary" : "border.primary",
+          border: "none",
+          boxShadow: "none",
+        }}
       />
       {topicCounts.map((topic) => (
         <Chip
@@ -38,7 +57,16 @@ const ProblemsTable = ({
           label={`${topic._id} (${topic.count})`}
           color={selectedTopic === topic._id ? "primary" : "default"}
           onClick={() => setSelectedTopic(topic._id)}
-          sx={{ fontWeight: 700, fontSize: 15, px: 2, height: 36, border: "none", boxShadow: "none" }}
+          sx={{
+            fontWeight: 700,
+            fontSize: 15,
+            px: 2,
+            height: 36,
+            border: "none",
+            boxShadow: "none",
+            bgcolor:
+              selectedTopic === topic._id ? "border.secondary" : "border.primary",
+          }}
         />
       ))}
     </Box>
@@ -52,7 +80,7 @@ const ProblemsTable = ({
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Search  />
+            <Search />
           </InputAdornment>
         ),
         style: { fontSize: 16, height: 44 },
@@ -61,7 +89,7 @@ const ProblemsTable = ({
     />
     {/* Add to List */}
     {selectedProblems.length > 0 && (
-      <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+      <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>
         <Typography>{selectedProblems.length} problem(s) selected</Typography>
         <Button
           variant="contained"
@@ -85,10 +113,15 @@ const ProblemsTable = ({
             </MenuItem>
           ) : (
             myLists.map((list) => (
-              <MenuItem 
-                key={list._id} 
+              <MenuItem
+                key={list._id}
                 onClick={() => handleAddToList(list._id)}
-                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', py: 1 }}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  py: 1,
+                }}
               >
                 <Typography variant="body1">{list.name}</Typography>
                 {list.description && (
@@ -103,12 +136,35 @@ const ProblemsTable = ({
       </Box>
     )}
     {/* Problems Table */}
-    <Paper sx={{ p: 0, borderRadius: 2, overflow: "hidden", boxShadow: "none", border: `1px solid ${borderColor}`, width: "100%" }}>
-      <Box sx={{ display: "flex", bgcolor: "background.main", borderBottom: `1px solid ${borderColor}` , px: 2, py: 1, fontWeight: 700, fontSize: 16, alignItems: "center" }}>
+    <Paper
+      sx={{
+        p: 0,
+        borderRadius: 2,
+        overflow: "hidden",
+        boxShadow: "none",
+        border: `1px solid ${borderColor}`,
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          bgcolor: "background.main",
+          borderBottom: `1px solid ${borderColor}`,
+          px: 2,
+          py: 1,
+          fontWeight: 700,
+          fontSize: 16,
+          alignItems: "center",
+        }}
+      >
         <Box sx={{ width: 40 }}>
           <Checkbox
             checked={selectedProblems.length === filteredProblems.length}
-            indeterminate={selectedProblems.length > 0 && selectedProblems.length < filteredProblems.length}
+            indeterminate={
+              selectedProblems.length > 0 &&
+              selectedProblems.length < filteredProblems.length
+            }
             onChange={handleSelectAll}
           />
         </Box>
@@ -180,20 +236,30 @@ const ProblemsTable = ({
         ))}
     </Paper>
     {/* Pagination */}
-    <Box sx={{ display: "flex", justifyContent: "center", mt: 2, fontSize: 16 }}>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", mt: 2, fontSize: 16 }}
+    >
       <Button
         disabled={paginationModel.page === 0}
-        onClick={() => setPaginationModel((prev) => ({ ...prev, page: prev.page - 1 }))}
+        onClick={() =>
+          setPaginationModel((prev) => ({ ...prev, page: prev.page - 1 }))
+        }
         sx={{ fontSize: 15, px: 2, textTransform: "none", boxShadow: "none" }}
       >
         Previous
       </Button>
       <Typography sx={{ mx: 2, alignSelf: "center", fontSize: 16 }}>
-        Page {paginationModel.page + 1} of {Math.ceil(filteredProblems.length / paginationModel.pageSize)}
+        Page {paginationModel.page + 1} of{" "}
+        {Math.ceil(filteredProblems.length / paginationModel.pageSize)}
       </Typography>
       <Button
-        disabled={(paginationModel.page + 1) * paginationModel.pageSize >= filteredProblems.length}
-        onClick={() => setPaginationModel((prev) => ({ ...prev, page: prev.page + 1 }))}
+        disabled={
+          (paginationModel.page + 1) * paginationModel.pageSize >=
+          filteredProblems.length
+        }
+        onClick={() =>
+          setPaginationModel((prev) => ({ ...prev, page: prev.page + 1 }))
+        }
         sx={{ fontSize: 15, px: 2, textTransform: "none", boxShadow: "none" }}
       >
         Next

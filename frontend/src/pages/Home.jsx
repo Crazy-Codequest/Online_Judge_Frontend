@@ -34,9 +34,9 @@ import { getConfig } from "../utils/getConfig";
 import PracticeCalendar from "./Admin/PracticeCalendar";
 import FloatingText from "./FloatingButton";
 import ProfessionalButton from "../components/Button/ProfessionalButton";
-import DailyChallenge from "./Problems/DailyChallenge";
 import useProblem from "../hooks/use-problem.hook";
 import { calculateTimeLeft } from "../utils/time";
+import DailyChallenge from "./Problems/components/DailyChallenge";
 
 const accent = "#7b5cff";
 const accent2 = "#00e0d3";

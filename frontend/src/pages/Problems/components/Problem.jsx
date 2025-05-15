@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import useProblem from '../../hooks/use-problem.hook';
+import useProblem from '../../../hooks/use-problem.hook';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import DailyChallenge from './DailyChallenge';

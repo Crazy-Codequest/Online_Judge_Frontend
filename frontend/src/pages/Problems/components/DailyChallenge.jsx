@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react'
-import ProfessionalButton from '../../components/Button/ProfessionalButton';
+import ProfessionalButton from '../../../components/Button/ProfessionalButton';
 import { Link } from 'react-router-dom';
 
 const DailyChallenge = ({ dailyProblem, sx }) => {

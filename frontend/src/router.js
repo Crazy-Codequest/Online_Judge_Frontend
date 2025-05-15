@@ -9,7 +9,7 @@ const Home = lazy(() => import("./pages/Home"));
 const SignIn = lazy(() => import("./pages/Login/Login"));
 const SignUp = lazy(() => import("./pages/Login/Signup"));
 const ProblemList = lazy(() => import("./pages/Problems"));
-const Problem = lazy(() => import("./pages/Problems/Problem"));
+const Problem = lazy(() => import("./pages/Problems"));
 const StatementPage = lazy(() => import("./pages/StatementPage"));
 const Competitions = lazy(() => import("./pages/Competitions"));
 const Competition = lazy(() => import("./pages/Competitions/Competition"));
