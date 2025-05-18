@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Grid,
@@ -28,6 +28,11 @@ import {
   LinkedIn as LinkedInIcon,
   Twitter as TwitterIcon,
 } from "@mui/icons-material";
+import axios from "axios";
+import { urlConstants } from "../../apis";
+import { useSelector } from "react-redux";
+import { getConfig } from "../../utils/getConfig";
+import { toast } from "react-toastify";
 
 const TABS = [
   { label: "Basic Info", icon: <BasicInfoIcon />, key: "basic" },
@@ -64,13 +69,25 @@ const ProfilePage = () => {
 
   const user = PROFILE_DATA;
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (ev) => setAvatar(ev.target.result);
-      reader.readAsDataURL(e.target.files[0]);
+     const file = e.target.files[0];
+     const formData = new FormData();
+     formData.append("profileImage", file);
+     formData.append("u_id", userPr.id);
+
+     try{
+      await axios.post(urlConstants.updateSocialImage, formData, getConfig());
+      toast.success("Avatar updated successfully!");
+      setAvatar(URL.createObjectURL(file));
+
+     }catch (error) {
+        console.error("Error uploading avatar:", error);
+     }
     }
   };
+
+  
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -136,6 +153,57 @@ const ProfilePage = () => {
         return null;
     }
   };
+
+  const {user: userPr} = useSelector((state) => state.auth);
+
+  const fetchProfileImage = async (u_id) => {
+    try {
+      const res = await axios.get(`${urlConstants.getSocialImage}/${u_id}`, {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return URL.createObjectURL(res.data);
+
+    } catch (error) {
+      console.error("Error fetching profile image:", error);
+      return DEFAULT_AVATAR;
+    }
+  };
+
+  useEffect(() => {
+    const fetchSocialData = async () => {
+      try {
+        const res = await axios.post(
+          urlConstants.getSocialProfile,
+          { u_id: userPr.id },
+          getConfig()
+        );
+        console.log(res.data);
+        
+      }catch (error) {
+        console.error("Error fetching social data:", error);
+      };
+    };
+    fetchSocialData();
+  }, []);
+
+  useEffect(() => {
+    const getAvatar = async () => {
+      try {
+        if(userPr?.id) {
+          const imgUrl = await fetchProfileImage(userPr.id);
+          setAvatar(imgUrl);
+        }
+      } catch (error) {
+        console.error("Error fetching avatar:", error);
+        
+      }
+    };
+
+    getAvatar();
+  }, [])
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
@@ -229,6 +297,7 @@ const ProfilePage = () => {
                   <ListItemText primary={tab.label} />
                 </ListItem>
               ))}
+              
             </List>
           </Grid>
           {/* Main Card */}
@@ -257,7 +326,7 @@ const ProfilePage = () => {
           <Grid container spacing={3} justifyContent="space-between" alignItems="center">
             <Grid item>
               <Typography variant="body2" color={theme.palette.grey[300]}>
-                © 2024 Online Judge. All rights reserved.
+                © 2025 Crazy Codequest. All rights reserved.
               </Typography>
             </Grid>
             <Grid item>

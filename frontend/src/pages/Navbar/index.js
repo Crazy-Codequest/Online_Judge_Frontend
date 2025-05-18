@@ -115,9 +115,9 @@ export default function Navbar() {
   };
 
   const handleMenuRightItemClick = (path) => {
+    handleRightMenuClose();
     setMobileMenuOpen(false);
     navigate(path);
-    handleRightMenuClose();
   };
 
   const handleSettingsMenuOpen = (e) => {

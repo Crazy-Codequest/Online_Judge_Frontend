@@ -83,7 +83,7 @@ export default function ForgotPassword() {
       localStorage.setItem("user", JSON.stringify({ user: res.data.user }));
       localStorage.setItem("token", res.data.token);
       dispatch(loginSuccess({ user: res.data.user }));
-      toast.success("Password reset successful! Please sign in.");
+      toast.success("Password reset successful! Signing you in...");
       navigate("/");
     } catch (err) {
       console.error(err.response.data);

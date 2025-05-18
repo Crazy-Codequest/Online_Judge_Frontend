@@ -46,6 +46,8 @@ export const urlConstants = {
   deleteList: baseUrl + "api/lists/delete",
   resendOTP: baseUrl + "api/auth/resend-otp",
   resetPassword: baseUrl + "api/auth/reset-password",
+  updateSocialImage: baseUrl + "api/social-profile/upload-profile-image",
+  getSocialImage: baseUrl + "api/social-profile/download-profile-image",
 };
 
 export const adminRoutes = {
