@@ -43,31 +43,15 @@ const TABS = [
 
 const DEFAULT_AVATAR = "https://res.cloudinary.com/drchiragb/image/upload/v1709912345/default-avatar.png";
 
-const PROFILE_DATA = {
-  name: "Chirag Bagde",
-  username: "chiragsbagde",
-  gender: "Male",
-  location: "Your location",
-  birthday: "Your birthday",
-  summary: "Tell us about yourself (interests, experience, etc.)",
-  website: "Your blog, portfolio, etc.",
-  github: "Your Github username or url",
-  linkedin: "Your LinkedIn username or url",
-  twitter: "Your X (formerly Twitter) username or url",
-  experience: {
-    work: "Add a workplace",
-    education: "Add a school",
-  },
-  skills: "Your Skills.",
-};
-
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("basic");
   const fileInputRef = useRef(null);
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const theme = useTheme();
+  const [socialLinks, setSocialLinks] = useState({});
+  const [user, setUser] = useState({});
 
-  const user = PROFILE_DATA;
+  const { user: userPr } = useSelector((state) => state.auth);
 
   const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -87,7 +71,52 @@ const ProfilePage = () => {
     }
   };
 
-  
+  const handleFieldSave = async (field, value) => {
+    try {
+      const payload = {
+        id: socialLinks._id,
+        u_id: userPr.id,
+      };
+      if (["name", "firstname"].includes(field)) payload.firstname = value;
+      else if (field === "lastname") payload.lastname = value;
+      else if (field === "email") payload.email = value;
+      else payload[field] = value;
+
+      await axios.post(urlConstants.updateSocialProfile, payload, getConfig());
+      toast.success(`${field.charAt(0).toUpperCase() + field.slice(1)} updated!`);
+      if (["website", "github", "linkedin", "twitter", "instagram", "facebook"].includes(field)) {
+        setSocialLinks((prev) => ({ ...prev, [field]: value }));
+      } else {
+        setUser((prev) => ({ ...prev, [field]: value }));
+      }
+    } catch (error) {
+      toast.error("Failed to update profile field.");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchSocialData = async () => {
+      try {
+        const res = await axios.post(
+          urlConstants.getSocialProfile,
+          { u_id: userPr.id },
+          getConfig()
+        );
+        setUser({
+          firstname: res.data.socialProfile.firstname || '',
+          lastname: res.data.socialProfile.lastname || '',
+          username: res.data.socialProfile.username || '',
+          summary: res.data.socialProfile.summary || '',
+          email: res.data.socialProfile.email || '',
+        });
+        setSocialLinks(res.data.socialProfile || {});
+      } catch (error) {
+        console.error("Error fetching social data:", error);
+      }
+    };
+    if (userPr?.id) fetchSocialData();
+  }, [userPr.id]);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -98,14 +127,14 @@ const ProfilePage = () => {
               Basic Info
             </Typography>
             <Divider />
-            <InfoRow label="Name" value={user.name} />
-            <InfoRow label="Username" value={user.username} />
-            <InfoRow label="Location" value={user.location} />
-            <InfoRow label="Summary" value={user.summary} />
-            <InfoRow label="Website" value={user.website} />
-            <InfoRow label="Github" value={user.github} />
-            <InfoRow label="LinkedIn" value={user.linkedin} />
-            <InfoRow label="X (formerly Twitter)" value={user.twitter} />
+            <InfoRow label="Firstname" value={user.firstname} onSave={(val) => handleFieldSave("firstname", val)} />
+            <InfoRow label="Lastname" value={user.lastname} onSave={(val) => handleFieldSave("lastname", val)} />
+            <InfoRow label="Username" value={user.username} onSave={(val) => handleFieldSave("username", val)} />
+            <InfoRow label="Summary" value={user.summary} onSave={(val) => handleFieldSave("summary", val)} />
+            <InfoRow label="Website" value={socialLinks.website} onSave={(val) => handleFieldSave("website", val)} />
+            <InfoRow label="Github" value={socialLinks.github} onSave={(val) => handleFieldSave("github", val)} />
+            <InfoRow label="LinkedIn" value={socialLinks.linkedin} onSave={(val) => handleFieldSave("linkedin", val)} />
+            <InfoRow label="X (formerly Twitter)" value={socialLinks.twitter} onSave={(val) => handleFieldSave("twitter", val)} />
           </Box>
         );
       case "points":
@@ -154,8 +183,6 @@ const ProfilePage = () => {
     }
   };
 
-  const {user: userPr} = useSelector((state) => state.auth);
-
   const fetchProfileImage = async (u_id) => {
     try {
       const res = await axios.get(`${urlConstants.getSocialImage}/${u_id}`, {
@@ -171,23 +198,6 @@ const ProfilePage = () => {
       return DEFAULT_AVATAR;
     }
   };
-
-  useEffect(() => {
-    const fetchSocialData = async () => {
-      try {
-        const res = await axios.post(
-          urlConstants.getSocialProfile,
-          { u_id: userPr.id },
-          getConfig()
-        );
-        console.log(res.data);
-        
-      }catch (error) {
-        console.error("Error fetching social data:", error);
-      };
-    };
-    fetchSocialData();
-  }, []);
 
   useEffect(() => {
     const getAvatar = async () => {
@@ -207,7 +217,6 @@ const ProfilePage = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
-      {/* Header */}
       <Box
         sx={{
           width: "100%",
@@ -269,10 +278,8 @@ const ProfilePage = () => {
         </Container>
       </Box>
 
-      {/* Main Content */}
       <Container maxWidth="md" sx={{ mt: 4, mb: 8, flex: 1 }}>
         <Grid container spacing={4} alignItems="flex-start">
-          {/* Sidebar */}
           <Grid item xs={12} md={3}>
             <List sx={{ p: 0 }}>
               {TABS.map((tab) => (
@@ -300,7 +307,6 @@ const ProfilePage = () => {
               
             </List>
           </Grid>
-          {/* Main Card */}
           <Grid item xs={12} md={9}>
             <Card sx={{ borderRadius: 3, boxShadow: theme.shadows[2], p: 0, bgcolor: "background.paper" }}>
               <CardContent sx={{ p: 0 }}>
@@ -311,7 +317,6 @@ const ProfilePage = () => {
         </Grid>
       </Container>
 
-      {/* Footer */}
       <Box
         component="footer"
         sx={{
@@ -331,13 +336,13 @@ const ProfilePage = () => {
             </Grid>
             <Grid item>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <MuiLink href={user.github} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+                <MuiLink href={socialLinks.github} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <GitHubIcon />
                 </MuiLink>
-                <MuiLink href={user.linkedin} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+                <MuiLink href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <LinkedInIcon />
                 </MuiLink>
-                <MuiLink href={user.twitter} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+                <MuiLink href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
                   <TwitterIcon />
                 </MuiLink>
               </Box>
@@ -349,14 +354,54 @@ const ProfilePage = () => {
   );
 };
 
-const InfoRow = ({ label, value }) => (
-  <Box sx={{ display: "flex", alignItems: "center", px: 4, py: 2, borderBottom: `1px solid ${useTheme().palette.divider}` }}>
-    <Typography sx={{ flex: 1, color: useTheme().palette.text.secondary, fontWeight: 500 }}>{label}</Typography>
-    <Typography sx={{ flex: 2, color: useTheme().palette.text.primary }}>{value}</Typography>
-    <Button size="small" sx={{ ml: 2, color: useTheme().palette.primary.main, fontWeight: 500, textTransform: "none" }} startIcon={<EditIcon fontSize="small" />}>
-      Edit
-    </Button>
-  </Box>
-);
+const InfoRow = ({ label, value, onSave }) => {
+  const theme = useTheme();
+  const [editing, setEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  const handleSave = () => {
+    setEditing(false);
+    if (onSave) onSave(inputValue);
+  };
+
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", px: 4, py: 2, borderBottom: `1px solid ${theme.palette.divider}` }}>
+      <Typography sx={{ flex: 1, color: theme.palette.text.secondary, fontWeight: 500 }}>{label}</Typography>
+      {editing ? (
+        <Box sx={{ flex: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <input
+            value={inputValue || ''}
+            onChange={e => setInputValue(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '6px 8px',
+              fontSize: '1rem',
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: 4,
+              background: theme.palette.background.paper,
+              color: theme.palette.text.primary
+            }}
+          />
+          <Button size="small" color="primary" variant="contained" sx={{ ml: 1 }} onClick={handleSave}>Save</Button>
+        </Box>
+      ) : (
+        <Typography sx={{ flex: 2, color: theme.palette.text.primary }}>{value}</Typography>
+      )}
+      <Button
+        size="small"
+        sx={{ ml: 2, color: theme.palette.primary.main, fontWeight: 500, textTransform: "none" }}
+        startIcon={<EditIcon fontSize="small" />}
+        onClick={() => setEditing(true)}
+        disabled={editing}
+      >
+        Edit
+      </Button>
+    </Box>
+  );
+};
 
 export default ProfilePage;
