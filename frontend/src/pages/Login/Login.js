@@ -195,6 +195,7 @@ export default function SignIn() {
               sx={{
                 mt: 2,
                 display: "flex",
+                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -209,6 +210,19 @@ export default function SignIn() {
                 >
                   <Typography sx={{ color: "primary.main" }} variant="h6">
                     Sign Up
+                  </Typography>
+                </Button>
+              </Typography>
+              <Typography variant="h6" color="text.secondary">
+                Forgot your password?
+                <Button
+                  onClick={() => navigate("/forgot-password")}
+                  variant="text"
+                  size="small"
+                  sx={{ textTransform: "none", ml: 1 }}
+                >
+                  <Typography sx={{ color: "primary.main" }} variant="h6">
+                    Reset Password
                   </Typography>
                 </Button>
               </Typography>

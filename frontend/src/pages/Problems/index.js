@@ -61,6 +61,7 @@ import LeftSidebar from "./components/LeftSidebar";
 import ProblemsTable from "./components/ProblemsTable";
 import { EditListDialog, DeleteListDialog } from "./components/ListPopups";
 import useProblemsApi from "./hooks/use-problems-api";
+import EmailForm from "./components/EmailMe";
 
 const difficultyColors = {
   easy: "#4CAF50",
@@ -366,35 +367,7 @@ const Problems = () => {
           gap: 3,
         }}
       >
-        <Paper
-          sx={{
-            p: 2,
-            borderRadius: 2,
-            boxShadow: "none",
-            border: `1px solid ${borderColor}`,
-            bgcolor: theme.palette.background.main,
-          }}
-        >
-          <Typography fontWeight={700} sx={{ mb: 1, fontSize: 16 }}>
-            Top Solvers
-          </Typography>
-          <List>
-            {["Alice", "Bob", "Charlie", "David", "Eve"].map((solver, idx) => (
-              <ListItem key={idx} sx={{ px: 0 }}>
-                <ListItemText
-                  primary={`${idx + 1}. ${solver}`}
-                  primaryTypographyProps={{ fontSize: 15, fontWeight: 500 }}
-                />
-                <Typography
-                  variant="body2"
-                  sx={{ fontSize: 14, color: theme.palette.text.secondary }}
-                >
-                  {Math.floor(Math.random() * 1000)} pts
-                </Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
+        <EmailForm />
         <Paper
           sx={{
             p: 2,

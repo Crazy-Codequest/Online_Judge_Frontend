@@ -4,6 +4,7 @@ import Navbar from "./pages/Navbar";
 import { Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "./features/auth/authSlice";
+import ForgotPassword from "./pages/Login/forgot-password";
 
 const Home = lazy(() => import("./pages/Home"));
 const SignIn = lazy(() => import("./pages/Login/Login"));
@@ -73,7 +74,16 @@ export const router = createBrowserRouter([
           const user = getUserFromStorage();
           return user ? redirect("/") : null;
         }
-      },      {
+      },   
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+        loader: () => {
+          const user = getUserFromStorage();
+          return user ? redirect("/") : null;
+        }
+      },
+      {
         path: "*",
         loader: () => {
           const user = getUserFromStorage();
