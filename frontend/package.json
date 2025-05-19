@@ -5,6 +5,8 @@
   "dependencies": {
     "@babel/runtime": "^7.23.6",
     "@date-io/date-fns": "^2.17.0",
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",

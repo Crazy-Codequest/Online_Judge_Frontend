@@ -17,7 +17,7 @@ const Competition = lazy(() => import("./pages/Competitions/Competition"));
 const CompetitionProblem = lazy(() => import("./pages/Competitions/Problems/Statement"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Compiler = lazy(() => import("./pages/Compiler"));
-const ProfilePage = lazy(() => import("./pages/Profile"));
+const ProfilePage = lazy(() => import("./views/profile"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 
 const getUserFromStorage = () => {
@@ -165,4 +165,4 @@ export const router = createBrowserRouter([
       }
     ]
   }
-]); 
+]);
