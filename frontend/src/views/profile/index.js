@@ -1,12 +1,10 @@
 import React from "react";
 import { Container, Grid, Box, Card, CardContent, Typography, Link as MuiLink, useTheme } from "@mui/material";
 import { GitHub as GitHubIcon, LinkedIn as LinkedInIcon, Twitter as TwitterIcon, Person as BasicInfoIcon, Storage as PointsIcon, Code as SubmissionsIcon, Star as AchievementsIcon } from "@mui/icons-material";
-import ProfileHeader from "../../components/Profile/ProfileHeader";
-import ProfileTabs from "../../components/Profile/ProfileTabs";
-import ProfileTabContent from "../../components/Profile/ProfileTabContent";
+import ProfileHeader from "../../components/Profile/components/Header";
+import ProfileTabs from "../../components/Profile/components/Tabs";
+import ProfileTabContent from "../../components/Profile/components/TabContent";
 import { useProfilePage } from "../../hooks/use-profile-page.hook";
-import UserAvatarSection from "./UserAvatarSection"; // You will need to create this component
-import SocialsTable from "./SocialsTable"; // You will need to create this component
 
 const TABS = [
   { label: "Basic Info", icon: <BasicInfoIcon />, key: "basic" },
@@ -26,10 +24,11 @@ const ProfilePage = () => {
     socialLinks,
     handleAvatarChange,
     handleFieldSave,
+    deleteProfileImage,
   } = useProfilePage();
 
   const isDark = theme.palette.mode === "dark";
-  const gradient = !isDark
+  const gradient = isDark
     ? "linear-gradient(-150deg, #222222 15%, #373737 70%, #3c4859 94%)"
     : "linear-gradient(-150deg, #e3e3e3 15%, #f5f5f5 70%, #dbeafe 94%)";
   
@@ -38,34 +37,22 @@ const ProfilePage = () => {
     window.location.href = '/login';
   };
 
-  let mainContent;
-  if (activeTab === "basic") {
-    mainContent = (
-      <ProfileTabContent activeTab={"basic"} user={user} socialLinks={socialLinks} handleFieldSave={handleFieldSave} />
-    );
-  } else if (activeTab === "socials") {
-    mainContent = (
-      <ProfileTabContent
-        activeTab={"socials"}
-        user={user}
-        socialLinks={socialLinks}
-        handleFieldSave={handleFieldSave}
-      />
-    );
-  } else if (activeTab === "avatar") {
-    mainContent = (
-      <ProfileTabContent
-        activeTab={"basic"}
-        user={user}
-        socialLinks={socialLinks}
-        handleFieldSave={handleFieldSave}
-      />
-    );
-  }
-
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
-      <ProfileHeader avatar={avatar} user={user} fileInputRef={fileInputRef} handleAvatarChange={handleAvatarChange} />
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "background.default",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <ProfileHeader
+        deleteProfileImage={deleteProfileImage}
+        avatar={avatar}
+        user={user}
+        fileInputRef={fileInputRef}
+        handleAvatarChange={handleAvatarChange}
+      />
       <Container maxWidth="md" sx={{ mt: 4, mb: 8, flex: 1 }}>
         <Grid container spacing={4} alignItems="flex-start">
           <Grid item xs={12} md={3}>
@@ -80,9 +67,21 @@ const ProfilePage = () => {
             />
           </Grid>
           <Grid item xs={12} md={9}>
-            <Card sx={{ borderRadius: 3, boxShadow: theme.shadows[2], p: 0, bgcolor: "background.paper" }}>
-              <CardContent sx={{ p: 0 }}>
-                {mainContent}
+            <Card
+              sx={{
+                borderRadius: 3,
+                boxShadow: theme.shadows[2],
+                p: 0,
+                bgcolor: "background.paper",
+              }}
+            >
+              <CardContent sx={{ p: 2 }}>
+                <ProfileTabContent
+                  activeTab={activeTab}
+                  user={user}
+                  socialLinks={socialLinks}
+                  handleFieldSave={handleFieldSave}
+                />
               </CardContent>
             </Card>
           </Grid>
@@ -93,27 +92,47 @@ const ProfilePage = () => {
         sx={{
           py: 3,
           px: 2,
-          mt: 'auto',
+          mt: "auto",
           background: gradient,
           color: theme.palette.common.white,
         }}
       >
         <Container maxWidth="md">
-          <Grid container spacing={3} justifyContent="space-between" alignItems="center">
+          <Grid
+            container
+            spacing={3}
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Grid item>
-              <Typography variant="body2" color={theme.palette.grey[300]}>
+              <Typography variant="body2" color={theme.palette.primary.main}>
                 © 2025 Crazy Codequest. All rights reserved.
               </Typography>
             </Grid>
             <Grid item>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <MuiLink href={socialLinks.github} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <MuiLink
+                  href={socialLinks.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: theme.palette.primary.main }}
+                >
                   <GitHubIcon />
                 </MuiLink>
-                <MuiLink href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+                <MuiLink
+                  href={socialLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: theme.palette.primary.main }}
+                >
                   <LinkedInIcon />
                 </MuiLink>
-                <MuiLink href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.common.white }}>
+                <MuiLink
+                  href={socialLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: theme.palette.primary.main }}
+                >
                   <TwitterIcon />
                 </MuiLink>
               </Box>

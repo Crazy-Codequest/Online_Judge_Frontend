@@ -4,11 +4,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const ProfileTabs = ({ activeTab, setActiveTab, onLogout }) => {
   const theme = useTheme();
-  // Sidebar tabs for navigation
   const sidebarTabs = [
     { label: "Basic Info", key: "basic" },
     { label: "Socials", key: "socials" },
-    { label: "User Avatar", key: "avatar" },
+    { label: "Avatar playground", key: "avatar" },
   ];
 
   return (

@@ -2,18 +2,19 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getConfig } from "../utils/getConfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { urlConstants } from "../apis";
+import { setAvatar } from "../features/auth/dataSlice";
 
-const DEFAULT_AVATAR = "https://res.cloudinary.com/drchiragb/image/upload/v1709912345/default-avatar.png";
 
 export function useProfilePage() {
   const [activeTab, setActiveTab] = useState("basic");
   const fileInputRef = useRef(null);
-  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const [socialLinks, setSocialLinks] = useState({});
   const [user, setUser] = useState({});
   const { user: userPr } = useSelector((state) => state.auth);
+  const { avatar } = useSelector(state => state.data);
+  const dispatch = useDispatch();
 
   const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -24,7 +25,7 @@ export function useProfilePage() {
       try {
         await axios.post(urlConstants.updateSocialImage, formData, getConfig());
         toast.success("Avatar updated successfully!");
-        setAvatar(URL.createObjectURL(file));
+        dispatch(setAvatar(URL.createObjectURL(file)));
       } catch (error) {
         console.error("Error uploading avatar:", error);
       }
@@ -68,6 +69,7 @@ export function useProfilePage() {
           username: res.data.socialProfile.username || '',
           summary: res.data.socialProfile.summary || '',
           email: res.data.socialProfile.email || '',
+          mobile: res.data.socialProfile.mobile || ''
         });
         setSocialLinks(res.data.socialProfile || {});
       } catch (error) {
@@ -88,16 +90,28 @@ export function useProfilePage() {
       return URL.createObjectURL(res.data);
     } catch (error) {
       console.error("Error fetching profile image:", error);
-      return DEFAULT_AVATAR;
+      return  ""      ;
     }
   };
+
+  const deleteProfileImage = async (u_id) => {
+    try {
+      const res = await axios.delete(`${urlConstants.deleteSocialImage}/${u_id}`, getConfig());
+      console.log(res.data);
+      toast.success("File deleted successflly!")
+      dispatch(setAvatar(null));
+    }catch(e){
+      console.error(e);
+      toast.error("Unable to delete the file.")
+    }
+  }
 
   useEffect(() => {
     const getAvatar = async () => {
       try {
         if (userPr?.id) {
           const imgUrl = await fetchProfileImage(userPr.id);
-          setAvatar(imgUrl);
+          dispatch(setAvatar(imgUrl));
         }
       } catch (error) {
         console.error("Error fetching avatar:", error);
@@ -115,5 +129,6 @@ export function useProfilePage() {
     socialLinks,
     handleAvatarChange,
     handleFieldSave,
+    deleteProfileImage,
   };
 }

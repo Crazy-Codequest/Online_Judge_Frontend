@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, Divider } from "@mui/material";
-import InfoRow from "./InfoRow";
+import InfoRow from "../InfoRow";
+import AvatarPlayground from "../../../views/profile/UserAvatarSection";
+import { setAvatarProps } from "../../../features/auth/dataSlice";
+import { useDispatch } from "react-redux";
 
 const ProfileTabContent = ({
   activeTab,
@@ -8,6 +11,17 @@ const ProfileTabContent = ({
   socialLinks,
   handleFieldSave
 }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const setAvatar = () => {
+      const avatarProps = localStorage.getItem("avatar");
+      if (avatarProps) dispatch(setAvatarProps(JSON.parse(avatarProps)));
+    }
+    
+    setAvatar();
+  }, [activeTab]);
+
   switch (activeTab) {
     case "basic":
       return (
@@ -55,6 +69,8 @@ const ProfileTabContent = ({
           />
         </Box>
       );
+      case "avatar":
+         return <AvatarPlayground />
     default:
       return null;
   }

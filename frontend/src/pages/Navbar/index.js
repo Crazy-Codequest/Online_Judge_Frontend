@@ -52,6 +52,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ProfileAvatar from "../../components/Profile/components/ProfileAvatar";
+import { useProfilePage } from "../../hooks/use-profile-page.hook";
 
 export default function Navbar() {
   const { palette } = useTheme();
@@ -73,6 +75,7 @@ export default function Navbar() {
   const theme = useTheme();
 
   const { themePref, toggleTheme } = useContext(ThemeContext);
+  const { avatar } = useProfilePage();
 
   const darkThemeStyles = {
     background: theme.palette.mode === "dark" ? "#121212" : "#f7f8fa",
@@ -366,7 +369,7 @@ export default function Navbar() {
               onBlur={() => setShowSearch(false)}
               size="small"
               value={search}
-              sx={{  borderRadius: 2, minWidth: 180 }}
+              sx={{ borderRadius: 2, minWidth: 180 }}
               autoFocus
             />
           ) : (
@@ -380,7 +383,11 @@ export default function Navbar() {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ mx: 1, display: { xs: "none", md: "block" }, bgcolor: darkThemeStyles.borderColor }}
+            sx={{
+              mx: 1,
+              display: { xs: "none", md: "block" },
+              bgcolor: darkThemeStyles.borderColor,
+            }}
           />
           <IconButton
             onClick={handleSettingsMenuOpen}
@@ -407,9 +414,26 @@ export default function Navbar() {
           <Divider
             orientation="vertical"
             flexItem
-            sx={{ mx: 1, display: { xs: "none", md: "block" }, bgcolor: darkThemeStyles.borderColor }}
+            sx={{
+              mx: 1,
+              display: { xs: "none", md: "block" },
+              bgcolor: darkThemeStyles.borderColor,
+            }}
           />
-          <Avatar
+          <ProfileAvatar
+            onClick={handleRightMenuClick}
+            src={avatar}
+            alt="avatar"
+            userId={user.id}
+            sx={{
+              width: 36,
+              height: 36,
+              boxShadow: theme.shadows[2],
+              background: theme.palette.background.paper,
+              cursor: "pointer"
+            }}
+          />
+          {/* <Avatar
             sx={{
               bgcolor: "#1976d2",
               width: 36,
@@ -422,7 +446,7 @@ export default function Navbar() {
             onClick={handleRightMenuClick}
           >
             {user?.name ? user.name[0].toUpperCase() : "C"}
-          </Avatar>
+          </Avatar> */}
         </Box>
 
         <Menu
@@ -692,7 +716,11 @@ export default function Navbar() {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6" fontWeight={700} color={darkThemeStyles.color}>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            color={darkThemeStyles.color}
+          >
             Notifications
           </Typography>
           {notifications.length > 0 && (
@@ -715,7 +743,11 @@ export default function Navbar() {
               <ListItem
                 alignItems="flex-start"
                 key={index}
-                sx={{ px: 2, py: 1.5, borderBottom: `1px solid ${darkThemeStyles.borderColor}` }}
+                sx={{
+                  px: 2,
+                  py: 1.5,
+                  borderBottom: `1px solid ${darkThemeStyles.borderColor}`,
+                }}
               >
                 <ListItemAvatar>
                   <MuiAvatar

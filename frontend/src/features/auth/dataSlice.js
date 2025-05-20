@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   timestamp: null,
-  search: ""
+  search: "",
+  avatarProps: {},
+  avatar: "",
 };
 
 const dataSlice = createSlice({
@@ -16,10 +18,18 @@ const dataSlice = createSlice({
     setSearch: (state, action) => {
       const { payload } = action;
       state.search = payload;
+    },
+    setAvatarProps: (state, action) => {
+      const { payload } = action;
+      state.avatarProps = payload;
+    },
+    setAvatar: (state, action) => {
+      const { payload } = action;
+      state.avatar = payload;
     }
   },
 });
 
-export const { setTimestamp, setSearch } = dataSlice.actions;
+export const { setTimestamp, setSearch, setAvatarProps, setAvatar } = dataSlice.actions;
 
 export default dataSlice.reducer;
