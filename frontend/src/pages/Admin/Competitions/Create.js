@@ -142,8 +142,7 @@ const Create = ({
   return (
     <Dialog
       fullWidth
-      maxWidth={false}
-      fullScreen
+      maxWidth="md"
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
     >

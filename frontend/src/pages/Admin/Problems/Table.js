@@ -85,14 +85,26 @@ const ProblemsTable = ({
           </TableHead>
           <TableBody>
             {problems.map((problem) => (
-              <TableRow key={problem._id}>
+              <TableRow
+                key={problem._id}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: theme => theme.palette.mode === 'dark' ? '#23272b' : '#f5f5f5',
+                    transition: 'background 0.2s',
+                  },
+                  '&.Mui-selected, &.Mui-selected:hover': {
+                    backgroundColor: theme => theme.palette.mode === 'dark' ? '#23272b' : '#e0e0e0',
+                    color: theme => theme.palette.primary.main,
+                  },
+                }}
+              >
                 <TableCell className="center">{problem.statement}</TableCell>
                 <TableCell className="center">{problem.difficulty}</TableCell>
                 <TableCell className="center">{problem.topic}</TableCell>
                 <TableCell className="center">
                   {problem.competition_problem ? "true" : "false"}
                 </TableCell>
-                <TableCell className="center">
+                <TableCell sx={{ display: "flex", gap: 2 }} className="center">
                   <Button
                     onClick={() => {
                       console.log(problem);

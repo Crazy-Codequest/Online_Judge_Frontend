@@ -15,6 +15,7 @@ const ProblemRoutes = ({
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [problemsData, setProblemsData] = useState([]);
+  
   return (
     <Box sx={{ width: "100%", padding: "20px" }}>
       <Table

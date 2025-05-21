@@ -131,8 +131,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
       fullWidth
-      maxWidth={false}
-      fullScreen
+      maxWidth="md"
       sx={{ overflowY: "hidden" }}
     >
       <DialogTitle sx={{ mt: 2, ml: 2 }}>Create Problem</DialogTitle>
@@ -149,8 +148,7 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
       </Box>
       <DialogContent
         sx={{
-          p: "2rem",
-          width: "80%",
+          width: "95%",
           margin: "0 auto",
         }}
       >
@@ -243,7 +241,6 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           <Box
             sx={{
               height: "12rem",
-              p: "2rem",
               overflowY: "scroll",
               mt: 2,
             }}
@@ -335,12 +332,14 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setProblemsData }) => {
           Add TestCases
         </Button>
       </DialogContent>
-      <DialogActions sx={{
-        mb: 2,
-        mr: 2,
-        display: "flex",
-        gap: "1rem",
-      }}>
+      <DialogActions
+        sx={{
+          mb: 2,
+          mr: 2,
+          display: "flex",
+          gap: "1rem",
+        }}
+      >
         <Button onClick={handleCreateProblem}>Create</Button>
         <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
       </DialogActions>

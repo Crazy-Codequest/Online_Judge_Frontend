@@ -83,11 +83,11 @@ const UserTable = ({
           <TableBody>
             {users.map((user) => (
               <TableRow key={user._id}>
-                <TableCell className="center">{user.firstname}</TableCell>
-                <TableCell className="center">{user.lastname}</TableCell>
-                <TableCell className="center">{user.email}</TableCell>
-                <TableCell className="center">{user.role}</TableCell>
-                <TableCell className="center">
+                <TableCell>{user.firstname}</TableCell>
+                <TableCell>{user.lastname}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell sx={{ display: "flex", gap: 2 }}>
                   <Button
                     onClick={() => {
                       setSelectedUser(user);

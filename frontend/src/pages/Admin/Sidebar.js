@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
-import { Typography } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 
 const Sidebar = ({
   setOpenCreateDialog,
@@ -26,13 +26,31 @@ const Sidebar = ({
     setSidebarCollapsed(true);
   };
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   return (
     <ReactSidebar
       collapsed={sidebarCollapsed}
       collapseSidebar={collapseSidebar}
-      style={{
+      rootStyles={{
         width: "20%",
+        color: "white",
+
+        "& .ps-sidebar-root": {
+          backgroundColor: theme.palette.background.main,
+        },
+        "& .css-dip3t8": {
+          backgroundColor: theme.palette.background.main,
+        },
+        "& .ps-menuitem-root:hover, & .ps-menuitem-root.ps-active, & .ps-submenu-root .ps-menuitem-root:hover, & .ps-submenu-root .ps-menuitem-root.ps-active": {
+          backgroundColor:
+            theme.palette.mode === "dark" ? "#23272b" : "#e0e0e0",
+          color: theme.palette.primary.main,
+          transition: "background 0.2s, color 0.2s",
+        },
+        "& .ps-sidebar-root.ps-open, & .css-1tqrhto": {
+          backgroundColor: theme.palette.background.main,
+        },
       }}
     >
       <Menu>

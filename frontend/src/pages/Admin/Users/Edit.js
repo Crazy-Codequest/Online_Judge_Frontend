@@ -7,6 +7,7 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  IconButton,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { getConfig } from "../../../utils/getConfig";
@@ -68,15 +69,23 @@ const Edit = ({
       <div>
         <Dialog
           fullWidth
-          maxWidth={false}
-          fullScreen
+          maxWidth="md"
           open={openEditDialog}
           onClose={() => setOpenEditDialog(false)}
         >
-          <DialogTitle>Edit User</DialogTitle>
-          <div onClick={() => setOpenEditDialog(false)} className="close-icon">
-            <CloseIcon />
-          </div>
+           <DialogTitle
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              pr: 2,
+            }}
+          >
+            Edit User
+            <IconButton onClick={() => setOpenEditDialog(false)}>
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
           <DialogContent className="dialog-content">
             <DialogContentText>Enter user details</DialogContentText>
             <div className="flex-end">

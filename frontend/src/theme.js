@@ -59,7 +59,7 @@ export function setUpTheme(mode) {
         htmlFontSize: 10,
         h2: {
           fontSize: "2rem",
-          fontWeight: "bold"
+          fontWeight: "bold",
         },
         body1: {
           fontSize: "1.4rem",
@@ -102,11 +102,15 @@ export function setUpTheme(mode) {
             padding: 0;
             margin: 0;
             font-size: 62.5%;
-            background-color: ${palette.background.primary};
+            background-color: ${palette.background.main};
             overflow-x: hidden;
           }
           .custom-toast {
             font-size: 1.2rem;
+          }
+          .ps-sidebar-root {
+            background-color: black !important;
+            color: white;
           }
         `,
         },

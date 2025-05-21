@@ -7,16 +7,18 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  MenuItem,
+  IconButton,
+  Grid,
+  Typography,
+  Box,
 } from "@mui/material";
-import axios from "axios";
-import { urlConstants } from "../../../apis";
-import { toast } from "react-toastify";
-import { getConfig } from "../../../utils/getConfig";
 import CloseIcon from "@mui/icons-material/Close";
-
-import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { urlConstants } from "../../../apis";
+import { getConfig } from "../../../utils/getConfig";
 
 const Edit = ({
   selectedProblem,
@@ -24,7 +26,6 @@ const Edit = ({
   setOpenEditDialog,
   setProblems,
   problems,
-  updateUser,
 }) => {
   const [updatedProblemData, setUpdatedProblemData] = useState({
     statement: selectedProblem.statement,
@@ -49,61 +50,43 @@ const Edit = ({
         getConfig()
       );
       const updatedProblem = { ...selectedProblem, ...updatedProblemData };
-      setProblems(
-        problems.map((problem) =>
-          problem._id === updatedProblem._id ? updatedProblem : problem
-        )
+      setProblems((prev) =>
+        prev.map((p) => (p._id === updatedProblem._id ? updatedProblem : p))
       );
-      setOpenEditDialog(false);
       toast.success("Problem updated successfully!");
+      setOpenEditDialog(false);
     } catch (e) {
-      console.log(e.message);
+      console.error(e.message);
+      toast.error("Failed to update problem.");
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedProblemData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleAddExample = () => {
-    setUpdatedProblemData((prevProblem) => ({
-      ...prevProblem,
-      examples: [
-        ...prevProblem.examples,
-        { input: "", output: "", explanation: "" },
-      ],
-    }));
+    setUpdatedProblemData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleArrayInputChange = (name, value) => {
-    setUpdatedProblemData((prevData) => ({
-      ...prevData,
-      [name]: value,
+    setUpdatedProblemData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddExample = () => {
+    setUpdatedProblemData((prev) => ({
+      ...prev,
+      examples: [...prev.examples, { input: "", output: "", explanation: "" }],
     }));
   };
 
   const handleDeleteExample = (index) => {
-    const updatedExamples = [...updatedProblemData.examples];
-    updatedExamples.splice(index, 1);
-
-    setUpdatedProblemData((prevProblem) => ({
-      ...prevProblem,
-      examples: updatedExamples,
-    }));
+    const examples = [...updatedProblemData.examples];
+    examples.splice(index, 1);
+    setUpdatedProblemData((prev) => ({ ...prev, examples }));
   };
 
   const handleExampleChange = (index, field, value) => {
-    const updatedExamples = [...updatedProblemData.examples];
-    updatedExamples[index][field] = value;
-
-    setUpdatedProblemData((prevProblem) => ({
-      ...prevProblem,
-      examples: updatedExamples,
-    }));
+    const examples = [...updatedProblemData.examples];
+    examples[index][field] = value;
+    setUpdatedProblemData((prev) => ({ ...prev, examples }));
   };
 
   return (
@@ -112,152 +95,230 @@ const Edit = ({
         open={openEditDialog}
         onClose={() => setOpenEditDialog(false)}
         fullWidth
-        maxWidth={false}
-        fullScreen
+        maxWidth="md"
       >
-        <DialogTitle className="mt-2 ml-2">Edit Problem</DialogTitle>
-        <div onClick={() => setOpenEditDialog(false)} className="close-icon">
-          <CloseIcon />
-        </div>
-        <DialogContent className="dialog-content">
-          <DialogContentText>Enter problem details</DialogContentText>
-          <TextField
-            label="Statement"
-            variant="outlined"
-            fullWidth
-            margin="dense"
-            name="statement"
-            value={updatedProblemData.statement}
-            onChange={handleInputChange}
-          />
-          <div className="flex-end">
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            pr: 2,
+          }}
+        >
+          Edit Problem
+          <IconButton onClick={() => setOpenEditDialog(false)}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            Update the problem details below.
+          </DialogContentText>
+
+          <Box display="flex" flexDirection="column" gap={2}>
             <TextField
-              label="Difficulty"
-              variant="outlined"
-              className="mt-1"
-              margin="dense"
-              name="difficulty"
-              select
-              style={{ width: "45%" }}
-              value={updatedProblemData.difficulty}
+              label="Statement"
+              name="statement"
+              value={updatedProblemData.statement}
               onChange={handleInputChange}
-            >
-              <MenuItem value="easy">Easy</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="hard">Hard</MenuItem>
-            </TextField>
-            <TextField
-              value={updatedProblemData.topic}
-              label="Topic"
-              className="mt-1"
-              variant="outlined"
               fullWidth
-              name="topic"
-              select
-              style={{ width: "45%" }}
-              margin="dense"
+              multiline
+              minRows={2}
+            />
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label="Difficulty"
+                  name="difficulty"
+                  value={updatedProblemData.difficulty}
+                  onChange={handleInputChange}
+                  select
+                  fullWidth
+                >
+                  <MenuItem value="easy">Easy</MenuItem>
+                  <MenuItem value="medium">Medium</MenuItem>
+                  <MenuItem value="hard">Hard</MenuItem>
+                </TextField>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TextField
+                  label="Topic"
+                  name="topic"
+                  value={updatedProblemData.topic}
+                  onChange={handleInputChange}
+                  select
+                  fullWidth
+                >
+                  <MenuItem value="strings">Strings</MenuItem>
+                  <MenuItem value="arrays">Arrays</MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
+
+            <TextField
+              label="Competition Problem"
+              name="competition_problem"
+              value={updatedProblemData.competition_problem}
               onChange={handleInputChange}
+              select
+              fullWidth
             >
-              <MenuItem value="strings">Strings</MenuItem>
-              <MenuItem value="arrays">Arrays</MenuItem>
+              <MenuItem value={true}>Yes</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
             </TextField>
-          </div>
 
-          <TextField
-            value={updatedProblemData.competition_problem}
-            label="Competition Problem"
-            variant="outlined"
-            className="mt-1"
-            fullWidth
-            margin="dense"
-            name="competition_problem"
-            select
-            onChange={handleInputChange}
-          >
-            <MenuItem value={true}>Yes</MenuItem>
-            <MenuItem value={false}>No</MenuItem>
-          </TextField>
+            <TextField
+              label="Description"
+              name="description"
+              value={updatedProblemData.description?.join("\n")}
+              onChange={(e) =>
+                handleArrayInputChange(
+                  "description",
+                  e.target.value.split("\n")
+                )
+              }
+              fullWidth
+              multiline
+              minRows={3}
+            />
 
-          <TextField
-            value={updatedProblemData.description?.join("\n")}
-            label="Description"
-            variant="outlined"
-            className="mt-1"
-            fullWidth
-            multiline
-            rows={3}
-            margin="dense"
-            name="description"
-            onChange={(e) =>
-              handleArrayInputChange("description", e.target.value.split("\n"))
-            }
-          />
-          <TextField
-            value={updatedProblemData.constraints?.join("\n")}
-            label="Constraints"
-            variant="outlined"
-            className="mt-1"
-            fullWidth
-            multiline
-            rows={3}
-            margin="dense"
-            name="constraints"
-            onChange={(e) =>
-              handleArrayInputChange("constraints", e.target.value.split("\n"))
-            }
-          />
-          {updatedProblemData.examples?.length && (
-            <div className="examples mt-2">
-              {updatedProblemData.examples.map((example, index) => (
-                <div key={index}>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Constraints
+              </Typography>
+
+              {updatedProblemData.constraints?.map((item, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  gap={1}
+                  alignItems="center"
+                  sx={{ mb: 1 }}
+                >
                   <TextField
-                    label="Input Example"
-                    variant="outlined"
+                    value={item}
+                    onChange={(e) => {
+                      const updated = [...updatedProblemData.constraints];
+                      updated[index] = e.target.value;
+                      setUpdatedProblemData((prev) => ({
+                        ...prev,
+                        constraints: updated,
+                      }));
+                    }}
+                    label={`Constraint ${index + 1}`}
                     fullWidth
-                    margin="dense"
-                    name={`inputExample-${index}`}
-                    value={example.input}
-                    onChange={(e) =>
-                      handleExampleChange(index, "input", e.target.value)
-                    }
+                    size="small"
                   />
-
-                  <TextField
-                    label="Output Example"
-                    variant="outlined"
-                    fullWidth
-                    margin="dense"
-                    name={`outputExample-${index}`}
-                    value={example.output}
-                    onChange={(e) =>
-                      handleExampleChange(index, "output", e.target.value)
-                    }
-                  />
-
-                  <TextField
-                    label="Explanation"
-                    variant="outlined"
-                    fullWidth
-                    margin="dense"
-                    name={`explanation-${index}`}
-                    value={example.explanation}
-                    onChange={(e) =>
-                      handleExampleChange(index, "explanation", e.target.value)
-                    }
-                  />
-
-                  <IconButton onClick={() => handleDeleteExample(index)}>
+                  <IconButton
+                    onClick={() => {
+                      const updated = [...updatedProblemData.constraints];
+                      updated.splice(index, 1);
+                      setUpdatedProblemData((prev) => ({
+                        ...prev,
+                        constraints: updated,
+                      }));
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
-                </div>
+                </Box>
               ))}
-            </div>
-          )}
-          <Button onClick={handleAddExample}>Add Example</Button>
+
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() =>
+                  setUpdatedProblemData((prev) => ({
+                    ...prev,
+                    constraints: [...(prev.constraints || []), ""],
+                  }))
+                }
+              >
+                Add Constraint
+              </Button>
+            </Box>
+
+            {updatedProblemData.examples?.length > 0 && (
+              <>
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  Examples
+                </Typography>
+
+                {updatedProblemData.examples.map((example, index) => (
+                  <Box
+                    key={index}
+                    display="flex"
+                    gap={2}
+                    alignItems="flex-start"
+                  >
+                    <Box flexGrow={1}>
+                      <TextField
+                        label="Input"
+                        value={example.input}
+                        onChange={(e) =>
+                          handleExampleChange(index, "input", e.target.value)
+                        }
+                        fullWidth
+                        margin="dense"
+                      />
+                      <TextField
+                        label="Output"
+                        value={example.output}
+                        onChange={(e) =>
+                          handleExampleChange(index, "output", e.target.value)
+                        }
+                        fullWidth
+                        margin="dense"
+                      />
+                      <TextField
+                        label="Explanation"
+                        value={example.explanation}
+                        onChange={(e) =>
+                          handleExampleChange(
+                            index,
+                            "explanation",
+                            e.target.value
+                          )
+                        }
+                        fullWidth
+                        margin="dense"
+                      />
+                    </Box>
+                    <IconButton
+                      onClick={() => handleDeleteExample(index)}
+                      sx={{ mt: 1 }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                ))}
+              </>
+            )}
+
+            <Button
+              variant="outlined"
+              onClick={handleAddExample}
+              sx={{ mt: 2 }}
+            >
+              Add Example
+            </Button>
+          </Box>
         </DialogContent>
-        <DialogActions className="action-buttons">
-          <Button onClick={handleUpdateProblem}>Save</Button>
-          <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
+
+        <DialogActions sx={{ p: 2 }}>
+          <Button
+            onClick={handleUpdateProblem}
+            variant="contained"
+            color="primary"
+          >
+            Save
+          </Button>
+          <Button onClick={() => setOpenEditDialog(false)} variant="outlined">
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     )

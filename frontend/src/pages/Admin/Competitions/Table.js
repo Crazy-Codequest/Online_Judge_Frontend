@@ -82,35 +82,36 @@ const CompetitionTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {competitions.length > 0 && competitions.map((competition) => (
-              <TableRow key={competition._id}>
-                <TableCell className="center">{competition.title}</TableCell>
-                <TableCell className="center">
-                  {getFormattedDateTime(competition.start_date)}
-                </TableCell>
-                <TableCell className="center">
-                  {getFormattedDateTime(competition.end_date)}
-                </TableCell>
-                <TableCell className="center">
-                  <Button
-                    onClick={() => {
-                      setSelectedCompetition(competition);
-                      setOpenEditDialog(true);
-                    }}
-                  >
-                    <Edit />
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setSelectedCompetition(competition);
-                      setOpenDeleteDialog(true);
-                    }}
-                  >
-                    <Delete />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {competitions.length > 0 &&
+              competitions.map((competition) => (
+                <TableRow key={competition._id}>
+                  <TableCell>{competition.title}</TableCell>
+                  <TableCell>
+                    {getFormattedDateTime(competition.start_date)}
+                  </TableCell>
+                  <TableCell>
+                    {getFormattedDateTime(competition.end_date)}
+                  </TableCell>
+                  <TableCell sx={{ display: "flex", gap: 2 }}>
+                    <Button
+                      onClick={() => {
+                        setSelectedCompetition(competition);
+                        setOpenEditDialog(true);
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setSelectedCompetition(competition);
+                        setOpenDeleteDialog(true);
+                      }}
+                    >
+                      <Delete />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

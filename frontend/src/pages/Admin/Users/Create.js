@@ -7,6 +7,7 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
 import { urlConstants } from "../../../apis";
@@ -55,15 +56,23 @@ const Create = ({ openCreateDialog, setOpenCreateDialog, setUsersData }) => {
   return (
     <Dialog
       fullWidth
-      maxWidth={false}
-      fullScreen
+      maxWidth="md"
       open={openCreateDialog}
       onClose={() => setOpenCreateDialog(false)}
     >
-      <DialogTitle className="mt-2 ml-2">Create User</DialogTitle>
-      <div onClick={() => setOpenCreateDialog(false)} className="close-icon">
-        <CloseIcon />
-      </div>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          pr: 2,
+        }}
+      >
+        Create User
+        <IconButton onClick={() => openCreateDialog(false)}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent className="dialog-content">
         <DialogContentText>Enter user details</DialogContentText>
         <div className="flex-end">
