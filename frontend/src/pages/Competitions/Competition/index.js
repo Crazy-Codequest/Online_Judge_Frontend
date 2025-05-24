@@ -60,7 +60,7 @@ const Competition = () => {
         urlConstants.getCompetitionOverview,
         {
           id: params.id,
-          userId: user._id
+          userId: user.id
         },
         getConfig()
       );
@@ -103,7 +103,7 @@ const Competition = () => {
         urlConstants.getUserSubmissions,
         {
           c_id: params.id,
-          u_id: user._id,
+          u_id: user.id,
           verdict: "passed",
         },
         getConfig()
@@ -158,7 +158,7 @@ const Competition = () => {
       await axios.post(
         urlConstants.registerUserForCompetiton,
         {
-          user_id: user._id,
+          user_id: user.id,
           id: params.id,
         },
         getConfig()

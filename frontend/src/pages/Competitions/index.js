@@ -35,7 +35,7 @@ const Competitions = () => {
       await axios.post(
         urlConstants.addUserForCompetiton,
         {
-          user_id: user._id,
+          user_id: user.id,
           id,
         },
         getConfig()
@@ -47,7 +47,7 @@ const Competitions = () => {
                 ...competition,
                 user: {
                   ...competition.user,
-                  userId: user._id, timestamp: new Date() ,
+                  userId: user.id, timestamp: new Date() ,
                 },
               }
             : competition
@@ -72,14 +72,14 @@ const Competitions = () => {
   
   const getCompetitions = async () => {
     try {
-      console.log("Fetching competitions for user:", user?._id);
-      if (!user?._id) {
+      console.log("Fetching competitions for user:", user?.id);
+      if (!user?.id) {
         console.error("No user ID available");
         setLoading(false);
         return;
       }
       const { data } = await axios.get(
-        `${urlConstants.getCompetitions}?id=${user._id}`,
+        `${urlConstants.getCompetitions}?id=${user.id}`,
         getConfig()
       );
       console.log("Competitions API Response:", data);
@@ -94,7 +94,7 @@ const Competitions = () => {
 
   const foundUser = (competition) => {    
     if(!competition.user) return false;
-    return competition.user["userId"] === user._id;
+    return competition.user["userId"] === user.id;
   };
 
   const handleCompetitionRedirect = (competition) => {
@@ -117,7 +117,7 @@ const Competitions = () => {
   useEffect(() => {
     console.log("Competitions useEffect triggered");
     getCompetitions();
-  }, [user?._id]);
+  }, [user?.id]);
 
   if (loading) {
     console.log("Competitions Component - Loading state");
