@@ -115,11 +115,13 @@ export default function Navbar() {
     navigate(path);
     handleLeftMenuClose();
     setMobileMenuOpen(false);
+    setAnchorelLeft(null);
   };
 
   const handleMenuRightItemClick = (path) => {
     handleRightMenuClose();
     setMobileMenuOpen(false);
+    setAnchorelRight(null);
     navigate(path);
   };
 
@@ -147,10 +149,10 @@ export default function Navbar() {
 
   const getAllNotifications = async () => {
     try {
-      const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user._id}`, getConfig());
+      const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user.id}`, getConfig());
       setNotifications(res.data);
     }catch(e){
-      console.log(e);
+      console.error(e);
     }
   }
 

@@ -24,10 +24,10 @@ const Delete = ({
   const handleDeleteUser = async () => {
     try {
       await axios.delete(
-        `${urlConstants.singleUser}/${selectedUser._id}`,
+        `${urlConstants.singleUser}/${selecteduser.id}`,
         getConfig()
       );
-      setUsers(users.filter((user) => user._id !== selectedUser._id));
+      setUsers(users.filter((user) => user.id !== selecteduser.id));
       setSelectedUser(null);
       setOpenDeleteDialog(false);
       toast.success("User deleted successfully!");

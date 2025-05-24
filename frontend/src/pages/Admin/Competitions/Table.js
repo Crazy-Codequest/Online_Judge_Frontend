@@ -41,7 +41,7 @@ const CompetitionTable = ({
       );
       setCompetitionsData(data.competitions);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

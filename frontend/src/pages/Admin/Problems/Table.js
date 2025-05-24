@@ -37,12 +37,12 @@ const ProblemsTable = ({
   const getProblems = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.getProblems}/${user._id}`,
+        `${adminRoutes.getProblems}/${user.id}`,
         getConfig()
       );
       setProblemsData(data.problems);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

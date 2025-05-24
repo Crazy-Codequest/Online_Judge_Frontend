@@ -128,7 +128,7 @@ const Problems = () => {
         const data = await fetchTopicCounts();
         setTopicCounts(data.topicCounts);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
 
@@ -137,7 +137,7 @@ const Problems = () => {
         const data = await fetchMyLists(user.id);
         setMyLists(data.lists);
       } catch(e){
-        console.log(e);
+        console.error(e);
       }
     };
 

@@ -40,14 +40,14 @@ const Edit = ({
       await axios.post(
         urlConstants.updateUserProfile,
         {
-          id: selectedUser._id,
+          id: selecteduser.id,
           user: { ...selectedUser, ...updatedUserData },
         },
         getConfig()
       );
       const updatedUser = { ...selectedUser, ...updatedUserData };
       setUsers(
-        users.map((user) => (user._id === updatedUser._id ? updatedUser : user))
+        users.map((user) => (user.id === updateduser.id ? updatedUser : user))
       );
       setOpenEditDialog(false);
       toast.success("User updated successfully!");

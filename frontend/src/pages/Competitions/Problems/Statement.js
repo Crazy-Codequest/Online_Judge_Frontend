@@ -31,13 +31,13 @@ const CompetitionProblem = () => {
         urlConstants.getTimestamp,
         {
           id: "680e852aeb911a0106b3410b",
-          userId: user._id,
+          userId: user.id,
         },
         getConfig()
       );
       setTimestamp(timestamp);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -52,7 +52,7 @@ const CompetitionProblem = () => {
       );
       setProblem(data.customprob);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

@@ -56,7 +56,7 @@ const Compiler = () => {
       );
       setOutput(data.output);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

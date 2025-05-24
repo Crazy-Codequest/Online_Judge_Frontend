@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Chip, TextField, InputAdornment, Button, Menu, MenuItem, Typography, Paper, Checkbox } from "@mui/material";
 import { Search, Add } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const ProblemsTable = ({
   topicCounts,
@@ -22,8 +23,10 @@ const ProblemsTable = ({
   hoverColor,
   difficultyColors,
   problems,
-}) => (
-  <Box sx={{ width: "100%", maxWidth: 950, mx: "auto" }}>
+}) => {
+  const navigate = useNavigate();
+
+  return <Box sx={{ width: "100%", maxWidth: 950, mx: "auto" }}>
     {/* Topic Chips */}
     {console.log("selectedTopic", selectedTopic, topicCounts)}
     <Box
@@ -207,7 +210,7 @@ const ProblemsTable = ({
                 onClick={(e) => e.stopPropagation()}
               />
             </Box>
-            <Box sx={{ flex: 2, fontWeight: 500, fontSize: 16 }}>
+            <Box onClick={() => navigate(`/problems/statement/${problem._id}`)} sx={{ flex: 2, fontWeight: 500, fontSize: 16 }}>
               {problem.statement}
             </Box>
             <Box sx={{ width: 120, textAlign: "center", fontSize: 16 }}>
@@ -266,6 +269,6 @@ const ProblemsTable = ({
       </Button>
     </Box>
   </Box>
-);
+};
 
 export default ProblemsTable;

@@ -55,7 +55,7 @@ const Competitions = () => {
       );
       toast.success("Registered for competition successfully!");
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -66,7 +66,7 @@ const Competitions = () => {
         return;
       } navigate(`/competitions/${competition._id}`);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
   

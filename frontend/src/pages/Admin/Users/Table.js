@@ -39,7 +39,7 @@ const UserTable = ({
       );
       setUsersData(data.users);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ const UserTable = ({
           </TableHead>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user._id}>
+              <TableRow key={user.id}>
                 <TableCell>{user.firstname}</TableCell>
                 <TableCell>{user.lastname}</TableCell>
                 <TableCell>{user.email}</TableCell>

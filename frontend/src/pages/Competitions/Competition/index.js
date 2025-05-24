@@ -82,7 +82,7 @@ const Competition = () => {
       );
       setProblems(data.fetchedCompetition.problems); 
     } catch (e) {
-      console.log(e);
+      console.error(e);
       
       if (
         e.response?.data?.error === "This competition is not currently active"
@@ -110,7 +110,7 @@ const Competition = () => {
       );
       setSubmissions(data.submissions);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -125,7 +125,7 @@ const Competition = () => {
       );
       setLeaderboard(data.leaderboard);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -141,7 +141,7 @@ const Competition = () => {
 
       setAllSubmissions(data.submissions);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 

@@ -94,7 +94,7 @@ const Compiler = ({
       setDesc(false);
     } catch (e) {
       setOutput("There was a error while running your code", e);
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -113,7 +113,7 @@ const Compiler = ({
         lang,
         code,
         p_id: id,
-        u_id: user._id,
+        u_id: user.id,
         c_id: c_id,
         input: testCase,
       };
@@ -126,7 +126,7 @@ const Compiler = ({
       setOutput(data.message);
       setDesc(false);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       setLoading(false);
     }

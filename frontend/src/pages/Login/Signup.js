@@ -64,7 +64,7 @@ export default function SignUp() {
       setUserEmail(response.data.email);
       setShowOtp(true);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast.error(e.response?.data || "Registration failed!");
     } finally {
       setLoading(false);
