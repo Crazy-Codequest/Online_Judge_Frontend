@@ -49,6 +49,7 @@ export const urlConstants = {
   updateSocialImage: baseUrl + "api/social-profile/upload-profile-image",
   getSocialImage: baseUrl + "api/social-profile/download-profile-image",
   deleteSocialImage: baseUrl + "api/social-profile/delete-profile-image",
+  getSignedUrl: baseUrl + "api/images/signed-url",
 };
 
 export const adminRoutes = {

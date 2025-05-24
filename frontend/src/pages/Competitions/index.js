@@ -24,11 +24,10 @@ const Competitions = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [competitions, setCompetitions] = useState([]);
+  const [imagesUrls, setImagesUrls] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
-
-  console.log("Competitions Component - User State:", user);
 
   const addUserToCompetition = async (id) => {
     try {
@@ -72,7 +71,6 @@ const Competitions = () => {
   
   const getCompetitions = async () => {
     try {
-      console.log("Fetching competitions for user:", user?.id);
       if (!user?.id) {
         console.error("No user ID available");
         setLoading(false);
@@ -82,7 +80,6 @@ const Competitions = () => {
         `${urlConstants.getCompetitions}?id=${user.id}`,
         getConfig()
       );
-      console.log("Competitions API Response:", data);
       setCompetitions(data.competitions || []);
     } catch (e) {
       console.error("Error fetching competitions:", e);
@@ -114,24 +111,54 @@ const Competitions = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Competitions useEffect triggered");
-    getCompetitions();
-  }, [user?.id]);
-
-  if (loading) {
-    console.log("Competitions Component - Loading state");
-    return <Loading />;
-  }
-
-  console.log("Competitions Component - Render with competitions:", competitions);
-
   const getStatus = (competition) => {
     const now = new Date();
     if (now < new Date(competition.start_date)) return { label: "Upcoming", color: "info" };
     if (now > new Date(competition.end_date)) return { label: "Ended", color: "default" };
     return { label: "Ongoing", color: "success" };
   };
+
+  useEffect(() => {
+    getCompetitions();
+  }, [user?.id]);
+
+  useEffect(() => {
+    const fetchCompetitionsImages = async () => {
+      const cached = localStorage.getItem("competitionImages");
+  
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        const now = Date.now();
+  
+        if (now - parsed.timestamp < 3600000) {
+          setImagesUrls(parsed.urls);
+          return;
+        }
+      }
+  
+      try {
+        const { data } = await axios.post(urlConstants.getSignedUrl, {
+          keys: images,
+        }, getConfig());
+  
+        const urls = data.map((obj) => obj.url);
+        setImagesUrls(urls);
+  
+        localStorage.setItem(
+          "competitionImages",
+          JSON.stringify({ urls, timestamp: Date.now() })
+        );
+      } catch (e) {
+        console.error("Error fetching signed URLs:", e);
+      }
+    };
+  
+    fetchCompetitionsImages();
+  }, []);
+  
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Box
@@ -220,7 +247,7 @@ const Competitions = () => {
                     borderTopRightRadius: 12,
                     cursor: "pointer",
                   }}
-                  src={images[index % images.length]}
+                  src={imagesUrls[index % imagesUrls.length]}
                   alt="Competition Banner"
                 />
                 <CardContent sx={{ p: 2 }}>
