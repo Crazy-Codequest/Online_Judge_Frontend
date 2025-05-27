@@ -37,7 +37,7 @@ const ProblemsTable = ({
   const getProblems = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.getProblems}/${user.id}`,
+        `${adminRoutes.getProblems}/${user?.id}`,
         getConfig()
       );
       setProblemsData(data.problems);

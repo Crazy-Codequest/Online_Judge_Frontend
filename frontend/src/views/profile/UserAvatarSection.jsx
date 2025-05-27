@@ -22,7 +22,7 @@ const AvatarPlayground = () => {
 
   const jsonBody = {
     dataUri: true,
-    seed: user.id,
+    seed: user?.id,
     ...customOptions
   }
 
@@ -39,7 +39,7 @@ const AvatarPlayground = () => {
   const handleSave = () => {
     
     const props = {
-      seed: seed || user.id,
+      seed: seed || user?.id,
       style: avatarStyle,
       customOptions: customOptions
     }
@@ -84,7 +84,7 @@ const AvatarPlayground = () => {
           {options.map((option) => {
             const optionAvatar = createAvatar(collection[avatarStyle], {
               ...customOptions,
-              seed: seed || user.id,
+              seed: seed || user?.id,
               [fieldKey]: [option],
               dataUri: true,
             }).toDataUri();

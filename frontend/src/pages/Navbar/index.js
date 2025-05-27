@@ -149,7 +149,7 @@ export default function Navbar() {
 
   const getAllNotifications = async () => {
     try {
-      const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user.id}`, getConfig());
+      const res = await axios.get(`${urlConstants.getAllNotifications}?userId=${user?.id}`, getConfig());
       setNotifications(res.data);
     }catch(e){
       console.error(e);
@@ -426,7 +426,7 @@ export default function Navbar() {
             onClick={handleRightMenuClick}
             src={avatar}
             alt="avatar"
-            userId={user.id}
+            userId={user?.id}
             sx={{
               width: 36,
               height: 36,

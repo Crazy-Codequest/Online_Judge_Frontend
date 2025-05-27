@@ -43,7 +43,7 @@ const Edit = ({
       };
       setCompetitions(
         competitions.map((user) =>
-          user.id === updatedCompetition._id ? updatedCompetition : user
+          user?.id === updatedCompetition._id ? updatedCompetition : user
         )
       );
       setOpenEditDialog(false);

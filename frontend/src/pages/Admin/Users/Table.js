@@ -82,7 +82,7 @@ const UserTable = ({
           </TableHead>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user?.id}>
                 <TableCell>{user.firstname}</TableCell>
                 <TableCell>{user.lastname}</TableCell>
                 <TableCell>{user.email}</TableCell>

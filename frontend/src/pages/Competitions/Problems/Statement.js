@@ -31,7 +31,7 @@ const CompetitionProblem = () => {
         urlConstants.getTimestamp,
         {
           id: "680e852aeb911a0106b3410b",
-          userId: user.id,
+          userId: user?.id,
         },
         getConfig()
       );

@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5000/";
+const baseUrl = "https://server-thrumming-waterfall-7530.fly.dev/";
 
 export const urlConstants = {
   getProblem: baseUrl + "api/problems/id",

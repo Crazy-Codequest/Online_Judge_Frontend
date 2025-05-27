@@ -113,7 +113,7 @@ const Compiler = ({
         lang,
         code,
         p_id: id,
-        u_id: user.id,
+        u_id: user?.id,
         c_id: c_id,
         input: testCase,
       };

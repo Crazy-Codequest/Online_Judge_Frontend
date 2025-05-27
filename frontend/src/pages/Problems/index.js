@@ -134,7 +134,7 @@ const Problems = () => {
 
     const getMyLists = async () => {
       try {
-        const data = await fetchMyLists(user.id);
+        const data = await fetchMyLists(user?.id);
         setMyLists(data.lists);
       } catch(e){
         console.error(e);
@@ -175,7 +175,7 @@ const Problems = () => {
         { 
           name: newListName, 
           description: listDescription,
-          user_id: user.id,
+          user_id: user?.id,
           problems: [] 
         },
         getConfig()

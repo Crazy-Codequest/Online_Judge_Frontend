@@ -34,7 +34,7 @@ const Competitions = () => {
       await axios.post(
         urlConstants.addUserForCompetiton,
         {
-          user_id: user.id,
+          user_id: user?.id,
           id,
         },
         getConfig()
@@ -46,7 +46,7 @@ const Competitions = () => {
                 ...competition,
                 user: {
                   ...competition.user,
-                  userId: user.id, timestamp: new Date() ,
+                  userId: user?.id, timestamp: new Date() ,
                 },
               }
             : competition
@@ -77,7 +77,7 @@ const Competitions = () => {
         return;
       }
       const { data } = await axios.get(
-        `${urlConstants.getCompetitions}?id=${user.id}`,
+        `${urlConstants.getCompetitions}?id=${user?.id}`,
         getConfig()
       );
       setCompetitions(data.competitions || []);
@@ -91,7 +91,7 @@ const Competitions = () => {
 
   const foundUser = (competition) => {    
     if(!competition.user) return false;
-    return competition.user["userId"] === user.id;
+    return competition.user["userId"] === user?.id;
   };
 
   const handleCompetitionRedirect = (competition) => {

@@ -75,7 +75,7 @@ const Leaderboard = ({ leaderboard }) => {
   ];
 
   const rows = leaderboard.map((entry, index) => ({
-    id: entry.user.id,
+    id: entry.user?.id,
     rank: index + 1,
     user: entry.user,
     totalScore: entry.totalScore,

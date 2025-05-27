@@ -39,7 +39,7 @@ const Create = ({
     const selectedUser = users.find((u) => u._id === userId);
     if (
       selectedUser &&
-      !newCompetition.users.some((u) => u._id === selecteduser.id)
+      !newCompetition.users.some((u) => u._id === selecteduser?.id)
     ) {
       setNewCompetition((prevData) => ({
         ...prevData,
@@ -113,7 +113,7 @@ const Create = ({
   const getProblemIds = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.getProblemIds}/${user.id}`,
+        `${adminRoutes.getProblemIds}/${user?.id}`,
         getConfig()
       );
       setProblems(data.problems);
@@ -125,7 +125,7 @@ const Create = ({
   const getUserIds = async () => {
     try {
       const { data } = await axios.get(
-        `${adminRoutes.adminUserId}/${user.id}`,
+        `${adminRoutes.adminUserId}/${user?.id}`,
         getConfig()
       );
       setUsers(data.users);
@@ -195,7 +195,7 @@ const Create = ({
           onChange={(e) => handleAddUser(e.target.value)}
         >
           {users.map((user, index) => (
-            <MenuItem key={index} value={user.id}>
+            <MenuItem key={index} value={user?.id}>
               {`${user.firstname} ${user.lastname}`}
             </MenuItem>
           ))}
