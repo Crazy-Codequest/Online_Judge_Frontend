@@ -39,7 +39,7 @@ const Create = ({
     const selectedUser = users.find((u) => u._id === userId);
     if (
       selectedUser &&
-      !newCompetition.users.some((u) => u._id === selecteduser?.id)
+      !newCompetition.users.some((u) => u._id === selectedUser?.id)
     ) {
       setNewCompetition((prevData) => ({
         ...prevData,
