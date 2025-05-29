@@ -21,7 +21,7 @@ export function useProfilePage() {
       const file = e.target.files[0];
       const formData = new FormData();
       formData.append("profileImage", file);
-      formData.append("u_id", userPr.id);
+      formData.append("u_id", userPr?.id);
       try {
         await axios.post(urlConstants.updateSocialImage, formData, getConfig());
         toast.success("Avatar updated successfully!");
@@ -36,7 +36,7 @@ export function useProfilePage() {
     try {
       const payload = {
         id: socialLinks._id,
-        u_id: userPr.id,
+        u_id: userPr?.id,
       };
       if (["name", "firstname"].includes(field)) payload.firstname = value;
       else if (field === "lastname") payload.lastname = value;
@@ -60,7 +60,7 @@ export function useProfilePage() {
       try {
         const res = await axios.post(
           urlConstants.getSocialProfile,
-          { u_id: userPr.id },
+          { u_id: userPr?.id },
           getConfig()
         );
         setUser({
@@ -77,7 +77,7 @@ export function useProfilePage() {
       }
     };
     if (userPr?.id) fetchSocialData();
-  }, [userPr.id]);
+  }, [userPr?.id]);
 
   const fetchProfileImage = async (u_id) => {
     try {
@@ -110,7 +110,7 @@ export function useProfilePage() {
     const getAvatar = async () => {
       try {
         if (userPr?.id) {
-          const imgUrl = await fetchProfileImage(userPr.id);
+          const imgUrl = await fetchProfileImage(userPr?.id);
           dispatch(setAvatar(imgUrl));
         }
       } catch (error) {
@@ -118,7 +118,7 @@ export function useProfilePage() {
       }
     };
     getAvatar();
-  }, []);
+  }, [userPr?.id]);
 
   return {
     activeTab,
